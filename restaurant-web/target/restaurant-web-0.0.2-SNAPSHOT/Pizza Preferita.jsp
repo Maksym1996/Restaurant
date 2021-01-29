@@ -10,6 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pizza Preferita</title>
 <!--    Bootstap START-->
+
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -33,6 +34,8 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
 	integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
 	crossorigin="anonymous"></script>
+	
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 
 
 <link rel="stylesheet" href="main.css">
@@ -84,14 +87,34 @@
 			</div>
 		</div>
 	</nav>
+	<!-- Кнопки фильтрации -->
+		<form class = "form" action="Pizza Preferita" method="GET">
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox"
+					id="flexSwitchCheckDefault" value="Pizza" name="categories"> <label
+					class="form-check-label filtres switchers" for="flexSwitchCheckDefault">Пицца <i class='fas fa-pizza-slice'></i> </label>
+			</div>
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox"
+					id="flexSwitchCheckDefault" value="Burger" name="categories"> <label
+					class="form-check-label filtres switchers" for="flexSwitchCheckDefault">Бургеры <i class='fas fa-hamburger'></i></label>
+			</div>
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox"
+					id="flexSwitchCheckDefault" value="Drinks" name="categories"> <label
+					class="form-check-label filtres switchers" for="flexSwitchCheckDefault">Напитки<i class="bi bi-cup-straw"></i></label>
+			</div>
+			<button type="submit" class="btn btn-outline-warning">Применить фильтр</button>
+		</form>
 	<main class="container">
 
+
 		<!-- Вывод контента -->
-		<div class="row">
+		<div class="row ">
 
 			<c:forEach var="product" items="${productsList}">
 				<div class="col-sm-4">
-					<div class="card" style="width: 18rem;">
+					<div class="card cartBorder" style="width: 18rem;">
 						<img src=<c:out value = "${product.imageLink}"/>
 							class="card-img-top" alt="Pizza" height="250" width="250">
 						<div class="card-body">
@@ -102,7 +125,7 @@
 								<c:out value="${product.description}" />
 							</p>
 							<div class="row row-cols-auto">
-								<a href="#" class="btn btn-primary col-sm-7">Заказать</a> <font
+								<a href="#" class="btn btn-primary col-sm-7 cart">Заказать</a> <font
 									size=+2 class="col-sm-5"><c:out value="${product.price}" />
 									грн</font>
 							</div>
@@ -119,42 +142,42 @@
 			<div class="text-center col-sm-4"></div>
 			<div class="text-center col-sm-0.5">
 				<c:if test="${param.page-1 > 0}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page - 1}"
-						class="padgination"> <i class="bi bi-arrow-left-circle-fill"></i></i>
+					<a href="/restaurant-web/Pizza Preferita?page=${param.page - 1}&categories=${paramValues.categories}"
+						class="padgination"> <i class="bi bi-arrow-left-circle-fill"></i>
 					</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
 				<c:if test="${param.page - 2 > 0}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page - 2}"
+					<a href="/restaurant-web/Pizza Preferita?page=${param.page - 2}&categories=${paramValues.categories}"
 						class="padgination">${param.page - 2}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
 				<c:if test="${param.page - 1 > 0}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page - 1}"
+					<a href="/restaurant-web/Pizza Preferita?page=${param.page - 1}&categories=${paramValues.categories}"
 						class="padgination">${param.page - 1}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<a href="/restaurant-web/Pizza Preferita?page=${param.page}"
+				<a href="/restaurant-web/Pizza Preferita?page=${param.page}&categories=${paramValues.categories}"
 					class="active">${param.page}</a>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${param.page + 1 < maxPages}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page + 1}"
+				<c:if test="${param.page + 1 <= maxPages}">
+					<a href="/restaurant-web/Pizza Preferita?page=${param.page + 1}&categories=${paramValues.categories}"
 						class="padgination">${param.page + 1}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${param.page + 2 < maxPages}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page + 2}"
+				<c:if test="${param.page + 2 <= maxPages}">
+					<a href="/restaurant-web/Pizza Preferita?page=${param.page + 2}&categories=${paramValues.categories}"
 						class="padgination">${param.page + 2}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${param.page + 1 < maxPages}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page + 1}"
+				<c:if test="${param.page + 1 <= maxPages}">
+					<a href="/restaurant-web/Pizza Preferita?page=${param.page + 1}&categories=${paramValues.categories}"
 						class="padgination"><i class="bi bi-arrow-right-circle-fill"></i></a>
 				</c:if>
 			</div>

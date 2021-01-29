@@ -1,6 +1,5 @@
 package db.dao;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +16,7 @@ public class SQLProductDao implements ProductDao {
 	private static final String GET_ALL_PRODUCTS = "SELECT * FROM product";
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE" + "(DEFAULT, ?, ?, ?, ?, ?, ?,)";
 	private static final String GET_PRODUCT = "SELECT * FROM product WHERE id = ?";
-	private static final String GET_PRODUCTS_BY_CATEGORY = "SELECT * FROM WHERE product IN (?)";
+	private static final String GET_PRODUCTS_BY_CATEGORY = "SELECT * FROM product WHERE category =?";
 	private static final String UPDATE_PRODUCT = "UPDATE product WHERE id = ? SET name=?," + 
 			"price=?, description=?, count=?, image_link=?, category_id=?";
 	
@@ -66,7 +65,7 @@ public class SQLProductDao implements ProductDao {
 			prep.setString(k++, model.getDescription());
 			prep.setInt(k++, model.getCount());
 			prep.setString(k++, model.getImageLink());
-			prep.setInt(k++, model.getCategoryId());
+			prep.setString(k++, model.getCategory());
 
 			if (prep.executeUpdate() > 0) {
 				rs = prep.getGeneratedKeys();
@@ -109,16 +108,16 @@ public class SQLProductDao implements ProductDao {
 	}
 
 	@Override
-	public List<Product> getProductByCategories(List<String> categories) {
+	public List<Product> getProductByCategories(String category) {
 		List<Product> productByCategories = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+			
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(GET_PRODUCTS_BY_CATEGORY);
-			Array categoriesArray = con.createArrayOf("VARCHAR", categories.toArray());
-			prep.setArray(1, categoriesArray);
+			prep.setString(1, category);
 			rs = prep.executeQuery();
 
 			while (rs.next()) {
@@ -126,7 +125,7 @@ public class SQLProductDao implements ProductDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO LOGGER
+			//TODO set logger 29.01.2021;
 		} finally {
 			close(con, prep, rs);
 		}
@@ -150,7 +149,7 @@ public class SQLProductDao implements ProductDao {
 			prep.setString(k++, model.getDescription());
 			prep.setInt(k++, model.getCount());
 			prep.setString(k++, model.getImageLink());
-			prep.setInt(k++, model.getCategoryId());
+			prep.setString(k++, model.getCategory());
 			
 			if(prep.executeUpdate() > 0) {
 				result = true;
@@ -174,7 +173,7 @@ public class SQLProductDao implements ProductDao {
 		product.setDescription(rs.getString(k++));
 		product.setCount(rs.getInt(k++));
 		product.setImageLink(rs.getString(k++));
-		product.setCategoryId(rs.getInt(k));
+		product.setCategory(rs.getString(k));
 
 		return product;
 	}

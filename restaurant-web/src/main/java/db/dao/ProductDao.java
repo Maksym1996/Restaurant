@@ -10,7 +10,7 @@ public interface ProductDao {
 	
 	List<Product> getAllProduct();
 	
-	List<Product> getProductByCategories(List<String> categories);
+	List<Product> getProductByCategories(String category);
 	
 	int insertProduct(Product model);
 	

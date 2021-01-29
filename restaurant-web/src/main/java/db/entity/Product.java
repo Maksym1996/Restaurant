@@ -12,7 +12,7 @@ public class Product implements Serializable {
 	String description;
 	int count;
 	String imageLink;
-	int categoryId;
+	String category;
 
 	public int getId() {
 		return id;
@@ -62,18 +62,18 @@ public class Product implements Serializable {
 		this.imageLink = imageLink;
 	}
 
-	public int getCategoryId() {
-		return categoryId;
+	public String getCategory() {
+		return category;
 	}
 
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", count="
-				+ count + ", imageLink=" + imageLink + ", categoryId=" + categoryId + "]";
+				+ count + ", imageLink=" + imageLink + ", category=" + category + "]";
 	}
 
 	@Override

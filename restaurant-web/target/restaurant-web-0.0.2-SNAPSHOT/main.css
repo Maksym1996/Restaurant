@@ -7,7 +7,7 @@ html {
 }
 
 body{
-	background-color: #f2f2f2;
+	background: url(https://raw.githubusercontent.com/Maksym1996/Image_Restaurant/main/fon.jpg);
 	font-family: "Lato";
 	fort-weight: 300;
 	color: #555;
@@ -44,7 +44,7 @@ a{
 
 
 main {
-	margin-top: 150px;
+	margin-top: 50px;
     margin-bottom: 15px;
 }
 
@@ -78,15 +78,36 @@ main {
 .cartMan{
     font-size:3rem;
 }
+.cart{
+	background-color:#8B4513;
+	border-color: #8B4513;
+}
+.cartBorder{
+	border-color: #ffc107;
+}
 
 .padgination{
 	font-size: 2em;
-	color: black;
+	color: #ffc107;
 	text-decoration: none;
+}
+
+.filtres{
+	font-size: 1.3em;
+	color: white;
 }
 .active{
 	font-size: 2em;
 	color: grey;
 	text-decoration: none;
+}
+
+.switchers{
+	color:#ffc107;
+}
+
+.form{
+	margin-left: 10px;
+	margin-top: 10px;
 }
 

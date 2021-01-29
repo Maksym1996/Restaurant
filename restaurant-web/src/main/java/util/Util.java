@@ -1,5 +1,6 @@
 package util;
 
+
 import java.util.List;
 
 public class Util {
@@ -9,4 +10,5 @@ public class Util {
 		int i = (int) (list.size()/pageSize);
 		return (double)list.size()/pageSize != (double)i ? i + 1 :i;
 	}
+
 }
