@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+	<!-- <WatchedResource>WEB-INF/web.xml</WatchedResource>-->
+	<Resource name="jdbc/restaurant" 
+		auth="Container"
+		type="javax.sql.DataSource" 
+		maxActive="50" 
+		maxIdle="30" 
+		maxWait="10000"
+		username="Maksym" 
+		password="aCx6V3@33m@iU@Y"
+		driverClassName="com.mysql.cj.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/restaurant?useUnicode=true&amp;serverTimezone=UTC" />
+</Context>
+	
+	
+	
+			
