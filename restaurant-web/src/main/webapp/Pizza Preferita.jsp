@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="t" uri = "WEB-INF/taglib.tld"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,7 +46,7 @@
 		<!-- Название -->
 		<div class="container-fluid">
 			<a class="navbar-brand"
-				href="/restaurant-web/Pizza Preferita?page=${param.page}">Pizza
+				href="/restaurant-web/Pizza Preferita?page=${currentPage}">Pizza
 				Preferita</a>
 
 			<!-- Кнопка для выпадающего списка при уменьшении маштаба -->
@@ -141,43 +142,43 @@
 		<div class="row row-cols-auto ">
 			<div class="text-center col-sm-4"></div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${param.page-1 > 0}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page - 1}&categories=${paramValues.categories}"
+				<c:if test="${currentPage-1 > 0}">
+					<a href='<t:page-link pageNumber="${currentPage - 1}" categories="${categories}"/>'
 						class="padgination"> <i class="bi bi-arrow-left-circle-fill"></i>
 					</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${param.page - 2 > 0}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page - 2}&categories=${paramValues.categories}"
-						class="padgination">${param.page - 2}</a>
+				<c:if test="${currentPage - 2 > 0}">
+					<a href='<t:page-link pageNumber="${currentPage - 2}" categories="${categories}"/>'
+						class="padgination">${currentPage - 2}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${param.page - 1 > 0}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page - 1}&categories=${paramValues.categories}"
-						class="padgination">${param.page - 1}</a>
+				<c:if test="${currentPage - 1 > 0}">
+					<a href='<t:page-link pageNumber="${currentPage - 1}" categories="${categories}"/>'
+						class="padgination">${currentPage - 1}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<a href="/restaurant-web/Pizza Preferita?page=${param.page}&categories=${paramValues.categories}"
-					class="active">${param.page}</a>
+				<a href='<t:page-link pageNumber="${currentPage}" categories="${categories}"/>'
+					class="active">${currentPage}</a>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${param.page + 1 <= maxPages}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page + 1}&categories=${paramValues.categories}"
-						class="padgination">${param.page + 1}</a>
+				<c:if test="${currentPage + 1 <= maxPages}">
+					<a href='<t:page-link pageNumber="${currentPage + 1}" categories="${categories}"/>' 
+					class="padgination">${currentPage + 1}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${param.page + 2 <= maxPages}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page + 2}&categories=${paramValues.categories}"
-						class="padgination">${param.page + 2}</a>
+				<c:if test="${currentPage + 2 <= maxPages}">
+					<a href='<t:page-link pageNumber="${currentPage + 2}" categories="${categories}"/>'
+						class="padgination">${currentPage + 2}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${param.page + 1 <= maxPages}">
-					<a href="/restaurant-web/Pizza Preferita?page=${param.page + 1}&categories=${paramValues.categories}"
+				<c:if test="${currentPage + 1 <= maxPages}">
+					<a href='<t:page-link pageNumber="${currentPage + 1}" categories="${categories}"/>'
 						class="padgination"><i class="bi bi-arrow-right-circle-fill"></i></a>
 				</c:if>
 			</div>

@@ -30,38 +30,29 @@ public class BeforeMainServlet extends HttpServlet {
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
 		
 		int currentPage = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
-		String categories = "&categories=";
-		String[] category = request.getParameterValues("categories");
+		String[] categories = request.getParameterValues("categories");
 
-		long pageSize = 2;
-		List<Product> partListProducts = new ArrayList<>();
+		int pageSize = 2;
+		List<Product> partListProducts;
+		long productsCount;
 
-		if (category == null) {
-			List<Product> temp = productDao.getAllProduct();
-			temp.stream().skip(pageSize * (currentPage - 1)).limit(pageSize).forEach(partListProducts::add);
-			RequestDispatcher dispatcher = request
-					.getRequestDispatcher("Pizza Preferita.jsp?page=" + currentPage + categories + 0);
-			request.setAttribute("productsList", partListProducts);
-			request.setAttribute("maxPages", Util.getMaxPages(temp, pageSize));
-			dispatcher.forward(request, response);
-
+		int skip = pageSize * (currentPage - 1);
+		int limit = pageSize;
+		if (categories == null) {
+			productsCount = productDao.getProductCount();
+			partListProducts = productDao.getAllProduct(skip, limit);
 		} else {
-			StringBuilder sb = new StringBuilder();
-			for (String s : category) {
-				sb.append(categories).append(s);
-			}
-			List<Product> temp = new ArrayList<>();
-			for (String s : category) {
-				temp.addAll(productDao.getProductByCategories(s));
-			}
-			temp.stream().skip(pageSize * (currentPage - 1)).limit(pageSize).forEach(partListProducts::add);
-			RequestDispatcher dispatcher = request
-					.getRequestDispatcher("Pizza Preferita.jsp?page=" + currentPage + sb.toString());
-			request.setAttribute("productsList", partListProducts);
-			request.setAttribute("maxPages", Util.getMaxPages(temp, pageSize));
-			dispatcher.forward(request, response);
-
+			productsCount = productDao.getProductCount(categories);
+			partListProducts = productDao.getProductByCategories(categories, skip, limit);
 		}
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Pizza Preferita.jsp");
+		request.setAttribute("productsList", partListProducts);
+		request.setAttribute("maxPages", Util.getMaxPages(productsCount, pageSize));
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("categories", categories);
+		
+		dispatcher.forward(request, response);
 
 	}
 

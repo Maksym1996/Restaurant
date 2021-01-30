@@ -1,14 +1,12 @@
 package util;
 
-
-import java.util.List;
-
 public class Util {
-	private Util() {};
-	
-	public static int getMaxPages(List<?> list, long pageSize) {
-		int i = (int) (list.size()/pageSize);
-		return (double)list.size()/pageSize != (double)i ? i + 1 :i;
+	private Util() {
+	};
+
+	public static int getMaxPages(long itemsCount, long pageSize) {
+		int i = (int) (itemsCount / pageSize);
+		return (double) itemsCount / pageSize != (double) i ? i + 1 : i;
 	}
 
 }

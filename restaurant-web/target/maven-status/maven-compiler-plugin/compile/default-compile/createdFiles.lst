@@ -3,6 +3,7 @@ db\dao\SQLProductDao.class
 db\dao\UserDao.class
 exception\ContextInitException.class
 web\listener\ContextListener.class
+web\tag\PageLinkTag.class
 db\dao\ProductDao.class
 db\entity\Product.class
 web\BeforeMainServlet.class
