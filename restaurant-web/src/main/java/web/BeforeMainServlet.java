@@ -1,7 +1,6 @@
 package web;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -28,30 +27,30 @@ public class BeforeMainServlet extends HttpServlet {
 			throws IOException, ServletException {
 		response.setContentType("text/html;charset=UTF-8");
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
-		
-		int currentPage = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
-		String[] categories = request.getParameterValues("categories");
 
-		int pageSize = 2;
+		int currentPage = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
+		String[] categories = request.getParameterValues("categories") != null ? request.getParameterValues("categories") : new String[] {};
+		String sortValue = request.getParameter("sortValue") != null ? request.getParameter("sortValue").toLowerCase()
+				: "id";
+		String desc = request.getParameter("desc");
+		
+		int limitProductOnPage = 2;
 		List<Product> partListProducts;
 		long productsCount;
 
-		int skip = pageSize * (currentPage - 1);
-		int limit = pageSize;
-		if (categories == null) {
-			productsCount = productDao.getProductCount();
-			partListProducts = productDao.getAllProduct(skip, limit);
-		} else {
-			productsCount = productDao.getProductCount(categories);
-			partListProducts = productDao.getProductByCategories(categories, skip, limit);
-		}
+		int skip = limitProductOnPage * (currentPage - 1);
+
+		productsCount = productDao.getProductCount(categories);
+		partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, desc, skip, limitProductOnPage);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("Pizza Preferita.jsp");
 		request.setAttribute("productsList", partListProducts);
-		request.setAttribute("maxPages", Util.getMaxPages(productsCount, pageSize));
+		request.setAttribute("maxPages", Util.getMaxPages(productsCount, limitProductOnPage));
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("categories", categories);
-		
+		request.setAttribute("sortValue", sortValue);
+		request.setAttribute("desc", desc);
+
 		dispatcher.forward(request, response);
 
 	}
@@ -59,7 +58,6 @@ public class BeforeMainServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

@@ -1,4 +1,3 @@
-web\Servlet.class
 db\dao\SQLProductDao.class
 db\dao\UserDao.class
 exception\ContextInitException.class

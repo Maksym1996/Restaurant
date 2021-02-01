@@ -14,7 +14,7 @@ public class Product implements Serializable {
 	String imageLink;
 	String category;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -30,7 +30,7 @@ public class Product implements Serializable {
 		this.name = name;
 	}
 
-	public int getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 
@@ -46,7 +46,7 @@ public class Product implements Serializable {
 		this.description = description;
 	}
 
-	public int getCount() {
+	public Integer getCount() {
 		return count;
 	}
 

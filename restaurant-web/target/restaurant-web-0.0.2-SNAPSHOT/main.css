@@ -52,15 +52,13 @@ main {
     position: absolute;
     bottom: 0;
     height: 60px;
-    width: 100%;
+    width: 105%;
     font-size: 1em;
 	padding: 15px 20px;
 	background-color: #0B0910;
 }
 
-.col-sm-4{
-    margin-bottom: : 5px;
-}
+
 
 
 .navbar-brand{
@@ -81,6 +79,7 @@ main {
 .cart{
 	background-color:#8B4513;
 	border-color: #8B4513;
+	
 }
 .cartBorder{
 	border-color: #ffc107;
@@ -109,5 +108,7 @@ main {
 .form{
 	margin-left: 10px;
 	margin-top: 10px;
+	margin-bottom: 10px;
 }
+
 

@@ -1,11 +1,9 @@
 package db.dao;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,47 +13,81 @@ import javax.sql.DataSource;
 import db.entity.Product;
 
 public class SQLProductDao implements ProductDao {
-	private static final String GET_ALL_PRODUCTS = "SELECT * FROM product LIMIT ? OFFSET ?";
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE" + "(DEFAULT, ?, ?, ?, ?, ?, ?,)";
 	private static final String GET_PRODUCT = "SELECT * FROM product WHERE id = ?";
-	private static final String GET_PRODUCTS_BY_CATEGORY = "SELECT * FROM product WHERE category IN (%s) LIMIT ? OFFSET ?";
-	private static final String UPDATE_PRODUCT = "UPDATE product WHERE id = ? SET name=?," + 
-			"price=?, description=?, count=?, image_link=?, category_id=?";
-	
-	private static final String GET_PRODUCTS_COUNT_BY_CATEGORY = "SELECT count(id) FROM product WHERE category IN (%s)";
-	private static final String GET_ALL_PRODUCTS_COUNT = "SELECT count(id) FROM product";
-	
+	private static final String UPDATE_PRODUCT = "UPDATE product WHERE id = ? SET name=?,"
+			+ "price=?, description=?, count=?, image_link=?, category_id=?";
+
 	private DataSource dataSource;
 
 	public SQLProductDao(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-
+	
 	@Override
-	public List<Product> getAllProduct(int skip, int limit) {
-		List<Product> allProduct = new ArrayList<>();
+	public List<Product> getProductByCategoriesOnPage(String[] categories, String sortValue, String desc, int skip, int limit) {
+		List<Product> productByCategories = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
 
 		try {
 			con = dataSource.getConnection();
-			prep = con.prepareStatement(GET_ALL_PRODUCTS);
-			prep.setInt(1, limit);
-			prep.setInt(2, skip);
-			rs = prep.executeQuery();
-			while (rs.next()) {
-				allProduct.add(extractionProduct(rs));
+			
+			prep = con.prepareStatement(protectSqlInjection(sortValue, categories, desc));
+
+			int k = 1;
+			for (String category : categories) {
+				prep.setString(k++, category);
 			}
+			prep.setInt(k++, limit);
+			prep.setInt(k++, skip);
+
+			rs = prep.executeQuery();
+
+			while (rs.next()) {
+				productByCategories.add(extractionProduct(rs));
+			}
+
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+			// TODO set logger 29.01.2021;
 		} finally {
 			close(con, prep, rs);
 		}
 
-		return allProduct;
+		return productByCategories;
 	}
 
+	@Override
+	public long getProductCount(String[] categories) {
+		Connection con = null;
+		PreparedStatement prep = null;
+		ResultSet rs = null;
+
+		int res = 0;
+		try {
+			con = dataSource.getConnection();
+			prep = con.prepareStatement(countQuery(categories));
+			int k = 1;
+			for (String category : categories) {
+				prep.setString(k++, category);
+			}
+			rs = prep.executeQuery();
+
+			if (rs.next()) {
+				res = rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// TODO set logger 29.01.2021;
+		} finally {
+			close(con, prep, rs);
+		}
+		return res;
+	}
+	
 	@Override
 	public int insertProduct(Product model) {
 		int productId = 0;
@@ -64,6 +96,7 @@ public class SQLProductDao implements ProductDao {
 		ResultSet rs = null;
 		try {
 			con = dataSource.getConnection();
+			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			prep = con.prepareStatement(INSERT_PRODUCT);
 			int k = 1;
 			prep.setString(k++, model.getName());
@@ -72,7 +105,6 @@ public class SQLProductDao implements ProductDao {
 			prep.setInt(k++, model.getCount());
 			prep.setString(k++, model.getImageLink());
 			prep.setString(k++, model.getCategory());
-			
 
 			if (prep.executeUpdate() > 0) {
 				rs = prep.getGeneratedKeys();
@@ -81,14 +113,19 @@ public class SQLProductDao implements ProductDao {
 					model.setId(productId);
 				}
 			}
-
+			con.commit();
 		} catch (SQLException e) {
+			rollback(con);
+			e.printStackTrace();
 			// TODO Auto-generated catch block
 		} finally {
 			close(con, prep, rs);
 		}
 		return 0;
 	}
+	
+	
+	
 
 	@Override
 	public Product getProduct(int id) {
@@ -101,51 +138,18 @@ public class SQLProductDao implements ProductDao {
 			prep = con.prepareStatement(GET_PRODUCT);
 			prep.setInt(1, id);
 			rs = prep.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				model = extractionProduct(rs);
 			}
-		}catch(SQLException e){
-			//TODO LOGGER
-		}finally {
-			close(con, prep, rs);
-		}
-	
-		return model;
-	}
-
-	@Override
-	public List<Product> getProductByCategories(String[] categories, int skip, int limit) {
-		List<Product> productByCategories = new ArrayList<>();
-		Connection con = null;
-		PreparedStatement prep = null;
-		ResultSet rs = null;
-			
-		try {
-			con = dataSource.getConnection();
-			
-			String inSql = String.join(",", Collections.nCopies(categories.length, "?"));
-			String query = String.format(GET_PRODUCTS_BY_CATEGORY, inSql);
-			prep = con.prepareStatement(query);
-			int k = 1;
-			for (String category : categories) {
-				prep.setString(k++, category);
-			}
-			prep.setInt(k++, limit);
-			prep.setInt(k++, skip);
-			rs = prep.executeQuery();
-
-			while (rs.next()) {
-				productByCategories.add(extractionProduct(rs));
-			}
-
 		} catch (SQLException e) {
-			//TODO set logger 29.01.2021;
+			e.printStackTrace();
+			// TODO LOGGER
 		} finally {
 			close(con, prep, rs);
 		}
 
-		return productByCategories;
+		return model;
 	}
 
 	@Override
@@ -153,9 +157,10 @@ public class SQLProductDao implements ProductDao {
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement prep = null;
-		
+
 		try {
 			con = dataSource.getConnection();
+			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			prep = con.prepareStatement(UPDATE_PRODUCT);
 			int k = 1;
 			prep.setInt(k++, model.getId());
@@ -165,18 +170,21 @@ public class SQLProductDao implements ProductDao {
 			prep.setInt(k++, model.getCount());
 			prep.setString(k++, model.getImageLink());
 			prep.setString(k++, model.getCategory());
-			
-			if(prep.executeUpdate() > 0) {
+
+			if (prep.executeUpdate() > 0) {
 				result = true;
 			}
-		}catch(SQLException e) {
-			//TODO logger
-		}finally {
+			con.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			rollback(con);
+			// TODO logger
+		} finally {
 			close(con, prep);
 		}
-		
+
 		return result;
-		
+
 	}
 
 	private Product extractionProduct(ResultSet rs) throws SQLException {
@@ -199,63 +207,64 @@ public class SQLProductDao implements ProductDao {
 				try {
 					ac.close();
 				} catch (Exception e) {
+					e.printStackTrace();
 					// TODO Auto-generated catch block
 				}
 			}
 		}
 	}
-	
-	@Override
-	public long getProductCount() {
-		Connection con = null;
-		Statement stat = null;
-		ResultSet rs = null;
-		
-		int res = 0;
+
+	private void rollback(Connection connect) {
 		try {
-			con = dataSource.getConnection();
-			stat = con.createStatement();
-			rs = stat.executeQuery(GET_ALL_PRODUCTS_COUNT);
-			if (rs.next()) {
-				res = rs.getInt(1);
-			}
+			connect.rollback();
 		} catch (SQLException e) {
-			//TODO set logger 29.01.2021;
-		} finally {
-			close(con, stat, rs);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return res;
 	}
+
 	
-	@Override
-	public long getProductCount(String[] categories) {
-		Connection con = null;
-		PreparedStatement prep = null;
-		ResultSet rs = null;
-			
-		int res = 0;
-		try {
-			con = dataSource.getConnection();
-			
+	
+	private String countQuery(String[] categories) {
+		StringBuilder result = new StringBuilder();
+		result.append("SELECT count(id) FROM product ");
+		if (categories != null && categories.length != 0) {
 			String inSql = String.join(",", Collections.nCopies(categories.length, "?"));
-			String query = String.format(GET_PRODUCTS_COUNT_BY_CATEGORY, inSql);
-			prep = con.prepareStatement(query);
-			int k = 1;
-			for (String category : categories) {
-				prep.setString(k++, category);
-			}
-			rs = prep.executeQuery();
-
-			if (rs.next()) {
-				res = rs.getInt(1);
-			}
-
-		} catch (SQLException e) {
-			//TODO set logger 29.01.2021;
-		} finally {
-			close(con, prep, rs);
+			result.append("WHERE category IN (").append(inSql).append(") ");
 		}
-		return res;
+		return result.toString();
+		
+	}
+
+	private String protectSqlInjection(String value, String[] categories, String desc) {
+		StringBuilder result = new StringBuilder();
+		result.append("SELECT * FROM product ");
+		if (categories != null && categories.length != 0) {
+			String inSql = String.join(",", Collections.nCopies(categories.length, "?"));
+			result.append("WHERE category IN (").append(inSql).append(") ");
+		}
+		
+		switch (value) {
+		case "name":
+			result.append("ORDER BY name ").toString();
+			break;
+		case "price":
+			result.append("ORDER BY price ").toString();
+			break;
+		case "category":
+			result.append("ORDER BY category ").toString();
+			break;
+		default:
+			result.append("ORDER BY id ").toString();
+			break;
+		}
+		
+		if("false".equals(desc)) {
+			result.append("DESC ");
+		}
+
+		return result.append("LIMIT ? OFFSET ?").toString();
+
 	}
 
 }

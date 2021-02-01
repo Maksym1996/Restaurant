@@ -2,7 +2,6 @@ D:\EPAM\Final_Task\restaurant-web\src\main\java\db\dao\SQLProductDao.java
 D:\EPAM\Final_Task\restaurant-web\src\main\java\db\dao\UserDao.java
 D:\EPAM\Final_Task\restaurant-web\src\main\java\exception\ContextInitException.java
 D:\EPAM\Final_Task\restaurant-web\src\main\java\util\Util.java
-D:\EPAM\Final_Task\restaurant-web\src\main\java\web\Servlet.java
 D:\EPAM\Final_Task\restaurant-web\src\main\java\db\entity\User.java
 D:\EPAM\Final_Task\restaurant-web\src\main\java\db\dao\SQLUserDao.java
 D:\EPAM\Final_Task\restaurant-web\src\main\java\db\entity\Product.java

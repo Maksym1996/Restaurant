@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="t" uri = "WEB-INF/taglib.tld"%>
+<%@ taglib prefix="t" uri="WEB-INF/taglib.tld"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,8 +35,8 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
 	integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
 	crossorigin="anonymous"></script>
-	
-	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 
 
 <link rel="stylesheet" href="main.css">
@@ -89,24 +89,64 @@
 		</div>
 	</nav>
 	<!-- Кнопки фильтрации -->
-		<form class = "form" action="Pizza Preferita" method="GET">
+	<div class="row row-cols-auto"
+		style="margin-right: 0px; margin-left: 0px">
+		<form class="form text-center col-sm-1.5" action="Pizza Preferita"
+			method="GET">
 			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox"
-					id="flexSwitchCheckDefault" value="Pizza" name="categories"> <label
-					class="form-check-label filtres switchers" for="flexSwitchCheckDefault">Пицца <i class='fas fa-pizza-slice'></i> </label>
+					id="flexSwitchCheckDefault" value="Pizza" name="categories" /> <label
+					class="form-check-label filtres switchers"
+					for="flexSwitchCheckDefault">Пицца <i
+					class='fas fa-pizza-slice'></i>
+				</label>
+
 			</div>
 			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox"
-					id="flexSwitchCheckDefault" value="Burger" name="categories"> <label
-					class="form-check-label filtres switchers" for="flexSwitchCheckDefault">Бургеры <i class='fas fa-hamburger'></i></label>
+					id="flexSwitchCheckDefault" value="Burger" name="categories">
+				<label class="form-check-label filtres switchers"
+					for="flexSwitchCheckDefault">Бургеры <i
+					class='fas fa-hamburger'></i></label>
 			</div>
 			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox"
-					id="flexSwitchCheckDefault" value="Drinks" name="categories"> <label
-					class="form-check-label filtres switchers" for="flexSwitchCheckDefault">Напитки<i class="bi bi-cup-straw"></i></label>
+					id="flexSwitchCheckDefault" value="Drinks" name="categories" /> <label
+					class="form-check-label filtres switchers"
+					for="flexSwitchCheckDefault">Напитки <i
+					class="bi bi-cup-straw"></i></label>
 			</div>
-			<button type="submit" class="btn btn-outline-warning">Применить фильтр</button>
+			<button type="submit" class="btn btn-outline-warning">Применить
+				фильтр</button>
 		</form>
+		<!-- Кнопка очистки фильтров 
+		<form action="Pizza Preferita" method="get">
+			<button type="submit" class="btn btn-link switchers">
+				<i class="far fa-times-circle"></i>
+			</button>
+		</form> 
+		-->
+
+	</div>
+	<br>
+	<div class="dropdown sortMargin" style="margin-left: 20px">
+		<button class="btn btn-warning dropdown-toggle" type="button"
+			id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+			Отсортировать по</i>
+		</button>
+		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			<li><a class="dropdown-item"
+				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "name" asc= "true"/>'>Названию</a></li>
+			<li><a class="dropdown-item"
+				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "price" asc= "true"/>'>От
+					дешевых к дорогим</a></li>
+			<li><a class="dropdown-item"
+				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "price" asc= "false"/>'>От
+					дорогих к дешевым</a></li>
+			<li><a class="dropdown-item"
+				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "category" asc= "true"/>'>Категориям</a></li>
+		</ul>
+	</div>
 	<main class="container">
 
 
@@ -114,8 +154,8 @@
 		<div class="row ">
 
 			<c:forEach var="product" items="${productsList}">
-				<div class="col-sm-4">
-					<div class="card cartBorder" style="width: 18rem;">
+				<div class="col-md-4">
+					<div class="card cartBorder" style="width: 18rem">
 						<img src=<c:out value = "${product.imageLink}"/>
 							class="card-img-top" alt="Pizza" height="250" width="250">
 						<div class="card-body">
@@ -139,46 +179,55 @@
 		</div>
 
 		<!-- Паджинация -->
-		<div class="row row-cols-auto ">
-			<div class="text-center col-sm-4"></div>
+		<div class="row row-cols-auto">
+			<div class="text-center col-sm-5"></div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${currentPage-1 > 0}">
-					<a href='<t:page-link pageNumber="${currentPage - 1}" categories="${categories}"/>'
+				<c:if test="${currentPage-1 > 0 && currentPage <= maxPages}">
+					<a
+						href='<t:page-link pageNumber="${currentPage - 1}" categories="${categories}" sortValue = "${sortValue}" asc= "${asc}"/>'
 						class="padgination"> <i class="bi bi-arrow-left-circle-fill"></i>
 					</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${currentPage - 2 > 0}">
-					<a href='<t:page-link pageNumber="${currentPage - 2}" categories="${categories}"/>'
+				<c:if test="${currentPage - 2 > 0 && currentPage <= maxPages}">
+					<a
+						href='<t:page-link pageNumber="${currentPage - 2}" categories="${categories}" sortValue = "${sortValue}" asc= "${asc}"/>'
 						class="padgination">${currentPage - 2}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${currentPage - 1 > 0}">
-					<a href='<t:page-link pageNumber="${currentPage - 1}" categories="${categories}"/>'
+				<c:if test="${currentPage - 1 > 0 && currentPage <= maxPages}">
+					<a
+						href='<t:page-link pageNumber="${currentPage - 1}" categories="${categories}" sortValue = "${sortValue}" asc= "${asc}"/>'
 						class="padgination">${currentPage - 1}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<a href='<t:page-link pageNumber="${currentPage}" categories="${categories}"/>'
-					class="active">${currentPage}</a>
-			</div>
-			<div class="text-center col-sm-0.5">
-				<c:if test="${currentPage + 1 <= maxPages}">
-					<a href='<t:page-link pageNumber="${currentPage + 1}" categories="${categories}"/>' 
-					class="padgination">${currentPage + 1}</a>
+				<c:if test="${currentPage > 0 && currentPage <= maxPages}">
+					<a
+						href='<t:page-link pageNumber="${currentPage}" categories="${categories}" sortValue = "${sortValue}" asc= "${asc}"/>'
+						class="active">${currentPage}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${currentPage + 2 <= maxPages}">
-					<a href='<t:page-link pageNumber="${currentPage + 2}" categories="${categories}"/>'
+				<c:if test="${currentPage + 1 <= maxPages && currentPage > 0}">
+					<a
+						href='<t:page-link pageNumber="${currentPage + 1}" categories="${categories}" sortValue = "${sortValue}" asc= "${asc}"/>'
+						class="padgination">${currentPage + 1}</a>
+				</c:if>
+			</div>
+			<div class="text-center col-sm-0.5">
+				<c:if test="${currentPage + 2 <= maxPages && currentPage > 0}">
+					<a
+						href='<t:page-link pageNumber="${currentPage + 2}" categories="${categories}" sortValue = "${sortValue}" asc= "${asc}"/>'
 						class="padgination">${currentPage + 2}</a>
 				</c:if>
 			</div>
 			<div class="text-center col-sm-0.5">
-				<c:if test="${currentPage + 1 <= maxPages}">
-					<a href='<t:page-link pageNumber="${currentPage + 1}" categories="${categories}"/>'
+				<c:if test="${currentPage + 1 <= maxPages && currentPage > 0}">
+					<a
+						href='<t:page-link pageNumber="${currentPage + 1}" categories="${categories}" sortValue = "${sortValue}" asc= "${asc}"/>'
 						class="padgination"><i class="bi bi-arrow-right-circle-fill"></i></a>
 				</c:if>
 			</div>
