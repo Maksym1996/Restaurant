@@ -52,6 +52,12 @@
 					<label for="inputFirstName" class="form-label">Имя<span
 						style="color: red">*</span></label> <input type="text"
 						class="form-control" id="inputFirstName" name="firstName" required>
+					<c:if
+						test="${not empty errors and errors.containsKey('firstName')}">
+						<p style="color: red">
+							<c:out value="${errors.firstName}" />
+						</p>
+					</c:if>
 
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
@@ -63,7 +69,11 @@
 					<label for="inputLastName" class="form-label">Фамилия<span
 						style="color: red">*</span></label> <input type="text"
 						class="form-control" id="inputLastName" name="lastName" required>
-
+					<c:if test="${not empty errors and errors.containsKey('lastName')}">
+						<p style="color: red">
+							<c:out value="${errors.lastName}" />
+						</p>
+					</c:if>
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputLastName').value = ''">
@@ -76,8 +86,24 @@
 					<label for="inputEmail" class="form-label">Электронная
 						почта<span style="color: red">*</span>
 					</label> <input type="text" class="form-control" id="inputEmail"
-						name="email" required>
-
+						name="email" >
+					<c:if test="${not empty errors and errors.containsKey('email')}">
+						<p style="color: red">
+							<c:out value="${errors.email}" />
+						</p>
+					</c:if>
+					<c:if
+						test="${not empty errors and errors.containsKey('emailOrigin')}">
+						<p style="color: red">
+							<c:out value="${errors.emailOrigin}" />
+						</p>
+					</c:if>
+					<!--<c:if
+						test="${not empty errors and errors.containsKey('emailPattern')}">
+						<p style="color: red">
+							<c:out value="${errors.emailPattern}" />
+						</p>
+					</c:if>-->
 				</div>
 				<button type="button" style="color: black" class="btn btn-link">
 					<i class="far fa-times-circle"></i>
@@ -95,6 +121,25 @@
 						телефон<span style="color: red">*</span>
 					</label> <input type="tel" class="form-control" id="inputPhone"
 						name="phoneNumber" required>
+					<c:if
+						test="${not empty errors and errors.containsKey('phoneNumber')}">
+						<p style="color: red">
+							<c:out value="${errors.phoneNumber}" />
+						</p>
+					</c:if>
+					<c:if
+						test="${not empty errors and errors.containsKey('phoneNumberOrigin')}">
+						<p style="color: red">
+							<c:out value="${errors.phoneNumberOrigin}" />
+						</p>
+					</c:if>
+					<c:if
+						test="${not empty errors and errors.containsKey('phoneNumberPattern')}">
+						<p style="color: red">
+							<c:out value="${errors.phoneNumberPattern}" />
+						</p>
+					</c:if>
+
 
 				</div>
 				<button type="button" style="color: black" class="btn btn-link">
@@ -112,7 +157,17 @@
 					<label for="inputPassword" class="form-label">Пароль<span
 						style="color: red">*</span></label> <input type="password"
 						class="form-control" id="inputPassword" name="password" required>
-
+					<c:if test="${not empty errors and errors.containsKey('password')}">
+						<p style="color: red">
+							<c:out value="${errors.password}" />
+						</p>
+					</c:if>
+					<c:if
+						test="${not empty errors and errors.containsKey('passwordPattern')}">
+						<p style="color: red">
+							<c:out value="${errors.passwordPattern}" />
+						</p>
+					</c:if>
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputPassword').value = ''">
@@ -124,7 +179,18 @@
 						пароль<span style="color: red">*</span>
 					</label> <input type="password" class="form-control" id="inputConfirm"
 						name="confirmPassword" required>
-
+					<c:if
+						test="${not empty errors and errors.containsKey('confirmPassword')}">
+						<p style="color: red">
+							<c:out value="${errors.confirmPassword}" />
+						</p>
+					</c:if>
+					<c:if
+						test="${not empty errors and errors.containsKey('confirmPasswordSame')}">
+						<p style="color: red">
+							<c:out value="${errors.confirmPasswordSame}" />
+						</p>
+					</c:if>
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputConfirm').value = ''">
@@ -137,7 +203,6 @@
 					<label for="inputStreet" class="form-label">Улица/Проспект/Переулок</label>
 					<input type="text" class="form-control" id="inputStreet"
 						name="street">
-
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputStreet').value = ''">
@@ -147,7 +212,6 @@
 				<div class="col-md-3">
 					<label for="inputHouse" class="form-label">Номер дома</label> <input
 						type="text" class="form-control" id="inputHouse" name="house">
-
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputHouse').value = ''">
@@ -159,7 +223,12 @@
 					<label for="inputApartment" class="form-label">Номер
 						квартиры</label> <input type="text" class="form-control"
 						id="inputApartment" name="apartment">
-
+					<c:if
+						test="${not empty errors and errors.containsKey('apartmentPattern')}">
+						<p style="color: red">
+							<c:out value="${errors.apartmentPattern}" />
+						</p>
+					</c:if>
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputApartment').value = ''">
@@ -170,13 +239,19 @@
 				<div class="col-md-3">
 					<label for="inputPorch" class="form-label">Номер подъезда</label> <input
 						type="text" class="form-control" id="inputPorch" name="porch">
-
+					<c:if
+						test="${not empty errors and errors.containsKey('porchPattern')}">
+						<p style="color: red">
+							<c:out value="${errors.porchPattern}" />
+						</p>
+					</c:if>
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputPorch').value = ''">
 					<i class="far fa-times-circle"></i>
 				</button>
 			</div>
+			<br>
 			<button type="submit" class="btn btn-light">Зарегистрироваться</button>
 		</form>
 	</main>
