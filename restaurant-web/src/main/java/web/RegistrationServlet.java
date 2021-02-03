@@ -37,8 +37,8 @@ public class RegistrationServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String emailRegex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
 		String phoneNumberRegex = "[0][0-9]{9}";
-		String porchRegex = "[1-9][0-9]{,2}";
-		String apartmentRegex = "[1-9][0-9]{,3}";
+		String porchRegex = "[1-9] {1} \\d*";
+		String apartmentRegex = "[1-9]{1}\\d*";
 		String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\\w\\s]).{8,}";
 
 		String firstName = request.getParameter("firstName");
