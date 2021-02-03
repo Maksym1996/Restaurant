@@ -14,9 +14,9 @@ public class User implements Serializable {
 	String phoneNumber;
 	String street;
 	String house;
-	int apartement;
+	int apartment;
 	int porch;
-	int roleId;
+	String role;
 
 	public int getId() {
 		return id;
@@ -82,12 +82,12 @@ public class User implements Serializable {
 		this.house = house;
 	}
 
-	public int getApartement() {
-		return apartement;
+	public int getApartment() {
+		return apartment;
 	}
 
-	public void setApartement(int apartement) {
-		this.apartement = apartement;
+	public void setApartment(int apartment) {
+		this.apartment = apartment;
 	}
 
 	public int getPorch() {
@@ -98,19 +98,35 @@ public class User implements Serializable {
 		this.porch = porch;
 	}
 
-	public int getRoleId() {
-		return roleId;
+	public String getRole() {
+		return role;
 	}
 
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public static User createUser(String firstName, String lastName, String email, String phoneNumber, String password,
+			String street, String house, int apartment, int porch) {
+		User user = new User();
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setPhoneNumber(phoneNumber);
+		user.setEmail(email);
+		user.setPassword(password);
+		user.setStreet(street);
+		user.setHouse(house);
+		user.setApartment(apartment);
+		user.setPorch(porch);
+		return user;
+
 	}
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", password=" + password + ", phoneNumber=" + phoneNumber + ", street=" + street + ", house=" + house
-				+ ", apartement=" + apartement + ", porch=" + porch + ", roleId=" + roleId + "]";
+				+ ", apartment=" + apartment + ", porch=" + porch + ", role=" + role + "]";
 	}
 
 	@Override

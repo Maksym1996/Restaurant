@@ -35,13 +35,23 @@ public class BeforeMainServlet extends HttpServlet {
 		String desc = request.getParameter("desc");
 		
 		int limitProductOnPage = 2;
-		List<Product> partListProducts;
-		long productsCount;
+		List<Product> partListProducts = null;
+		long productsCount = 0;
 
 		int skip = limitProductOnPage * (currentPage - 1);
 
-		productsCount = productDao.getProductCount(categories);
-		partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, desc, skip, limitProductOnPage);
+		try {
+			productsCount = productDao.getProductCount(categories);
+		} catch (Exception e) {
+			//TODO add some logger 03.02.2021
+			response.sendRedirect("SomeWrong.jsp");
+		}
+		try {
+			partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, desc, skip, limitProductOnPage);
+		} catch (Exception e) {
+			//TODO add some logger 03.02.2021
+			response.sendRedirect("SomeWrong.jsp");
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("Pizza Preferita.jsp");
 		request.setAttribute("productsList", partListProducts);

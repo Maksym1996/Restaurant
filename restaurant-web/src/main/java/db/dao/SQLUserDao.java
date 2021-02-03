@@ -14,10 +14,10 @@ import db.entity.User;
 
 public class SQLUserDao implements UserDao {
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
-	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?,?,?,?,?,?,?,?)";
-	private static final String GET_USER = "SELECT * FROM user WHERE email = ?";
+	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'234jsdflakj')) ,?,?,?,?,?,?)";
+	private static final String GET_USER = "SELECT * FROM user WHERE email = ? AND password = MD5(CONCAT(?,'234jsdflakj'))";
 	private static final String UPDATE_USER = "UPDATE user WHERE id = ? SET first_name=?, last_name=?"
-			+ "password=?, phone_number=?, street=?, house=?, apartement=?, porch=?";
+			+ "password=?, phone_number=?, street=?, house=?, apartment=?, porch=?";
 	private final DataSource dataSource;
 
 	public SQLUserDao(DataSource dataSource) {
@@ -25,7 +25,7 @@ public class SQLUserDao implements UserDao {
 	}
 
 	@Override
-	public List<User> getAllUsers() {
+	public List<User> getAllUsers() throws Exception {
 		List<User> allUser = new ArrayList<>();
 		Connection con = null;
 		Statement stat = null;
@@ -39,7 +39,8 @@ public class SQLUserDao implements UserDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO some logger
+			//TODO some logger
+			throw new SQLException();
 		} finally {
 			close(con, stat, rs);
 		}
@@ -48,7 +49,7 @@ public class SQLUserDao implements UserDao {
 	}
 	
 	@Override
-	public int insertUser(User model) {
+	public int insertUser(User model) throws Exception {
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -64,9 +65,9 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getPhoneNumber());
 			prep.setString(k++, model.getStreet());
 			prep.setString(k++, model.getHouse());
-			prep.setInt(k++, model.getApartement());
+			prep.setInt(k++, model.getApartment());
 			prep.setInt(k++, model.getPorch());
-			prep.setInt(k++, model.getRoleId());
+			prep.setString(k++, model.getRole());
 			
 			if(prep.executeUpdate() > 0) {
 				rs = prep.getGeneratedKeys();
@@ -77,6 +78,7 @@ public class SQLUserDao implements UserDao {
 			}
 		} catch (SQLException e) {
 			// TODO some logger
+			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
 		}
@@ -84,7 +86,7 @@ public class SQLUserDao implements UserDao {
 	}
 
 	@Override
-	public User getUser(String email) {
+	public User getUser(String email, String password) throws Exception {
 		User model = new User();
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -93,6 +95,7 @@ public class SQLUserDao implements UserDao {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(GET_USER);
 			prep.setString(1, email);
+			prep.setString(2, password);
 			rs = prep.executeQuery();
 			
 			if(rs.next()) {
@@ -100,6 +103,7 @@ public class SQLUserDao implements UserDao {
 			}
 		}catch(SQLException e){
 			//TODO LOGGER
+			throw new SQLException();
 		}finally {
 			close(con, prep, rs);
 		}
@@ -107,7 +111,7 @@ public class SQLUserDao implements UserDao {
 	}
 
 	@Override
-	public boolean updateUser(User model) {
+	public boolean updateUser(User model) throws Exception {
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -123,7 +127,7 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getPhoneNumber());
 			prep.setString(k++, model.getStreet());
 			prep.setString(k++, model.getHouse());
-			prep.setInt(k++, model.getApartement());
+			prep.setInt(k++, model.getApartment());
 			prep.setInt(k++, model.getPorch());
 			
 			
@@ -132,6 +136,7 @@ public class SQLUserDao implements UserDao {
 			}
 		}catch(SQLException e) {
 			//TODO logger
+			throw new SQLException();
 		}finally {
 			close(con, prep);
 		}
@@ -151,20 +156,22 @@ public class SQLUserDao implements UserDao {
 		user.setPhoneNumber(rs.getString(k++));
 		user.setStreet(rs.getString(k++));
 		user.setHouse(rs.getString(k++));
-		user.setApartement(rs.getInt(k++));
-		user.setPorch(rs.getInt(k));
+		user.setApartment(rs.getInt(k++));
+		user.setPorch(rs.getInt(k++));
+		user.setRole(rs.getString(k));
 		
 
 		return user;
 	}
 
-	private void close(AutoCloseable... ac) {
+	private void close(AutoCloseable... ac) throws Exception {
 		for (AutoCloseable a : ac) {
 			if (a != null) {
 				try {
 					a.close();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					//TODO some logger
+					throw new Exception();
 				}
 			}
 		}

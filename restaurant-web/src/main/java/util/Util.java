@@ -1,5 +1,7 @@
 package util;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +34,32 @@ public class Util {
 		default:
 			return null;
 		}
+
+	}
+	
+	public static String hash(String input) throws NoSuchAlgorithmException {
+		int sizeByte = 256;
+		int numSystem = 16;
+		MessageDigest digest = MessageDigest.getInstance("MD5");
+
+		digest.update(input.getBytes());
+
+		byte[] hash = digest.digest();
+
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < hash.length; i++) {
+			int num = ((int) hash[i] < 0 ? sizeByte : 0) + (int) hash[i];
+			String str = Integer.toString(num, numSystem);
+
+			if (str.length() == 1) {
+				str = "0" + str;
+			}
+			for (char ch : str.toCharArray()) {
+				result.append(Character.toUpperCase(ch));
+			}
+		}
+
+		return result.toString();
 
 	}
 

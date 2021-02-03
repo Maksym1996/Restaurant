@@ -23,9 +23,10 @@ public class SQLProductDao implements ProductDao {
 	public SQLProductDao(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-	
+
 	@Override
-	public List<Product> getProductByCategoriesOnPage(String[] categories, String sortValue, String desc, int skip, int limit) {
+	public List<Product> getProductByCategoriesOnPage(String[] categories, String sortValue, String desc, int skip,
+			int limit) throws Exception {
 		List<Product> productByCategories = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -33,7 +34,7 @@ public class SQLProductDao implements ProductDao {
 
 		try {
 			con = dataSource.getConnection();
-			
+
 			prep = con.prepareStatement(protectSqlInjection(sortValue, categories, desc));
 
 			int k = 1;
@@ -50,8 +51,8 @@ public class SQLProductDao implements ProductDao {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			// TODO set logger 29.01.2021;
+			// TODO add some logger 03.02.2021
+			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
 		}
@@ -60,7 +61,7 @@ public class SQLProductDao implements ProductDao {
 	}
 
 	@Override
-	public long getProductCount(String[] categories) {
+	public long getProductCount(String[] categories) throws Exception {
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -80,16 +81,16 @@ public class SQLProductDao implements ProductDao {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			// TODO set logger 29.01.2021;
+			// TODO add some logger 03.02.2021
+			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
 		}
 		return res;
 	}
-	
+
 	@Override
-	public int insertProduct(Product model) {
+	public int insertProduct(Product model) throws Exception {
 		int productId = 0;
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -116,19 +117,16 @@ public class SQLProductDao implements ProductDao {
 			con.commit();
 		} catch (SQLException e) {
 			rollback(con);
-			e.printStackTrace();
-			// TODO Auto-generated catch block
+			// TODO add some logger 03.02.2021
+			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
 		}
 		return 0;
 	}
-	
-	
-	
 
 	@Override
-	public Product getProduct(int id) {
+	public Product getProduct(int id) throws Exception {
 		Product model = new Product();
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -143,8 +141,8 @@ public class SQLProductDao implements ProductDao {
 				model = extractionProduct(rs);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			// TODO LOGGER
+			// TODO add some logger 03.02.2021
+			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
 		}
@@ -153,7 +151,7 @@ public class SQLProductDao implements ProductDao {
 	}
 
 	@Override
-	public boolean updateProduct(Product model) {
+	public boolean updateProduct(Product model) throws Exception {
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -176,9 +174,9 @@ public class SQLProductDao implements ProductDao {
 			}
 			con.commit();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			rollback(con);
-			// TODO logger
+			// TODO add some logger 03.02.2021
+			throw new SQLException();
 		} finally {
 			close(con, prep);
 		}
@@ -201,30 +199,28 @@ public class SQLProductDao implements ProductDao {
 		return product;
 	}
 
-	private void close(AutoCloseable... autoCloseables) {
+	private void close(AutoCloseable... autoCloseables) throws Exception {
 		for (AutoCloseable ac : autoCloseables) {
 			if (ac != null) {
 				try {
 					ac.close();
 				} catch (Exception e) {
-					e.printStackTrace();
-					// TODO Auto-generated catch block
+					// TODO add some logger 03.02.2021
+					throw new Exception();
 				}
 			}
 		}
 	}
 
-	private void rollback(Connection connect) {
+	private void rollback(Connection connect) throws SQLException {
 		try {
 			connect.rollback();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO add some logger 03.02.2021
+			throw new SQLException();
 		}
 	}
 
-	
-	
 	private String countQuery(String[] categories) {
 		StringBuilder result = new StringBuilder();
 		result.append("SELECT count(id) FROM product ");
@@ -233,7 +229,7 @@ public class SQLProductDao implements ProductDao {
 			result.append("WHERE category IN (").append(inSql).append(") ");
 		}
 		return result.toString();
-		
+
 	}
 
 	private String protectSqlInjection(String value, String[] categories, String desc) {
@@ -243,7 +239,7 @@ public class SQLProductDao implements ProductDao {
 			String inSql = String.join(",", Collections.nCopies(categories.length, "?"));
 			result.append("WHERE category IN (").append(inSql).append(") ");
 		}
-		
+
 		switch (value) {
 		case "name":
 			result.append("ORDER BY name ").toString();
@@ -258,8 +254,8 @@ public class SQLProductDao implements ProductDao {
 			result.append("ORDER BY id ").toString();
 			break;
 		}
-		
-		if("false".equals(desc)) {
+
+		if ("false".equals(desc)) {
 			result.append("DESC ");
 		}
 

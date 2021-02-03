@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="t" uri="WEB-INF/taglib.tld"%>
 <!DOCTYPE html>
@@ -41,53 +41,10 @@
 
 <link rel="stylesheet" href="main.css">
 </head>
-<body class="d-flex flex-column h-100">
-	<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-		<!-- Название -->
-		<div class="container-fluid">
-			<a class="navbar-brand"
-				href="/restaurant-web/Pizza Preferita?page=${currentPage}">Pizza
-				Preferita</a>
+<body class="d-flex flex-column h-100 mainPageBody">
 
-			<!-- Кнопка для выпадающего списка при уменьшении маштаба -->
-			<button class="navbar-toggler collapsed" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<div class="navbar-collapse collapse" id="navbarSupportedContent">
-
-				<!-- Выпадающий список для языков-->
-				<div class="dropdown">
-					<button class="btn btn-secondary dropdown-toggle" type="button"
-						id="dropdownMenuButton" data-toggle="dropdown"
-						aria-expanded="false">
-						<i class="bi bi-globe2"></i>
-					</button>
-					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<li><a class="dropdown-item" href="#">English</a></li>
-						<li><a class="dropdown-item" href="#">Русский</a></li>
-					</ul>
-				</div>
-
-				<!--Иконки кабинета и корзины-->
-				<div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
-				<div class="me-auto mb-2"></div>
-				<div class="me-2">
-					<a href="#" title="Личный кабинет"> <i
-						class="bi bi-person-square cartMan"></i>
-					</a>
-				</div>
-				<div class="me-2">
-					<a href="#" title="Корзина"> <i class="bi bi-cart3 cartMan"></i>
-					</a>
-				</div>
-
-			</div>
-		</div>
-	</nav>
+	<c:import url="/WEB-INF/jspf/header.jspf" />
+	
 	<!-- Кнопки фильтрации -->
 	<div class="row row-cols-auto"
 		style="margin-right: 0px; margin-left: 0px">
@@ -235,19 +192,7 @@
 		</div>
 	</main>
 
-	<!-- Вывод нижней строки с контантами -->
-	<footer class="footer">
-		<div class="row row-cols-auto">
-			<div class="text-center col-sm-4">
-				<i class="bi bi-phone"></i> <span>+380969055386</span>
-			</div>
-			<div class="text-center col-sm-4">
-				<span>© Maksym 2021</span>
-			</div>
-			<div class="text-center col-sm-4">
-				<i class="bi bi-envelope-fill"></i> <span>kordonets1996@ukr.net</span>
-			</div>
-		</div>
-	</footer>
+	<c:import url = "/WEB-INF/jspf/footer.jspf"/>
+	
 </body>
 </html>
