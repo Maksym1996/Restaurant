@@ -14,7 +14,7 @@ import db.entity.User;
 
 public class SQLUserDao implements UserDao {
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
-	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'234jsdflakj')) ,?,?,?,?,?,?)";
+	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'234jsdflakj')) ,?,?,?,?,?, DEFAULT)";
 	private static final String GET_USER = "SELECT * FROM user WHERE email = ? AND password = MD5(CONCAT(?,'234jsdflakj'))";
 	private static final String UPDATE_USER = "UPDATE user WHERE id = ? SET first_name=?, last_name=?"
 			+ "password=?, phone_number=?, street=?, house=?, apartment=?, porch=?";
@@ -40,6 +40,7 @@ public class SQLUserDao implements UserDao {
 
 		} catch (SQLException e) {
 			//TODO some logger
+			
 			throw new SQLException();
 		} finally {
 			close(con, stat, rs);
@@ -56,7 +57,7 @@ public class SQLUserDao implements UserDao {
 		int userId = 0;
 		try {
 			con = dataSource.getConnection();
-			prep = con.prepareStatement(INSERT_USER);
+			prep = con.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
 			prep.setString(k++, model.getEmail());
 			prep.setString(k++, model.getFirstName());
@@ -65,9 +66,8 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getPhoneNumber());
 			prep.setString(k++, model.getStreet());
 			prep.setString(k++, model.getHouse());
-			prep.setInt(k++, model.getApartment());
-			prep.setInt(k++, model.getPorch());
-			prep.setString(k++, model.getRole());
+			prep.setString(k++, model.getApartment());
+			prep.setString(k++, model.getPorch());
 			
 			if(prep.executeUpdate() > 0) {
 				rs = prep.getGeneratedKeys();
@@ -77,6 +77,7 @@ public class SQLUserDao implements UserDao {
 				}
 			}
 		} catch (SQLException e) {
+			System.err.println(e.getMessage());
 			// TODO some logger
 			throw new SQLException();
 		} finally {
@@ -127,8 +128,8 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getPhoneNumber());
 			prep.setString(k++, model.getStreet());
 			prep.setString(k++, model.getHouse());
-			prep.setInt(k++, model.getApartment());
-			prep.setInt(k++, model.getPorch());
+			prep.setString(k++, model.getApartment());
+			prep.setString(k++, model.getPorch());
 			
 			
 			if(prep.executeUpdate() > 0) {
@@ -156,8 +157,8 @@ public class SQLUserDao implements UserDao {
 		user.setPhoneNumber(rs.getString(k++));
 		user.setStreet(rs.getString(k++));
 		user.setHouse(rs.getString(k++));
-		user.setApartment(rs.getInt(k++));
-		user.setPorch(rs.getInt(k++));
+		user.setApartment(rs.getString(k++));
+		user.setPorch(rs.getString(k++));
 		user.setRole(rs.getString(k));
 		
 
