@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import db.dao.UserDao;
 import db.entity.User;
+import util.Util;
 
 /**
  * Servlet implementation class Registrarion
@@ -51,7 +52,7 @@ public class RegistrationServlet extends HttpServlet {
 		String house = request.getParameter("house");
 		String apartment = request.getParameter("apartment");
 		String porch = request.getParameter("porch");
-
+		
 		Map<String, String> errors = new HashMap<>();
 
 		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
@@ -60,7 +61,7 @@ public class RegistrationServlet extends HttpServlet {
 		try {
 			allUsers = userDao.getAllUsers();
 		} catch (Exception e1) {
-			//TODO add some logger 03.02.2021
+			// TODO add some logger 03.02.2021
 			response.sendRedirect("SomeWrong.jsp");
 		}
 
@@ -73,25 +74,26 @@ public class RegistrationServlet extends HttpServlet {
 			}
 		}
 
-		if (firstName == null) {
+		if (firstName.isEmpty()) {
 			errors.put("firstName", "Provide your first name");
 		}
-		if (lastName == null) {
+		if (lastName.isEmpty()) {
 			errors.put("lastName", "Provide your last name");
 		}
-		if (email == null) {
+		if (email.isEmpty()) {
 			errors.put("email", "Provide your email");
 		}
-		if (phoneNumber == null) {
+		
+		if (phoneNumber.isEmpty()) {
 			errors.put("phoneNumber", "Provide your first name");
 		}
-		if (password == null) {
+		if (password.isEmpty()) {
 			errors.put("password", "Provide your password");
 		}
-		if (confirmPassword == null) {
+		if (confirmPassword.isEmpty()) {
 			errors.put("confirmPassword", "Confirm password");
 		}
-		if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
+		if (!password.isEmpty() && !confirmPassword.isEmpty() && !password.equals(confirmPassword)) {
 			errors.put("confirmPasswordSame", "The passwords you entered are different");
 		}
 
@@ -105,10 +107,10 @@ public class RegistrationServlet extends HttpServlet {
 			errors.put("passwordPattern",
 					"The password must consist of at least 8 characters, at least one digit, one uppercase and lowercase letters of the Latin alphabet and one special character");
 		}
-		if (!Pattern.matches(apartmentRegex, apartment)) {
+		if (!apartment.isEmpty() && !Pattern.matches(apartmentRegex, apartment)) {
 			errors.put("apartmentPattern", "Сannot contain any characters unless numbers");
 		}
-		if (!Pattern.matches(porchRegex, porch)) {
+		if (!porch.isEmpty() && !Pattern.matches(porchRegex, porch)) {
 			errors.put("porchPattern", "Сannot contain any characters unless numbers");
 		}
 
@@ -119,14 +121,16 @@ public class RegistrationServlet extends HttpServlet {
 			return;
 		}
 
-		User model = User.createUser(firstName, lastName, email, phoneNumber, confirmPassword, street, house,
-				Integer.parseInt(apartment), Integer.parseInt(porch));
+		User model = Util.createUser(firstName, lastName, email, phoneNumber, password, street, house,
+				apartment, porch);
 
 		try {
 			userDao.insertUser(model);
 		} catch (Exception e) {
-			//TODO add some logger 03.02.2021
+			System.err.println(e.getMessage());
+			// TODO add some logger 03.02.2021
 			response.sendRedirect("SomeWrong.jsp");
+			return;
 		}
 
 		HttpSession session = request.getSession(true);
