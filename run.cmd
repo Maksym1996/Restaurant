@@ -1,4 +1,4 @@
-mvn clean install && cd restaurant-web && mvn tomcat7:run
+mvn clean install && mvn tomcat7:run
 
  
 
