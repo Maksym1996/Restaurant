@@ -46,7 +46,8 @@
 	<c:import url="/WEB-INF/jspf/header.jspf" />
 
 	<main>
-		<form class="form" action="Registration" method="post">
+		<form class="form" action="Registration" method="post"
+			style="margin-left: 3rem">
 			<div class="row row-cols-auto">
 				<div class="col-md-3">
 					<label for="inputFirstName" class="form-label">Имя<span
@@ -86,7 +87,7 @@
 					<label for="inputEmail" class="form-label">Электронная
 						почта<span style="color: red">*</span>
 					</label> <input type="text" class="form-control" id="inputEmail"
-						name="email" >
+						name="email">
 					<c:if test="${not empty errors and errors.containsKey('email')}">
 						<p style="color: red">
 							<c:out value="${errors.email}" />
@@ -98,16 +99,15 @@
 							<c:out value="${errors.emailOrigin}" />
 						</p>
 					</c:if>
-					<!--<c:if
+					<c:if
 						test="${not empty errors and errors.containsKey('emailPattern')}">
 						<p style="color: red">
 							<c:out value="${errors.emailPattern}" />
 						</p>
-					</c:if>-->
+					</c:if>
 				</div>
-				<button type="button" style="color: black" class="btn btn-link">
-					<i class="far fa-times-circle"></i>
-				</button>
+
+
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputEmail').value = ''">
 					<i class="far fa-times-circle"></i>
@@ -142,9 +142,9 @@
 
 
 				</div>
-				<button type="button" style="color: black" class="btn btn-link">
+				<!-- button type="button" style="color: #ffffff00" class="btn btn-link">
 					<i class="far fa-times-circle"></i>
-				</button>
+				</button> -->
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputPhone').value = ''">
 					<i class="far fa-times-circle"></i>
@@ -254,8 +254,9 @@
 			<br>
 			<button type="submit" class="btn btn-light">Зарегистрироваться</button>
 		</form>
-	</main>
 
+	</main>
+	<br>
 	<c:import url="/WEB-INF/jspf/footer.jspf" />
 
 
