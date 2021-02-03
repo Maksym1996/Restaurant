@@ -14,8 +14,8 @@ public class User implements Serializable {
 	String phoneNumber;
 	String street;
 	String house;
-	int apartment;
-	int porch;
+	String apartment;
+	String porch;
 	String role;
 
 	public int getId() {
@@ -82,19 +82,19 @@ public class User implements Serializable {
 		this.house = house;
 	}
 
-	public int getApartment() {
+	public String getApartment() {
 		return apartment;
 	}
 
-	public void setApartment(int apartment) {
+	public void setApartment(String apartment) {
 		this.apartment = apartment;
 	}
 
-	public int getPorch() {
+	public String getPorch() {
 		return porch;
 	}
 
-	public void setPorch(int porch) {
+	public void setPorch(String porch) {
 		this.porch = porch;
 	}
 
@@ -104,22 +104,6 @@ public class User implements Serializable {
 
 	public void setRole(String role) {
 		this.role = role;
-	}
-
-	public static User createUser(String firstName, String lastName, String email, String phoneNumber, String password,
-			String street, String house, int apartment, int porch) {
-		User user = new User();
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setPhoneNumber(phoneNumber);
-		user.setEmail(email);
-		user.setPassword(password);
-		user.setStreet(street);
-		user.setHouse(house);
-		user.setApartment(apartment);
-		user.setPorch(porch);
-		return user;
-
 	}
 
 	@Override
