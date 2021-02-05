@@ -13,9 +13,10 @@ import javax.sql.DataSource;
 import db.entity.User;
 
 public class SQLUserDao implements UserDao {
+	private static final String SALT = "234jsdflakj";
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
-	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'234jsdflakj')) ,?,?,?,?,?, DEFAULT)";
-	private static final String GET_USER = "SELECT * FROM user WHERE email = ? AND password = MD5(CONCAT(?,'234jsdflakj'))";
+	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT + "')) ,?,?,?,?,?, DEFAULT)";
+	private static final String GET_USER = "SELECT * FROM user WHERE email = ? AND password = MD5(CONCAT(?,'" + SALT +"'))";
 	private static final String UPDATE_USER = "UPDATE user WHERE id = ? SET first_name=?, last_name=?"
 			+ "password=?, phone_number=?, street=?, house=?, apartment=?, porch=?";
 	private final DataSource dataSource;
