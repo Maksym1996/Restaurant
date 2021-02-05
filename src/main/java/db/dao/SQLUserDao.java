@@ -15,10 +15,12 @@ import db.entity.User;
 public class SQLUserDao implements UserDao {
 	private static final String SALT = "234jsdflakj";
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
-	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT + "')) ,?,?,?,?,?, DEFAULT)";
-	private static final String GET_USER = "SELECT * FROM user WHERE email = ? AND password = MD5(CONCAT(?,'" + SALT +"'))";
-	private static final String UPDATE_USER = "UPDATE user WHERE id = ? SET first_name=?, last_name=?"
-			+ "password=?, phone_number=?, street=?, house=?, apartment=?, porch=?";
+	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT
+			+ "')) ,?,?,?,?,?, DEFAULT, ?)";
+	private static final String GET_USER = "SELECT * FROM user WHERE email = ? AND password = MD5(CONCAT(?,'" + SALT
+			+ "'))";
+	private static final String UPDATE_USER = "UPDATE user WHERE phone_number = ? SET first_name=?, last_name=?"
+			+ "password=?, street=?, house=?, apartment=?, porch=?, registred=?";
 	private final DataSource dataSource;
 
 	public SQLUserDao(DataSource dataSource) {
@@ -40,8 +42,8 @@ public class SQLUserDao implements UserDao {
 			}
 
 		} catch (SQLException e) {
-			//TODO some logger
-			
+			// TODO some logger
+
 			throw new SQLException();
 		} finally {
 			close(con, stat, rs);
@@ -49,7 +51,9 @@ public class SQLUserDao implements UserDao {
 
 		return allUser;
 	}
+
 	
+
 	@Override
 	public int insertUser(User model) throws Exception {
 		Connection con = null;
@@ -69,10 +73,11 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getHouse());
 			prep.setString(k++, model.getApartment());
 			prep.setString(k++, model.getPorch());
-			
-			if(prep.executeUpdate() > 0) {
+			prep.setString(k++, model.getRegistred());
+
+			if (prep.executeUpdate() > 0) {
 				rs = prep.getGeneratedKeys();
-				if(rs.next()) {
+				if (rs.next()) {
 					userId = rs.getInt(1);
 					model.setId(userId);
 				}
@@ -99,14 +104,14 @@ public class SQLUserDao implements UserDao {
 			prep.setString(1, email);
 			prep.setString(2, password);
 			rs = prep.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				model = extraction(rs);
 			}
-		}catch(SQLException e){
-			//TODO LOGGER
+		} catch (SQLException e) {
+			// TODO LOGGER
 			throw new SQLException();
-		}finally {
+		} finally {
 			close(con, prep, rs);
 		}
 		return model;
@@ -117,7 +122,7 @@ public class SQLUserDao implements UserDao {
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement prep = null;
-		
+
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(UPDATE_USER);
@@ -131,20 +136,20 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getHouse());
 			prep.setString(k++, model.getApartment());
 			prep.setString(k++, model.getPorch());
-			
-			
-			if(prep.executeUpdate() > 0) {
+			prep.setString(k++, model.getRegistred());
+
+			if (prep.executeUpdate() > 0) {
 				result = true;
 			}
-		}catch(SQLException e) {
-			//TODO logger
+		} catch (SQLException e) {
+			// TODO logger
 			throw new SQLException();
-		}finally {
+		} finally {
 			close(con, prep);
 		}
-		
+
 		return result;
-		
+
 	}
 
 	private User extraction(ResultSet rs) throws SQLException {
@@ -160,8 +165,8 @@ public class SQLUserDao implements UserDao {
 		user.setHouse(rs.getString(k++));
 		user.setApartment(rs.getString(k++));
 		user.setPorch(rs.getString(k++));
-		user.setRole(rs.getString(k));
-		
+		user.setRole(rs.getString(k++));
+		user.setRegistred(rs.getString(k++));
 
 		return user;
 	}
@@ -172,13 +177,11 @@ public class SQLUserDao implements UserDao {
 				try {
 					a.close();
 				} catch (Exception e) {
-					//TODO some logger
+					// TODO some logger
 					throw new Exception();
 				}
 			}
 		}
 	}
-
-
 
 }

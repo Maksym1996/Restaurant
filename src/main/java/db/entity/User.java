@@ -17,6 +17,7 @@ public class User implements Serializable {
 	String apartment;
 	String porch;
 	String role;
+	String registred;
 
 	public int getId() {
 		return id;
@@ -106,6 +107,14 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
+	public String getRegistred() {
+		return registred;
+	}
+
+	public void setRegistred(String registred) {
+		this.registred = registred;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
@@ -117,7 +126,6 @@ public class User implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
 		return result;
 	}
@@ -131,11 +139,6 @@ public class User implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
 		if (phoneNumber == null) {
 			if (other.phoneNumber != null)
 				return false;
@@ -143,5 +146,8 @@ public class User implements Serializable {
 			return false;
 		return true;
 	}
+
+
+	
 
 }

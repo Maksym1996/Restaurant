@@ -14,7 +14,7 @@ public class Util {
 	}
 
 	public static User createUser(String firstName, String lastName, String email, String phoneNumber, String password,
-			String street, String house, String apartment, String porch) {
+			String street, String house, String apartment, String porch, String registred) {
 		User user = new User();
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
@@ -25,6 +25,7 @@ public class Util {
 		user.setHouse(house);
 		user.setApartment(apartment);
 		user.setPorch(porch);
+		user.setRegistred(registred);
 		return user;
 
 	}
