@@ -1,12 +1,16 @@
 package util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import db.entity.Product;
 
-public class Cart {
-    private List<Product> products = new ArrayList<>();
+public class Cart implements Serializable {
+    
+	private static final long serialVersionUID = -3564439771722286373L;
+	
+	private List<Product> products = new ArrayList<>();
 
     public List<Product> getProducts() {
         return products;

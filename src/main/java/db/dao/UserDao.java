@@ -13,5 +13,7 @@ public interface UserDao {
 	User getUser(String email, String password) throws Exception;
 
 	boolean updateUser(User model) throws Exception;
+	
+	boolean deleteUser(int id) throws Exception;
 
 }

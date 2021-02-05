@@ -21,6 +21,8 @@ public class SQLUserDao implements UserDao {
 			+ "'))";
 	private static final String UPDATE_USER = "UPDATE user WHERE phone_number = ? SET first_name=?, last_name=?"
 			+ "password=?, street=?, house=?, apartment=?, porch=?, registred=?";
+	private static final String DELETE_USER_BY_ID = "DELETE FROM user WHERE id =?";
+	
 	private final DataSource dataSource;
 
 	public SQLUserDao(DataSource dataSource) {
@@ -82,10 +84,10 @@ public class SQLUserDao implements UserDao {
 					model.setId(userId);
 				}
 			}
-			con.commit();
+			
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
-			rollback(con);
+			
 			// TODO some logger
 			throw new SQLException();
 		} finally {
@@ -195,6 +197,30 @@ public class SQLUserDao implements UserDao {
 			// TODO add some logger 03.02.2021
 			throw new SQLException();
 		}
+	}
+
+	@Override
+	public boolean deleteUser(int id) throws Exception {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement prep = null;
+		ResultSet rs = null;
+		try {
+			con = dataSource.getConnection();
+			prep = con.prepareStatement(DELETE_USER_BY_ID);
+			prep.setInt(1, id);
+			rs = prep.executeQuery();
+
+			if (rs.next()) {
+				result = true;
+			}
+		} catch (SQLException e) {
+			// TODO LOGGER
+			throw new SQLException();
+		} finally {
+			close(con, prep, rs);
+		}
+		return result;
 	}
 
 }
