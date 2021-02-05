@@ -9,9 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import db.dao.ProductDao;
 import db.entity.Product;
+import util.Cart;
 import util.Util;
 
 /**
@@ -29,11 +31,16 @@ public class BeforeMainServlet extends HttpServlet {
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
 
 		int currentPage = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
-		String[] categories = request.getParameterValues("categories") != null ? request.getParameterValues("categories") : new String[] {};
+		String[] categories = request.getParameterValues("categories") != null
+				? request.getParameterValues("categories")
+				: new String[] {};
 		String sortValue = request.getParameter("sortValue") != null ? request.getParameter("sortValue").toLowerCase()
 				: "id";
-		String desc = request.getParameter("desc");
-		
+		String asc = request.getParameter("asc");
+		int productId = request.getParameter("productId") != null
+				? Integer.parseInt(request.getParameter("productId"))
+				: 0;
+
 		int limitProductOnPage = 2;
 		List<Product> partListProducts = null;
 		long productsCount = 0;
@@ -43,23 +50,41 @@ public class BeforeMainServlet extends HttpServlet {
 		try {
 			productsCount = productDao.getProductCount(categories);
 		} catch (Exception e) {
-			//TODO add some logger 03.02.2021
+			// TODO add some logger 03.02.2021
 			response.sendRedirect("SomeWrong.jsp");
 		}
 		try {
-			partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, desc, skip, limitProductOnPage);
+			partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, asc, skip,
+					limitProductOnPage);
 		} catch (Exception e) {
-			//TODO add some logger 03.02.2021
+			// TODO add some logger 03.02.2021
 			response.sendRedirect("SomeWrong.jsp");
 		}
-		
+
+		if (productId != 0) {
+			HttpSession session = request.getSession(true);
+			Cart cart = (Cart) session.getAttribute("cart");
+			if (cart == null) {
+				cart = new Cart();
+				session.setAttribute("cart", cart);
+			}
+			List<Product> products = cart.getProducts();
+			try {
+				products.add(productDao.getProduct(productId));
+			} catch (Exception e) {
+				// TODO add some logger 04.02.2021
+				response.sendRedirect("SomeWrong.jsp");
+			}
+			
+		}
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("Pizza Preferita.jsp");
 		request.setAttribute("productsList", partListProducts);
 		request.setAttribute("maxPages", Util.getMaxPages(productsCount, limitProductOnPage));
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("categories", categories);
 		request.setAttribute("sortValue", sortValue);
-		request.setAttribute("desc", desc);
+		request.setAttribute("asc", asc);
 
 		dispatcher.forward(request, response);
 
