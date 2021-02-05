@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 import db.entity.Product;
 
 public class SQLProductDao implements ProductDao {
-	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE" + "(DEFAULT, ?, ?, ?, ?, ?, ?,)";
+	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE(DEFAULT, ?, ?, ?, ?, ?, ?,)";
 	private static final String GET_PRODUCT = "SELECT * FROM product WHERE id = ?";
 	private static final String UPDATE_PRODUCT = "UPDATE product WHERE id = ? SET name=?,"
 			+ "price=?, description=?, count=?, image_link=?, category_id=?";
@@ -122,7 +122,7 @@ public class SQLProductDao implements ProductDao {
 		} finally {
 			close(con, prep, rs);
 		}
-		return 0;
+		return productId;
 	}
 
 	@Override
