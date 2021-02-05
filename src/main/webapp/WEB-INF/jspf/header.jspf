@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-		<!-- Название -->
+		<!-- ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ -->
 		<div class="container-fluid">
 			<a class="navbar-brand"
 				href="/restaurant-web/Pizza Preferita?page=1">Pizza
 				Preferita</a>
 
-			<!-- Кнопка для выпадающего списка при уменьшении маштаба -->
+			<!-- ÐÐ½Ð¾Ð¿ÐºÐ° Ð´Ð»Ñ Ð²ÑÐ¿Ð°Ð´Ð°ÑÑÐµÐ³Ð¾ ÑÐ¿Ð¸ÑÐºÐ° Ð¿ÑÐ¸ ÑÐ¼ÐµÐ½ÑÑÐµÐ½Ð¸Ð¸ Ð¼Ð°ÑÑÐ°Ð±Ð° -->
 			<button class="navbar-toggler collapsed" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
 				aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -15,7 +15,7 @@
 
 			<div class="navbar-collapse collapse" id="navbarSupportedContent">
 
-				<!-- Выпадающий список для языков-->
+				<!-- ÐÑÐ¿Ð°Ð´Ð°ÑÑÐ¸Ð¹ ÑÐ¿Ð¸ÑÐ¾Ðº Ð´Ð»Ñ ÑÐ·ÑÐºÐ¾Ð²-->
 				<div class="dropdown">
 					<button class="btn btn-secondary dropdown-toggle" type="button"
 						id="dropdownMenuButton" data-toggle="dropdown"
@@ -28,16 +28,16 @@
 					</ul>
 				</div>
 
-				<!--Иконки кабинета и корзины-->
+				<!--ÐÐºÐ¾Ð½ÐºÐ¸ ÐºÐ°Ð±Ð¸Ð½ÐµÑÐ° Ð¸ ÐºÐ¾ÑÐ·Ð¸Ð½Ñ-->
 				<div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
 				<div class="me-auto mb-2"></div>
 				<div class="me-2">
-					<a href="Login page" title="Личный кабинет"> <i
+					<a href="Login page" title="Аккаунт"> <i
 						class="bi bi-person-square cartMan"></i>
 					</a>
 				</div>
 				<div class="me-2">
-					<a href="#" title="Корзина"> <i class="bi bi-cart3 cartMan"></i>
+					<a href="Cart" title="Ваша корзина"> <i class="bi bi-cart3 cartMan"></i>
 					</a>
 				</div>
 
