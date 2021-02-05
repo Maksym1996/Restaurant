@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 import db.entity.Receipt;
 
-public class SQLReceiptDao implements ReceiptDao{
+public class SQLReceiptDao implements ReceiptDao {
 	private static final String GET_ALL_RECEIPTS = "SELECT * FROM order_has_product";
 	private static final String GET_RECEIPTS_BY_ORDER_ID = "SELECT * FROM order_has_product WHERE orderId = ?";
 	private static final String SET_RECEIPT = "INSERT INTO order_has_product VALUE(?,?,?,?)";
@@ -40,10 +40,10 @@ public class SQLReceiptDao implements ReceiptDao{
 			if (prep.executeUpdate() > 0) {
 				rs = prep.getGeneratedKeys();
 			}
-			con.commit();
+
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
-			rollback(con);
+
 			// TODO some logger
 			throw new SQLException();
 		} finally {
@@ -51,7 +51,6 @@ public class SQLReceiptDao implements ReceiptDao{
 		}
 		return result;
 	}
-	
 
 	@Override
 	public List<Receipt> getReceipt(int orderId) throws Exception {
@@ -103,7 +102,7 @@ public class SQLReceiptDao implements ReceiptDao{
 
 		return allReceipts;
 	}
-	
+
 	private Receipt extractionReceipt(ResultSet rs) throws SQLException {
 		Receipt receipt = new Receipt();
 		int k = 1;
@@ -128,13 +127,5 @@ public class SQLReceiptDao implements ReceiptDao{
 		}
 	}
 
-	private void rollback(Connection connect) throws SQLException {
-		try {
-			connect.rollback();
-		} catch (SQLException e) {
-			// TODO add some logger 03.02.2021
-			throw new SQLException();
-		}
-	}
 
 }

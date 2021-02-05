@@ -14,9 +14,9 @@ import db.entity.Order;
 
 public class SQLOrderDao implements OrderDao {
 	private static final String GET_ALL_ORDERS = "SELECT * FROM order";
-	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM order WHERE user_id = ?";
-	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM order WHERE status = ?";
-	private static final String SET_ORDER = "INSERT INTO order VALUE(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orders WHERE user_id = ?";
+	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orders WHERE status = ?";
+	private static final String SET_ORDER = "INSERT INTO orders VALUE(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	private final DataSource dataSource;
 
@@ -127,10 +127,10 @@ public class SQLOrderDao implements OrderDao {
 					model.setId(orderId);
 				}
 			}
-			con.commit();
+			
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
-			rollback(con);
+			
 			// TODO some logger
 			throw new SQLException();
 		} finally {
