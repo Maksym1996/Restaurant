@@ -73,7 +73,7 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getHouse());
 			prep.setString(k++, model.getApartment());
 			prep.setString(k++, model.getPorch());
-			prep.setString(k++, model.getRegistred());
+			prep.setString(k++, model.getRegistered());
 
 			if (prep.executeUpdate() > 0) {
 				rs = prep.getGeneratedKeys();
@@ -82,8 +82,10 @@ public class SQLUserDao implements UserDao {
 					model.setId(userId);
 				}
 			}
+			con.commit();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
+			rollback(con);
 			// TODO some logger
 			throw new SQLException();
 		} finally {
@@ -136,12 +138,14 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getHouse());
 			prep.setString(k++, model.getApartment());
 			prep.setString(k++, model.getPorch());
-			prep.setString(k++, model.getRegistred());
+			prep.setString(k++, model.getRegistered());
 
 			if (prep.executeUpdate() > 0) {
 				result = true;
 			}
+			con.commit();
 		} catch (SQLException e) {
+			rollback(con);
 			// TODO logger
 			throw new SQLException();
 		} finally {
@@ -166,7 +170,7 @@ public class SQLUserDao implements UserDao {
 		user.setApartment(rs.getString(k++));
 		user.setPorch(rs.getString(k++));
 		user.setRole(rs.getString(k++));
-		user.setRegistred(rs.getString(k++));
+		user.setRegistered(rs.getString(k++));
 
 		return user;
 	}
@@ -181,6 +185,15 @@ public class SQLUserDao implements UserDao {
 					throw new Exception();
 				}
 			}
+		}
+	}
+	
+	private void rollback(Connection connect) throws SQLException {
+		try {
+			connect.rollback();
+		} catch (SQLException e) {
+			// TODO add some logger 03.02.2021
+			throw new SQLException();
 		}
 	}
 

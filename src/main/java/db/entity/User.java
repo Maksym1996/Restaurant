@@ -17,7 +17,7 @@ public class User implements Serializable {
 	String apartment;
 	String porch;
 	String role;
-	String registred;
+	String registered;
 
 	public int getId() {
 		return id;
@@ -107,12 +107,12 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
-	public String getRegistred() {
-		return registred;
+	public String getRegistered() {
+		return registered;
 	}
 
-	public void setRegistred(String registred) {
-		this.registred = registred;
+	public void setRegistered(String registered) {
+		this.registered = registered;
 	}
 
 	@Override
