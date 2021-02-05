@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -31,20 +32,28 @@ import util.Util;
 @WebServlet("/Cart")
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	String emptyCart = "EmptyCart.html";
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
-		Cart cart = (Cart) session.getAttribute("cart");
 		RequestDispatcher dispatcher;
-		if (cart == null) {
-			dispatcher = request.getRequestDispatcher("EmptyCart.html");
+		
+		Cart cart = (Cart) session.getAttribute("cart");
+		
+		if(cart == null) {
+			dispatcher = request.getRequestDispatcher(emptyCart);
+			dispatcher.forward(request, response);
+			return;
+		}
+		List<Product> products = cart.getProducts();
+		if (products.isEmpty()) {
+			dispatcher = request.getRequestDispatcher(emptyCart);
 			dispatcher.forward(request, response);
 			return;
 		}
 
-		List<Product> products = cart.getProducts();
+		
 		// realize delete product from cart
 		String productId = request.getParameter("productId");
 		if (productId != null) {
@@ -55,7 +64,7 @@ public class CartServlet extends HttpServlet {
 				}
 			}
 			if (products.isEmpty()) {
-				dispatcher = request.getRequestDispatcher("EmptyCart.html");
+				dispatcher = request.getRequestDispatcher(emptyCart);
 				dispatcher.forward(request, response);
 				return;
 			}
@@ -77,8 +86,8 @@ public class CartServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String phoneNumberRegex = "[0][0-9]{9}";
-		String porchRegex = "[1-9] {1} \\d*";
-		String apartmentRegex = "[1-9]{1}\\d*";
+		String porchRegex = "[0-9]+";
+		String apartmentRegex = "[0-9]+";
 
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
@@ -87,7 +96,7 @@ public class CartServlet extends HttpServlet {
 		String house = request.getParameter("house");
 		String apartment = request.getParameter("apartment");
 		String porch = request.getParameter("porch");
-
+		
 		HttpSession session = request.getSession(true);
 
 		Map<String, String> errors = new HashMap<>();
@@ -157,11 +166,11 @@ public class CartServlet extends HttpServlet {
 		int orderId = 0;
 		OrderDao orderDao = (OrderDao) request.getServletContext().getAttribute("orderDao");
 		Date date = new Date();
-		SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+		SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.KOREA);
 		String currentDate = formatForDateNow.format(date);
 		try {
 			orderId = orderDao
-					.insertOrder(Util.createOrder(currentDate, "", "NEW", street, house, apartment, porch, userId));
+					.insertOrder(Util.createOrder(currentDate, null, "NEW", street, house, apartment, porch, userId));
 		} catch (Exception e) {
 
 			// TODO add some logger 05.02.2021

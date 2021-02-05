@@ -7,7 +7,7 @@
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
-<meta charset="utf-8">
+ <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your cart</title>
 <!--    Bootstap START-->
@@ -44,7 +44,7 @@
 <body class="otherPageBody">
 
 	<c:import url="/WEB-INF/jspf/header.jspf" />
-
+    
 	<div align="center" style="font-size: 1em">
 		Ваша корзина
 		<p>
