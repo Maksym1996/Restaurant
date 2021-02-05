@@ -12,7 +12,8 @@ public class PageLinkTag extends SimpleTagSupport {
 	private String[] categories;
 	private String sortValue;
 	private String asc;
-
+    private String productId;
+	
 	public void setPageNumber(int pageNumber) {
 		this.pageNumber = pageNumber;
 	}
@@ -20,13 +21,17 @@ public class PageLinkTag extends SimpleTagSupport {
 	public void setCategories(String[] categories) {
 		this.categories = categories;
 	}
-	
+
 	public void setSortValue(String sortValue) {
 		this.sortValue = sortValue;
 	}
-	
+
 	public void setAsc(String asc) {
 		this.asc = asc;
+	}
+	
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 
 	@Override
@@ -39,7 +44,15 @@ public class PageLinkTag extends SimpleTagSupport {
 				link.append("&categories=").append(category);
 			}
 		}
-		link.append("&sortValue=").append(sortValue).append("&asc=").append(asc);
+		if (sortValue != null) {
+			link.append("&sortValue=").append(sortValue);
+		}
+		if (asc != null) {
+			link.append("&asc=").append(asc);
+		}
+		if(productId != null) {
+			link.append("&productId=").append(productId);
+		}
 		out.print(link.toString());
 	}
 }
