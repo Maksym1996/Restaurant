@@ -2,7 +2,6 @@ package web;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,8 +36,7 @@ public class BeforeMainServlet extends HttpServlet {
 		String sortValue = request.getParameter("sortValue") != null ? request.getParameter("sortValue").toLowerCase()
 				: "id";
 		String asc = request.getParameter("asc");
-		int productId = request.getParameter("productId") != null
-				? Integer.parseInt(request.getParameter("productId"))
+		int productId = request.getParameter("productId") != null ? Integer.parseInt(request.getParameter("productId"))
 				: 0;
 
 		int limitProductOnPage = 2;
@@ -61,21 +59,32 @@ public class BeforeMainServlet extends HttpServlet {
 			response.sendRedirect("SomeWrong.jsp");
 		}
 
+		HttpSession session = request.getSession(true);
+		Cart cart = (Cart) session.getAttribute("cart");
+
+		if (cart == null) {
+			cart = new Cart();
+			session.setAttribute("cart", cart);
+		}
+
+		List<Product> cartProducts = cart.getProducts();
+		request.setAttribute("cartProducts", cartProducts);
 		if (productId != 0) {
-			HttpSession session = request.getSession(true);
-			Cart cart = (Cart) session.getAttribute("cart");
-			if (cart == null) {
-				cart = new Cart();
-				session.setAttribute("cart", cart);
+			boolean contain = false;
+			for (Product p : cartProducts) {
+				if (p.getId() == productId) {
+					contain = true;
+					break;
+				}
 			}
-			List<Product> products = cart.getProducts();
-			try {
-				products.add(productDao.getProduct(productId));
-			} catch (Exception e) {
-				// TODO add some logger 04.02.2021
-				response.sendRedirect("SomeWrong.jsp");
+			if (!contain) {
+				try {
+					cartProducts.add(productDao.getProduct(productId));
+				} catch (Exception e) {
+					// TODO add some logger 04.02.2021
+					response.sendRedirect("SomeWrong.jsp");
+				}
 			}
-			
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("Pizza Preferita.jsp");

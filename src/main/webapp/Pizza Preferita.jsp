@@ -44,7 +44,7 @@
 <body class="d-flex flex-column h-100 mainPageBody">
 
 	<c:import url="/WEB-INF/jspf/header.jspf" />
-	
+
 	<!-- Кнопки фильтрации -->
 	<div class="row row-cols-auto"
 		style="margin-right: 0px; margin-left: 0px">
@@ -123,9 +123,14 @@
 								<c:out value="${product.description}" />
 							</p>
 							<div class="row row-cols-auto">
-								<a href="#" class="btn btn-primary col-sm-7 cart">Заказать</a> <font
-									size=+2 class="col-sm-5"><c:out value="${product.price}" />
-									грн</font>
+
+								<a
+									href='<t:page-link pageNumber="${currentPage}" categories="${categories}" sortValue = "${sortValue}" asc= "${asc}" productId="${product.id}"/>'
+									class="btn btn-primary col-sm-7 cart"> Заказать</a> <font
+									size=+2 class="col-sm-5"> <c:out
+										value="${product.price}" /> грн
+								</font>
+
 							</div>
 
 						</div>
@@ -134,7 +139,7 @@
 			</c:forEach>
 
 		</div>
-
+		<div></div>
 		<!-- Паджинация -->
 		<div class="row row-cols-auto">
 			<div class="text-center col-sm-5"></div>
@@ -192,7 +197,7 @@
 		</div>
 	</main>
 
-	<c:import url = "/WEB-INF/jspf/footer.jspf"/>
-	
+	<c:import url="/WEB-INF/jspf/footer.jspf" />
+
 </body>
 </html>
