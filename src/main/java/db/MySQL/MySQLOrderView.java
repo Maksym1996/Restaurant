@@ -7,21 +7,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
 import db.dao.OrderDao;
 import db.entity.Order;
+import db.entity.Product;
 
 public class MySQLOrderView implements OrderDao {
 	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView";
 	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ?";
 	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE status = ?";
-	private static final String SET_NEW_ORDER = "INSERT INTO orderView(id, order_date, state, address, user_id) VALUES(DEFAULT, ?, ?, ?, ?)";
+	private static final String SET_NEW_ORDER = "INSERT INTO orderView(id, order_date, state, address, user_id) VALUES(DEFAULT, current_timestamp(), ?, ?, ?)";
 	private static final String SET_PRODUCT_FOR_ORDER = "INSERT INTO orderView(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
-	private static final String SET_STATE_AND_CLOSEDATE = "UPDATE orderView SET state=?, closing_date=? WHERE id = ?";
+	private static final String SET_STATE_AND_CLOSEDATE = "UPDATE orderView WHERE id = ? SET state=?, closing_date=? ";
 
-	
 	private final DataSource dataSource;
 
 	public MySQLOrderView(DataSource dataSource) {
@@ -104,52 +105,20 @@ public class MySQLOrderView implements OrderDao {
 
 		return allOrders;
 	}
-	
-	@Override
-	public boolean updateOrder(int orderId, int productId, int count, int currentPrice) throws Exception {
-		Connection con = null;
-		PreparedStatement prep = null;
-		boolean result = false;	
-		try {
-			con = dataSource.getConnection();
-			con.setAutoCommit(result);
-			
-			prep = con.prepareStatement(SET_PRODUCT_FOR_ORDER);
-			int k = 1;
-			prep.setInt(k++, orderId);
-			prep.setInt(k++, productId);
-			prep.setInt(k++, count);
-			prep.setInt(k++, currentPrice);
-
-			if (prep.executeUpdate() > 0) {
-				result = true;
-			}
-			con.commit();
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-			rollback(con);
-			// TODO some logger
-			throw new SQLException();
-		} finally {
-			close(con, prep);
-		}
-		return result;
-	
-	}
 
 	@Override
-	public int insertOrder(Order model) throws Exception {
+	public int insertOrder(Order model, List<Product> products) throws Exception {
 		Connection con = null;
+
 		PreparedStatement prep = null;
 		ResultSet rs = null;
 		int orderId = 0;
 		try {
+
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
-			
-			prep = con.prepareStatement(SET_NEW_ORDER, Statement.RETURN_GENERATED_KEYS, Connection.TRANSACTION_REPEATABLE_READ);
+			prep = con.prepareStatement(SET_NEW_ORDER, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
-			prep.setString(k++, model.getOrderDate());
 			prep.setString(k++, model.getStatus());
 			prep.setString(k++, model.getAddress());
 			prep.setInt(k++, model.getUserId());
@@ -161,9 +130,17 @@ public class MySQLOrderView implements OrderDao {
 					model.setId(orderId);
 				}
 			}
-			
-			
-			
+			for (Product p : products) {
+				try (PreparedStatement setProdPrepSt = con.prepareStatement(SET_PRODUCT_FOR_ORDER)) {
+					k = 1;
+					setProdPrepSt.setInt(k++, orderId);
+					setProdPrepSt.setInt(k++, p.getId());
+					setProdPrepSt.setInt(k++, 1);
+					setProdPrepSt.setInt(k++, p.getPrice());
+					setProdPrepSt.executeUpdate();
+				}
+
+			}
 			con.commit();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());

@@ -26,20 +26,18 @@ public class Util {
 
 	}
 
-	public static User createUser(String firstName, String lastName, String phoneNumber) {
+	public static User createUser(String firstName, String phoneNumber) {
 		User user = new User();
 		user.setFirstName(firstName);
-		user.setLastName(lastName);
 		user.setPhoneNumber(phoneNumber);
 		user.setRegistered("false");
 		return user;
 
 	}
 
-	public static Order createOrder(String openDate, String status, String address, int userId) {
+	public static Order createOrder(String status, String address, int userId) {
 		Order order = new Order();
 
-		order.setOrderDate(openDate);
 		order.setStatus(status);
 		order.setAddress(address);
 		order.setUserId(userId);

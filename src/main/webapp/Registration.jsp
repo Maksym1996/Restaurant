@@ -61,13 +61,13 @@
 					</c:if>
 
 				</div>
-				
+
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputFirstName').value = ''">
 					<i class="far fa-times-circle"></i>
 				</button>
-				</div>
-<div class="row row-cols-auto">
+			</div>
+			<div class="row row-cols-auto">
 				<div class="col-md-6">
 					<label for="inputLastName" class="form-label">Фамилия<span
 						style="color: red">*</span></label> <input type="text"
@@ -78,7 +78,7 @@
 						</p>
 					</c:if>
 				</div>
-				
+
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputLastName').value = ''">
 					<i class="far fa-times-circle"></i>
@@ -173,8 +173,8 @@
 					onclick="document.getElementById('inputPassword').value = ''">
 					<i class="far fa-times-circle"></i>
 				</button>
-				</div>
-<div class="row row-cols-auto">
+			</div>
+			<div class="row row-cols-auto">
 
 				<div class="col-md-6">
 					<label for="inputConfirm" class="form-label">Повторите
@@ -200,7 +200,7 @@
 				</button>
 			</div>
 
-			
+
 			<br>
 			<button type="submit" class="btn btn-light">Зарегистрироваться</button>
 		</form>

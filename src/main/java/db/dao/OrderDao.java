@@ -1,8 +1,10 @@
 package db.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import db.entity.Order;
+import db.entity.Product;
 
 public interface OrderDao {
 	
@@ -12,8 +14,6 @@ public interface OrderDao {
 	
 	public List<Order> getOrdersByStatus(String status) throws Exception;
 	
-	public int insertOrder(Order model) throws Exception;
-
-	boolean updateOrder(int orderId, int productId, int count, int currentPrice) throws Exception;
+	public int insertOrder(Order model, List<Product> products) throws Exception;
 
 }
