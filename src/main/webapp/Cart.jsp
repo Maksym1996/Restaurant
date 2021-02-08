@@ -40,8 +40,12 @@
 
 
 <link rel="stylesheet" href="main.css">
+
+
+
 </head>
 <body class="otherPageBody">
+
 
 	<c:import url="/WEB-INF/jspf/header.jspf" />
 
@@ -56,8 +60,8 @@
 			style="margin-left: 2rem">
 			<button type="submit" class="btn btn-info">Оформить заказ</button>
 
-			<div class="row row-cols-auto" align="left">
-				<div class="col-md-4">
+			<div class="row row-cols-auto" style="margin-top: 30px" align="left">
+				<div class="col-md-3">
 					<label for="inputFirstName">Имя<span style="color: red">*</span></label>
 					<input type="text" class="form-control" id="inputFirstName"
 						name="firstName" required>
@@ -68,17 +72,7 @@
 						</p>
 					</c:if>
 				</div>
-				<div class="col-md-4">
-					<label for="inputLastName" class="formLabelCart">Фамилия<span
-						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputLastName" name="lastName" required>
-					<c:if test="${not empty errors and errors.containsKey('lastName')}">
-						<p style="color: red">
-							<c:out value="${errors.firstName}" />
-						</p>
-					</c:if>
-				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<label for="inputPhoneNumber" class="formLabelCart">Номер
 						телефона<span style="color: red">*</span>
 					</label> <input type="tel" class="form-control" id="inputPhoneNumber"
@@ -96,8 +90,8 @@
 						</p>
 					</c:if>
 				</div>
-				<div class="col-md-3">
-					<label for="inputAddress" class="form-label">Адресс
+				<div class="col-md-4">
+					<label for="inputAddress" class="formLabelCart">Адресс
 						доставки<span style="color: red">*</span>
 					</label> <input type="text" class="form-control" id="inputAddress"
 						name="address" required>
@@ -111,12 +105,14 @@
 
 			</div>
 		</form>
+		
 	</div>
+	
 	<!-- Вывод контента -->
 	<main class="container">
 		<div class="row ">
 			<c:forEach var="product" items="${productsList}">
-				<div class="col-md-3" style="color: black">
+				<div class="col-md-2" style="color: black">
 					<div class="card cartBorder" style="width: 12rem">
 						<img src=<c:out value = "${product.imageLink}"/>
 							class="card-img-top" alt="Pizza" height="170" width="150">
@@ -134,8 +130,32 @@
 							</div>
 
 						</div>
+						
+						<div class="input-group">
+						<c:set var="id" scope="session" value="${product.id}" />
+							<a href='/restaurant-web/Cart?id=${product.id}&change=dec'
+								class="input-group-btn">
+								<button class="btn btn-outline-success" type="button">-</button>
+							</a> <label
+								class="form-control no-padding add-color text-center height-25"><c:out
+									value="${count.id} " /></label> <a
+								href='/restaurant-web/Cart?id=${product.id}&change=inc'
+								class="input-group-btn">
+								<button class="btn btn-outline-success " type="button">+</button>
+							</a>
+						</div>
+						
+
 					</div>
+
+
 				</div>
+				<form action="Cart" method="get" class="col-md-1">
+					<button type="submit" style="color: red" class="btn btn-link " id="deleteId"
+						name="deleteId" value=<c:out value="${product.id}" /> >
+						<i class="far fa-times-circle"></i>
+					</button>
+				</form>
 			</c:forEach>
 
 		</div>
@@ -145,4 +165,5 @@
 
 	<c:import url="/WEB-INF/jspf/footer.jspf" />
 </body>
+
 </html>

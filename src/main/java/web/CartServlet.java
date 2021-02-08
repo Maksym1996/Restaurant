@@ -1,11 +1,8 @@
 package web;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -31,15 +28,16 @@ import util.Util;
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String EMPTY_CART = "EmptyCart.html";
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
 		RequestDispatcher dispatcher;
-		
+
 		Cart cart = (Cart) session.getAttribute("cart");
-		
-		if(cart == null) {
+
+		if (cart == null) {
 			dispatcher = request.getRequestDispatcher(EMPTY_CART);
 			dispatcher.forward(request, response);
 			return;
@@ -50,23 +48,50 @@ public class CartServlet extends HttpServlet {
 			dispatcher.forward(request, response);
 			return;
 		}
-
 		
-		// realize delete product from cart
-		String productId = request.getParameter("productId");
-		if (productId != null) {
-			for (Product p : products) {
-				if (p.getId() == Integer.parseInt(productId)) {
-					products.remove(p);
-					break;
-				}
-			}
-			if (products.isEmpty()) {
-				dispatcher = request.getRequestDispatcher(EMPTY_CART);
-				dispatcher.forward(request, response);
-				return;
+		
+		String changeId = request.getParameter("id");
+		int change = "inc".equals(request.getParameter("change")) ? 1
+				: "dec".equals(request.getParameter("change")) ? -1 : 0;
+		
+		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute("count");
+		
+		if (count.isEmpty()) {
+			count = new HashMap<>();
+			session.setAttribute("count", count);
+			for(Product p: products) {
+				count.put(p.getId(), 1);
 			}
 		}
+		
+		if(changeId!=null && change!= 0) {
+			int id = Integer.parseInt(changeId);
+			int value = count.get(id)+change;
+			if(value <= 0) {
+				value = 1;
+			} else if(value >= 20) {
+				value = 20;
+			}
+			count.put(id, value);
+		}
+		
+		// realize delete product from cart
+				String deleteId = request.getParameter("deleteId");
+				if (deleteId != null) {
+					for (Product p : products) {
+						if (p.getId() == Integer.parseInt(deleteId)) {
+							products.remove(p);
+							count.remove(p.getId());
+							break;
+						}
+					}
+					if (products.isEmpty()) {
+						dispatcher = request.getRequestDispatcher(EMPTY_CART);
+						dispatcher.forward(request, response);
+						return;
+					}
+				}
+		
 
 		int orderSumm = 0;
 		for (Product p : products) {
@@ -84,23 +109,17 @@ public class CartServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String phoneNumberRegex = "[0][0-9]{9}";
-	
 
 		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
 		String phoneNumber = request.getParameter("phoneNumber");
 		String address = request.getParameter("address");
-		
-		
+
 		HttpSession session = request.getSession(true);
 
 		Map<String, String> errors = new HashMap<>();
 
 		if (firstName.isEmpty()) {
 			errors.put("firstName", "Provide your first name");
-		}
-		if (lastName.isEmpty()) {
-			errors.put("lastName", "Provide your last name");
 		}
 		if (phoneNumber.isEmpty()) {
 			errors.put("phoneNumber", "Provide your first name");
@@ -135,7 +154,7 @@ public class CartServlet extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
 		if (user == null) {
-			User model = Util.createUser(firstName, lastName, phoneNumber);
+			User model = Util.createUser(firstName, phoneNumber);
 
 			try {
 				userId = userDao.insertUser(model);
@@ -150,17 +169,9 @@ public class CartServlet extends HttpServlet {
 
 		// create order
 		OrderDao orderDao = (OrderDao) request.getServletContext().getAttribute("orderDao");
-		Date date = new Date();
-		SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.KOREA);
-		String currentDate = formatForDateNow.format(date);
 		List<Product> products = cart.getProducts();
 		try {
-			int orderId = orderDao
-					.insertOrder(Util.createOrder(currentDate, "NEW", address, userId));
-			
-			for(Product p: products) {
-				orderDao.updateOrder(orderId, p.getId(), 1, p.getPrice());
-			}
+			orderDao.insertOrder(Util.createOrder("NEW", address, userId), products);
 		} catch (Exception e) {
 			// TODO add some logger 05.02.2021
 			response.sendRedirect("SomeWrong.jsp");
