@@ -146,7 +146,8 @@ public class MySQLOrderView implements OrderDao {
 		try {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
-			prep = con.prepareStatement(SET_NEW_ORDER, Statement.RETURN_GENERATED_KEYS);
+			
+			prep = con.prepareStatement(SET_NEW_ORDER, Statement.RETURN_GENERATED_KEYS, Connection.TRANSACTION_REPEATABLE_READ);
 			int k = 1;
 			prep.setString(k++, model.getOrderDate());
 			prep.setString(k++, model.getStatus());
@@ -160,6 +161,9 @@ public class MySQLOrderView implements OrderDao {
 					model.setId(orderId);
 				}
 			}
+			
+			
+			
 			con.commit();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
