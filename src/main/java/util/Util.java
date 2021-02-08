@@ -5,8 +5,7 @@ import db.entity.Receipt;
 import db.entity.User;
 
 public class Util {
-	
-	
+
 	private Util() {
 	};
 
@@ -15,23 +14,19 @@ public class Util {
 		return (double) itemsCount / pageSize != (double) i ? i + 1 : i;
 	}
 
-	public static User createUser(String firstName, String lastName, String email, String phoneNumber, String password,
-			String street, String house, String apartment, String porch) {
+	public static User createUser(String firstName, String lastName, String email, String phoneNumber,
+			String password) {
 		User user = new User();
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setPhoneNumber(phoneNumber);
 		user.setEmail(email);
 		user.setPassword(password);
-		user.setStreet(street);
-		user.setHouse(house);
-		user.setApartment(apartment);
-		user.setPorch(porch);
 		user.setRegistered("true");
 		return user;
 
 	}
-	
+
 	public static User createUser(String firstName, String lastName, String phoneNumber) {
 		User user = new User();
 		user.setFirstName(firstName);
@@ -41,10 +36,11 @@ public class Util {
 		return user;
 
 	}
-	
-	public static Order createOrder(String openDate, String closeDate, String status, String street, String house, String apartment, String porch, int userId) {
+
+	public static Order createOrder(String openDate, String closeDate, String status, String street, String house,
+			String apartment, String porch, int userId) {
 		Order order = new Order();
-		
+
 		order.setOrderDate(openDate);
 		order.setClosingDate(closeDate);
 		order.setStatus(status);
@@ -53,19 +49,19 @@ public class Util {
 		order.setApartment(apartment);
 		order.setPorch(porch);
 		order.setUserId(userId);
-		
+
 		return order;
 
 	}
-	
+
 	public static Receipt createReceipt(int orderId, int productId, int count, int currentPrice) {
 		Receipt receipt = new Receipt();
-		
+
 		receipt.setOrderId(orderId);
 		receipt.setProductId(productId);
 		receipt.setCount(count);
 		receipt.setCurrentPrice(currentPrice);
-		
+
 		return receipt;
 
 	}

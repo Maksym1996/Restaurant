@@ -12,10 +12,6 @@ public class User implements Serializable {
 	String lastName;
 	String password;
 	String phoneNumber;
-	String street;
-	String house;
-	String apartment;
-	String porch;
 	String role;
 	String registered;
 
@@ -67,38 +63,6 @@ public class User implements Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getHouse() {
-		return house;
-	}
-
-	public void setHouse(String house) {
-		this.house = house;
-	}
-
-	public String getApartment() {
-		return apartment;
-	}
-
-	public void setApartment(String apartment) {
-		this.apartment = apartment;
-	}
-
-	public String getPorch() {
-		return porch;
-	}
-
-	public void setPorch(String porch) {
-		this.porch = porch;
-	}
-
 	public String getRole() {
 		return role;
 	}
@@ -118,8 +82,7 @@ public class User implements Serializable {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", password=" + password + ", phoneNumber=" + phoneNumber + ", street=" + street + ", house=" + house
-				+ ", apartment=" + apartment + ", porch=" + porch + ", role=" + role + "]";
+				+ ", password=" + password + ", phoneNumber=" + phoneNumber + ", role=" + role + "]";
 	}
 
 	@Override

@@ -49,7 +49,7 @@
 		<form class="form" action="Registration" method="post"
 			style="margin-left: 3rem">
 			<div class="row row-cols-auto">
-				<div class="col-md-3">
+				<div class="col-md-6">
 					<label for="inputFirstName" class="form-label">Имя<span
 						style="color: red">*</span></label> <input type="text"
 						class="form-control" id="inputFirstName" name="firstName" required>
@@ -61,12 +61,14 @@
 					</c:if>
 
 				</div>
+				
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputFirstName').value = ''">
 					<i class="far fa-times-circle"></i>
 				</button>
-
-				<div class="col-md-3">
+				</div>
+<div class="row row-cols-auto">
+				<div class="col-md-6">
 					<label for="inputLastName" class="form-label">Фамилия<span
 						style="color: red">*</span></label> <input type="text"
 						class="form-control" id="inputLastName" name="lastName" required>
@@ -76,6 +78,7 @@
 						</p>
 					</c:if>
 				</div>
+				
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputLastName').value = ''">
 					<i class="far fa-times-circle"></i>
@@ -142,9 +145,6 @@
 
 
 				</div>
-				<!-- button type="button" style="color: #ffffff00" class="btn btn-link">
-					<i class="far fa-times-circle"></i>
-				</button> -->
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputPhone').value = ''">
 					<i class="far fa-times-circle"></i>
@@ -153,7 +153,7 @@
 			</div>
 
 			<div class="row row-cols-auto">
-				<div class="col-md-3">
+				<div class="col-md-6">
 					<label for="inputPassword" class="form-label">Пароль<span
 						style="color: red">*</span></label> <input type="password"
 						class="form-control" id="inputPassword" name="password" required>
@@ -173,8 +173,10 @@
 					onclick="document.getElementById('inputPassword').value = ''">
 					<i class="far fa-times-circle"></i>
 				</button>
+				</div>
+<div class="row row-cols-auto">
 
-				<div class="col-md-3">
+				<div class="col-md-6">
 					<label for="inputConfirm" class="form-label">Повторите
 						пароль<span style="color: red">*</span>
 					</label> <input type="password" class="form-control" id="inputConfirm"
@@ -198,59 +200,7 @@
 				</button>
 			</div>
 
-			<div class="row row-cols-auto">
-				<div class="col-md-3">
-					<label for="inputStreet" class="form-label">Улица/Проспект/Переулок</label>
-					<input type="text" class="form-control" id="inputStreet"
-						name="street">
-				</div>
-				<button type="button" style="color: red" class="btn btn-link "
-					onclick="document.getElementById('inputStreet').value = ''">
-					<i class="far fa-times-circle"></i>
-				</button>
-
-				<div class="col-md-3">
-					<label for="inputHouse" class="form-label">Номер дома</label> <input
-						type="text" class="form-control" id="inputHouse" name="house">
-				</div>
-				<button type="button" style="color: red" class="btn btn-link "
-					onclick="document.getElementById('inputHouse').value = ''">
-					<i class="far fa-times-circle"></i>
-				</button>
-			</div>
-			<div class="row row-cols-auto">
-				<div class="col-md-3">
-					<label for="inputApartment" class="form-label">Номер
-						квартиры</label> <input type="text" class="form-control"
-						id="inputApartment" name="apartment">
-					<c:if
-						test="${not empty errors and errors.containsKey('apartmentPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.apartmentPattern}" />
-						</p>
-					</c:if>
-				</div>
-				<button type="button" style="color: red" class="btn btn-link "
-					onclick="document.getElementById('inputApartment').value = ''">
-					<i class="far fa-times-circle"></i>
-				</button>
-
-
-				<div class="col-md-3">
-					<label for="inputPorch" class="form-label">Номер подъезда</label> <input
-						type="text" class="form-control" id="inputPorch" name="porch">
-					<c:if
-						test="${not empty errors and errors.containsKey('porchPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.porchPattern}" />
-						</p>
-					</c:if>
-				</div>
-				<button type="button" style="color: red" class="btn btn-link "
-					onclick="document.getElementById('inputPorch').value = ''">
-					<i class="far fa-times-circle"></i>
-				</button>
-			</div>
+			
 			<br>
 			<button type="submit" class="btn btn-light">Зарегистрироваться</button>
 		</form>

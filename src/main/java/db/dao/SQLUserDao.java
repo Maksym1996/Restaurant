@@ -16,11 +16,11 @@ public class SQLUserDao implements UserDao {
 	private static final String SALT = "234jsdflakj";
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
 	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT
-			+ "')) ,?,?,?,?,?, DEFAULT, ?)";
+			+ "')) ,?, DEFAULT, ?)";
 	private static final String GET_USER = "SELECT * FROM user WHERE email = ? AND password = MD5(CONCAT(?,'" + SALT
 			+ "'))";
 	private static final String UPDATE_USER = "UPDATE user WHERE phone_number = ? SET first_name=?, last_name=?"
-			+ "password=?, street=?, house=?, apartment=?, porch=?, registred=?";
+			+ "password=?, registred=?";
 	private static final String DELETE_USER_BY_ID = "DELETE FROM user WHERE id =?";
 	
 	private final DataSource dataSource;
@@ -71,10 +71,6 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getLastName());
 			prep.setString(k++, model.getPassword());
 			prep.setString(k++, model.getPhoneNumber());
-			prep.setString(k++, model.getStreet());
-			prep.setString(k++, model.getHouse());
-			prep.setString(k++, model.getApartment());
-			prep.setString(k++, model.getPorch());
 			prep.setString(k++, model.getRegistered());
 
 			if (prep.executeUpdate() > 0) {
@@ -136,10 +132,6 @@ public class SQLUserDao implements UserDao {
 			prep.setString(k++, model.getLastName());
 			prep.setString(k++, model.getPassword());
 			prep.setString(k++, model.getPhoneNumber());
-			prep.setString(k++, model.getStreet());
-			prep.setString(k++, model.getHouse());
-			prep.setString(k++, model.getApartment());
-			prep.setString(k++, model.getPorch());
 			prep.setString(k++, model.getRegistered());
 
 			if (prep.executeUpdate() > 0) {
@@ -167,10 +159,6 @@ public class SQLUserDao implements UserDao {
 		user.setLastName(rs.getString(k++));
 		user.setPassword(rs.getString(k++));
 		user.setPhoneNumber(rs.getString(k++));
-		user.setStreet(rs.getString(k++));
-		user.setHouse(rs.getString(k++));
-		user.setApartment(rs.getString(k++));
-		user.setPorch(rs.getString(k++));
 		user.setRole(rs.getString(k++));
 		user.setRegistered(rs.getString(k++));
 

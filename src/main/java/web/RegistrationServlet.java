@@ -38,8 +38,6 @@ public class RegistrationServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String emailRegex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
 		String phoneNumberRegex = "[0][0-9]{9}";
-		String porchRegex = "[1-9] {1} \\d*";
-		String apartmentRegex = "[1-9]{1}\\d*";
 		String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\\w\\s]).{8,}";
 
 		String firstName = request.getParameter("firstName");
@@ -48,10 +46,6 @@ public class RegistrationServlet extends HttpServlet {
 		String phoneNumber = request.getParameter("phoneNumber");
 		String password = request.getParameter("password");
 		String confirmPassword = request.getParameter("confirmPassword");
-		String street = request.getParameter("street");
-		String house = request.getParameter("house");
-		String apartment = request.getParameter("apartment");
-		String porch = request.getParameter("porch");
 		
 		Map<String, String> errors = new HashMap<>();
 
@@ -107,12 +101,6 @@ public class RegistrationServlet extends HttpServlet {
 			errors.put("passwordPattern",
 					"The password must consist of at least 8 characters, at least one digit, one uppercase and lowercase letters of the Latin alphabet and one special character");
 		}
-		if (!apartment.isEmpty() && !Pattern.matches(apartmentRegex, apartment)) {
-			errors.put("apartmentPattern", "Сannot contain any characters unless numbers");
-		}
-		if (!porch.isEmpty() && !Pattern.matches(porchRegex, porch)) {
-			errors.put("porchPattern", "Сannot contain any characters unless numbers");
-		}
 
 		if (!errors.isEmpty()) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("Registration.jsp");
@@ -121,8 +109,7 @@ public class RegistrationServlet extends HttpServlet {
 			return;
 		}
 
-		User model = Util.createUser(firstName, lastName, email, phoneNumber, password, street, house,
-				apartment, porch);
+		User model = Util.createUser(firstName, lastName, email, phoneNumber, password);
 
 		try {
 			userDao.insertUser(model);
