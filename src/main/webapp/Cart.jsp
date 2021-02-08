@@ -105,9 +105,9 @@
 
 			</div>
 		</form>
-		
+
 	</div>
-	
+
 	<!-- Вывод контента -->
 	<main class="container">
 		<div class="row ">
@@ -130,29 +130,36 @@
 							</div>
 
 						</div>
-						
+
 						<div class="input-group">
-						<c:set var="id" scope="session" value="${product.id}" />
+
 							<a href='/restaurant-web/Cart?id=${product.id}&change=dec'
 								class="input-group-btn">
 								<button class="btn btn-outline-success" type="button">-</button>
 							</a> <label
-								class="form-control no-padding add-color text-center height-25"><c:out
-									value="${count.id} " /></label> <a
-								href='/restaurant-web/Cart?id=${product.id}&change=inc'
+								class="form-control no-padding add-color text-center height-25">
+
+								<c:forEach items="${count}" var="entry">
+    								<c:if test="${entry.key == product.id}">
+    								${entry.value}
+    								</c:if>  
+								</c:forEach>
+
+							</label> <a href='/restaurant-web/Cart?id=${product.id}&change=inc'
 								class="input-group-btn">
 								<button class="btn btn-outline-success " type="button">+</button>
 							</a>
 						</div>
-						
+
 
 					</div>
 
 
 				</div>
 				<form action="Cart" method="get" class="col-md-1">
-					<button type="submit" style="color: red" class="btn btn-link " id="deleteId"
-						name="deleteId" value=<c:out value="${product.id}" /> >
+					<button type="submit" style="color: red" class="btn btn-link "
+						id="deleteId" name="deleteId"
+						value=<c:out value="${product.id}" />>
 						<i class="far fa-times-circle"></i>
 					</button>
 				</form>

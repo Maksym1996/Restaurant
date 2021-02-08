@@ -56,7 +56,7 @@ public class CartServlet extends HttpServlet {
 		
 		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute("count");
 		
-		if (count.isEmpty()) {
+		if (count == null) {
 			count = new HashMap<>();
 			session.setAttribute("count", count);
 			for(Product p: products) {
