@@ -18,7 +18,7 @@ public class MySQLUser implements UserDao {
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
 	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT
 			+ "')) ,?, DEFAULT, ?)";
-	private static final String GET_USER = "SELECT * FROM user WHERE email = ? AND password = MD5(CONCAT(?,'" + SALT
+	private static final String GET_USER = "SELECT * FROM user WHERE phone_number = ? AND password = MD5(CONCAT(?,'" + SALT
 			+ "'))";
 	private static final String UPDATE_USER = "UPDATE user WHERE phone_number = ? SET first_name=?, last_name=?"
 			+ "password=?, registred=?";
@@ -95,7 +95,7 @@ public class MySQLUser implements UserDao {
 	}
 
 	@Override
-	public User getUser(String email, String password) throws Exception {
+	public User getUser(String phoneNumber, String password) throws Exception {
 		User model = new User();
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -103,7 +103,7 @@ public class MySQLUser implements UserDao {
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(GET_USER);
-			prep.setString(1, email);
+			prep.setString(1, phoneNumber);
 			prep.setString(2, password);
 			rs = prep.executeQuery();
 

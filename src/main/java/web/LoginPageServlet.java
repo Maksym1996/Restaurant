@@ -52,13 +52,13 @@ public class LoginPageServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-        String email = request.getParameter("email");
+        String phoneNumber = request.getParameter("phoneNumber");
         String password = request.getParameter("password");
         
         UserDao userDao = (UserDao)request.getServletContext().getAttribute("userDao");
         User user = null;
 		try {
-			user = userDao.getUser(email, password);
+			user = userDao.getUser(phoneNumber, password);
 		} catch (Exception e) {
 			//TODO add some logger 03.02.2021
 			response.sendRedirect("SomeWrong.jsp");
@@ -66,7 +66,7 @@ public class LoginPageServlet extends HttpServlet {
         Map<String,String>errors = new HashMap<>();
         
         if(user == null || user.getId()==0) {
-        	errors.put("errors", "Entered Email or Password is incorrectly");
+        	errors.put("errors", "Entered Phone number or Password is incorrectly");
         	RequestDispatcher dispatcher = request.getRequestDispatcher("Login page.jsp");
         	request.setAttribute("errors", errors);
         	dispatcher.forward(request, response);

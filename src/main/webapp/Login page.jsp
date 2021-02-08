@@ -52,17 +52,17 @@
 					<p class="formLabel">Авторизуйтесь</p>
 					<!-- Email input -->
 					<div class="form-floating">
-						<input type="email" class="form-control" id="floatingInputValue"
-							placeholder="name@example.com" name="email" required> <label
-							for="floatingInputValue">Электронная почта</label>
+						<input type="tel" class="form-control" id="inputTel"
+							placeholder="0123456789" name="phoneNumber" required> <label
+							for="inputTel">Номер телефона</label>
 					</div>
 
 					<!-- Password input -->
 					<div class="form-floating">
 						<input type="password" class="form-control"
-							id="floatingInputValue" name="password"
-							placeholder="name@example.com" required> <label
-							for="floatingInputValue">Пароль</label>
+							id="inputPassword" name="password"
+							placeholder="" required> <label
+							for="inputPassword">Пароль</label>
 					</div>
 
 					<!-- 2 column grid layout for inline styling -->
