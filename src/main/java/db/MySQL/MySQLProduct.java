@@ -1,4 +1,4 @@
-package db.dao;
+package db.MySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,9 +10,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import db.dao.ProductDao;
 import db.entity.Product;
 
-public class SQLProductDao implements ProductDao {
+public class MySQLProduct implements ProductDao {
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE(DEFAULT, ?, ?, ?, ?, ?, ?,)";
 	private static final String GET_PRODUCT = "SELECT * FROM product WHERE id = ?";
 	private static final String UPDATE_PRODUCT = "UPDATE product WHERE id = ? SET name=?,"
@@ -20,7 +21,7 @@ public class SQLProductDao implements ProductDao {
 
 	private DataSource dataSource;
 
-	public SQLProductDao(DataSource dataSource) {
+	public MySQLProduct(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
