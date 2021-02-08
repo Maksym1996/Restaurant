@@ -62,9 +62,7 @@ public class CartServlet extends HttpServlet {
 			for(Product p: products) {
 				count.put(p.getId(), 1);
 			}
-		}
-		
-		if(changeId!=null && change!= 0) {
+		}else if(changeId!=null && change!= 0) {
 			int id = Integer.parseInt(changeId);
 			int value = count.get(id)+change;
 			if(value <= 0) {
@@ -97,6 +95,8 @@ public class CartServlet extends HttpServlet {
 		for (Product p : products) {
 			orderSumm += p.getPrice();
 		}
+		
+	
 
 		dispatcher = request.getRequestDispatcher("Cart.jsp");
 		request.setAttribute("productsList", products);
