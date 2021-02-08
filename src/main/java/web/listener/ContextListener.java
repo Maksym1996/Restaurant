@@ -10,13 +10,11 @@ import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
 import db.dao.UserDao;
+import db.MySQL.SQLOrderDao;
+import db.MySQL.MySQLProduct;
+import db.MySQL.MySQLUser;
 import db.dao.OrderDao;
 import db.dao.ProductDao;
-import db.dao.ReceiptDao;
-import db.dao.SQLOrderDao;
-import db.dao.SQLProductDao;
-import db.dao.SQLReceiptDao;
-import db.dao.SQLUserDao;
 import exception.ContextInitException;
 
 @WebListener
@@ -30,16 +28,14 @@ public class ContextListener implements ServletContextListener {
 	private void initDao(ServletContextEvent event) {
 		DataSource dataSource = getDataSource();
 				
-		UserDao userDao = new SQLUserDao(dataSource);
-		ProductDao productDao = new SQLProductDao(dataSource);
+		UserDao userDao = new MySQLUser(dataSource);
+		ProductDao productDao = new MySQLProduct(dataSource);
 		OrderDao orderDao = new SQLOrderDao(dataSource);
-		ReceiptDao receiptDao = new SQLReceiptDao(dataSource);
 		
 		ServletContext servletContext = event.getServletContext();
 		servletContext.setAttribute("userDao", userDao);
 		servletContext.setAttribute("productDao", productDao);
 		servletContext.setAttribute("orderDao", orderDao);
-		servletContext.setAttribute("receiptDao", receiptDao);
 	}
 	
 	private DataSource getDataSource() {

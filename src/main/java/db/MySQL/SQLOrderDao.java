@@ -1,4 +1,4 @@
-package db.dao;
+package db.MySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import db.dao.OrderDao;
 import db.entity.Order;
 
 public class SQLOrderDao implements OrderDao {

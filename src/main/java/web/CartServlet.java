@@ -18,10 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import db.dao.OrderDao;
-import db.dao.ReceiptDao;
 import db.dao.UserDao;
 import db.entity.Product;
-import db.entity.Receipt;
 import db.entity.User;
 import util.Cart;
 import util.Util;
@@ -192,18 +190,7 @@ public class CartServlet extends HttpServlet {
 		// create receipt
 		List<Product> products = cart.getProducts();
 
-		ReceiptDao receiptDao = (ReceiptDao) request.getServletContext().getAttribute("receiptDao");
-
-		for (Product p : products) {
-			Receipt model = Util.createReceipt(orderId, p.getId(), 1, p.getPrice());
-			try {
-				receiptDao.setReceipt(model);
-			} catch (Exception e) {
-				response.sendRedirect("SomeWrong.jsp");
-				// TODO add some logger 05.02.2021
-				return;
-			}
-		}
+		// Receipt was be here
 		session.removeAttribute("cart");
 		response.sendRedirect("SuccessBuy.html");
 

@@ -1,7 +1,6 @@
 package util;
 
 import db.entity.Order;
-import db.entity.Receipt;
 import db.entity.User;
 
 public class Util {
@@ -51,18 +50,6 @@ public class Util {
 		order.setUserId(userId);
 
 		return order;
-
-	}
-
-	public static Receipt createReceipt(int orderId, int productId, int count, int currentPrice) {
-		Receipt receipt = new Receipt();
-
-		receipt.setOrderId(orderId);
-		receipt.setProductId(productId);
-		receipt.setCount(count);
-		receipt.setCurrentPrice(currentPrice);
-
-		return receipt;
 
 	}
 

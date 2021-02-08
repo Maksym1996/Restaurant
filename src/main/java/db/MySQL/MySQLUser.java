@@ -1,4 +1,4 @@
-package db.dao;
+package db.MySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,9 +10,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import db.dao.UserDao;
 import db.entity.User;
 
-public class SQLUserDao implements UserDao {
+public class MySQLUser implements UserDao {
 	private static final String SALT = "234jsdflakj";
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
 	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT
@@ -25,7 +26,7 @@ public class SQLUserDao implements UserDao {
 	
 	private final DataSource dataSource;
 
-	public SQLUserDao(DataSource dataSource) {
+	public MySQLUser(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
