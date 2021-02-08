@@ -48,55 +48,55 @@ public class CartServlet extends HttpServlet {
 			dispatcher.forward(request, response);
 			return;
 		}
-		
-		
+
 		String changeId = request.getParameter("id");
 		int change = "inc".equals(request.getParameter("change")) ? 1
 				: "dec".equals(request.getParameter("change")) ? -1 : 0;
-		
+
 		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute("count");
-		
+
+
 		if (count == null) {
 			count = new HashMap<>();
 			session.setAttribute("count", count);
-			for(Product p: products) {
+			for (Product p : products) {
 				count.put(p.getId(), 1);
 			}
-		}else if(changeId!=null && change!= 0) {
+		} else if (changeId != null && change != 0) {
 			int id = Integer.parseInt(changeId);
-			int value = count.get(id)+change;
-			if(value <= 0) {
+			int value = count.get(id) + change;
+			if (value <= 0) {
 				value = 1;
-			} else if(value >= 20) {
+			} else if (value >= 20) {
 				value = 20;
 			}
 			count.put(id, value);
-		}
-		
-		// realize delete product from cart
-				String deleteId = request.getParameter("deleteId");
-				if (deleteId != null) {
-					for (Product p : products) {
-						if (p.getId() == Integer.parseInt(deleteId)) {
-							products.remove(p);
-							count.remove(p.getId());
-							break;
-						}
-					}
-					if (products.isEmpty()) {
-						dispatcher = request.getRequestDispatcher(EMPTY_CART);
-						dispatcher.forward(request, response);
-						return;
-					}
-				}
-		
 
-		int orderSumm = 0;
-		for (Product p : products) {
-			orderSumm += p.getPrice();
+		}
+
+		// realize delete product from cart
+		String deleteId = request.getParameter("deleteId");
+		if (deleteId != null) {
+			for (Product p : products) {
+				if (p.getId() == Integer.parseInt(deleteId)) {
+					products.remove(p);
+					count.remove(p.getId());
+
+					break;
+				}
+			}
+			if (products.isEmpty()) {
+				session.removeAttribute("count");
+				dispatcher = request.getRequestDispatcher(EMPTY_CART);
+				dispatcher.forward(request, response);
+				return;
+			}
 		}
 		
-	
+		int orderSumm = 0;
+		for(Product p: products) {
+			orderSumm += p.getPrice() * count.get(p.getId());
+		}
 
 		dispatcher = request.getRequestDispatcher("Cart.jsp");
 		request.setAttribute("productsList", products);
@@ -166,18 +166,20 @@ public class CartServlet extends HttpServlet {
 		} else {
 			userId = user.getId();
 		}
-
+		
 		// create order
 		OrderDao orderDao = (OrderDao) request.getServletContext().getAttribute("orderDao");
 		List<Product> products = cart.getProducts();
+		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute("count");
 		try {
-			orderDao.insertOrder(Util.createOrder("NEW", address, userId), products);
+			orderDao.insertOrder(Util.createOrder("NEW", address, userId), products, count);
 		} catch (Exception e) {
 			// TODO add some logger 05.02.2021
 			response.sendRedirect("SomeWrong.jsp");
 			return;
 		}
-
+		
+		session.removeAttribute("count");
 		session.removeAttribute("cart");
 		response.sendRedirect("SuccessBuy.html");
 

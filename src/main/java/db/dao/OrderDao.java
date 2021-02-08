@@ -14,6 +14,6 @@ public interface OrderDao {
 	
 	public List<Order> getOrdersByStatus(String status) throws Exception;
 	
-	public int insertOrder(Order model, List<Product> products) throws Exception;
+	public int insertOrder(Order model, List<Product> products, Map<Integer, Integer> count) throws Exception;
 
 }

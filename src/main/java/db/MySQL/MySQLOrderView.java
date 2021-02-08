@@ -107,7 +107,7 @@ public class MySQLOrderView implements OrderDao {
 	}
 
 	@Override
-	public int insertOrder(Order model, List<Product> products) throws Exception {
+	public int insertOrder(Order model, List<Product> products, Map<Integer, Integer> count) throws Exception {
 		Connection con = null;
 
 		PreparedStatement prep = null;
@@ -135,7 +135,7 @@ public class MySQLOrderView implements OrderDao {
 					k = 1;
 					setProdPrepSt.setInt(k++, orderId);
 					setProdPrepSt.setInt(k++, p.getId());
-					setProdPrepSt.setInt(k++, 1);
+					setProdPrepSt.setInt(k++, count.get(p.getId()));
 					setProdPrepSt.setInt(k++, p.getPrice());
 					setProdPrepSt.executeUpdate();
 				}
