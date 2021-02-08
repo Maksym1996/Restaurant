@@ -36,17 +36,13 @@ public class Util {
 
 	}
 
-	public static Order createOrder(String openDate, String closeDate, String status, String street, String house,
-			String apartment, String porch, int userId) {
+	public static Order createOrder(String openDate, String closeDate, String status, String address, int userId) {
 		Order order = new Order();
 
 		order.setOrderDate(openDate);
 		order.setClosingDate(closeDate);
 		order.setStatus(status);
-		order.setStreet(street);
-		order.setHouse(house);
-		order.setApartment(apartment);
-		order.setPorch(porch);
+		order.setAddress(address);
 		order.setUserId(userId);
 
 		return order;

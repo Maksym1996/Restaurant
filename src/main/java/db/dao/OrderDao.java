@@ -14,4 +14,6 @@ public interface OrderDao {
 	
 	public int insertOrder(Order model) throws Exception;
 
+	boolean updateOrder(int orderId, int productId, int count, int currentPrice) throws Exception;
+
 }

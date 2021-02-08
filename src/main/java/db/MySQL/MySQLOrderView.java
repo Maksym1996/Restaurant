@@ -13,15 +13,18 @@ import javax.sql.DataSource;
 import db.dao.OrderDao;
 import db.entity.Order;
 
-public class SQLOrderDao implements OrderDao {
-	private static final String GET_ALL_ORDERS = "SELECT * FROM order";
-	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orders WHERE user_id = ?";
-	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orders WHERE status = ?";
-	private static final String SET_ORDER = "INSERT INTO orders VALUE(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)";
+public class MySQLOrderView implements OrderDao {
+	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView";
+	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ?";
+	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE status = ?";
+	private static final String SET_NEW_ORDER = "INSERT INTO orderView(id, order_date, state, address, user_id) VALUES(DEFAULT, ?, ?, ?, ?)";
+	private static final String SET_PRODUCT_FOR_ORDER = "INSERT INTO orderView(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
+	private static final String SET_STATE_AND_CLOSEDATE = "UPDATE orderView SET state=?, closing_date=? WHERE id = ?";
 
+	
 	private final DataSource dataSource;
 
-	public SQLOrderDao(DataSource dataSource) {
+	public MySQLOrderView(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
@@ -101,6 +104,38 @@ public class SQLOrderDao implements OrderDao {
 
 		return allOrders;
 	}
+	
+	@Override
+	public boolean updateOrder(int orderId, int productId, int count, int currentPrice) throws Exception {
+		Connection con = null;
+		PreparedStatement prep = null;
+		boolean result = false;	
+		try {
+			con = dataSource.getConnection();
+			con.setAutoCommit(result);
+			
+			prep = con.prepareStatement(SET_PRODUCT_FOR_ORDER);
+			int k = 1;
+			prep.setInt(k++, orderId);
+			prep.setInt(k++, productId);
+			prep.setInt(k++, count);
+			prep.setInt(k++, currentPrice);
+
+			if (prep.executeUpdate() > 0) {
+				result = true;
+			}
+			con.commit();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+			rollback(con);
+			// TODO some logger
+			throw new SQLException();
+		} finally {
+			close(con, prep);
+		}
+		return result;
+	
+	}
 
 	@Override
 	public int insertOrder(Order model) throws Exception {
@@ -110,15 +145,12 @@ public class SQLOrderDao implements OrderDao {
 		int orderId = 0;
 		try {
 			con = dataSource.getConnection();
-			prep = con.prepareStatement(SET_ORDER, Statement.RETURN_GENERATED_KEYS);
+			con.setAutoCommit(false);
+			prep = con.prepareStatement(SET_NEW_ORDER, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
 			prep.setString(k++, model.getOrderDate());
-			prep.setString(k++, model.getClosingDate());
 			prep.setString(k++, model.getStatus());
-			prep.setString(k++, model.getStreet());
-			prep.setString(k++, model.getHouse());
-			prep.setString(k++, model.getApartment());
-			prep.setString(k++, model.getPorch());
+			prep.setString(k++, model.getAddress());
 			prep.setInt(k++, model.getUserId());
 
 			if (prep.executeUpdate() > 0) {
@@ -128,10 +160,10 @@ public class SQLOrderDao implements OrderDao {
 					model.setId(orderId);
 				}
 			}
-			
+			con.commit();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
-			
+			rollback(con);
 			// TODO some logger
 			throw new SQLException();
 		} finally {
@@ -147,10 +179,7 @@ public class SQLOrderDao implements OrderDao {
 		order.setOrderDate(rs.getString(k++));
 		order.setClosingDate(rs.getString(k++));
 		order.setStatus(rs.getString(k++));
-		order.setStreet(rs.getString(k++));
-		order.setHouse(rs.getString(k++));
-		order.setApartment(rs.getString(k++));
-		order.setPorch(rs.getString(k++));
+		order.setAddress(rs.getString(k++));
 		order.setUserId(rs.getInt(k++));
 
 		return order;

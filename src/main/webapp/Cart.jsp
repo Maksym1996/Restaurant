@@ -98,46 +98,16 @@
 					</c:if>
 				</div>
 				<div class="col-md-3">
-					<label for="inputStreet" class="form-label">Улица<span
+					<label for="inputAddress" class="form-label">Адресс доставки<span
 						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputStreet" name="street" required>
-					<c:if test="${not empty errors and errors.containsKey('street')}">
+						class="form-control" id="inputAddress" name="address" required>
+					<c:if test="${not empty errors and errors.containsKey('address')}">
 						<p style="color: red">
-							<c:out value="${errors.street}" />
+							<c:out value="${errors.address}" />
 						</p>
 					</c:if>
 				</div>
-				<div class="col-md-3">
-					<label for="inputHouse" class="form-label">Дом<span
-						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputHouse" name="house" required>
-					<c:if test="${not empty errors and errors.containsKey('house')}">
-						<p style="color: red">
-							<c:out value="${errors.house}" />
-						</p>
-					</c:if>
-				</div>
-				<div class="col-md-3">
-					<label for="inputApartment" class="form-label">Квартира</label> <input
-						type="text" class="form-control" id="inputApartment"
-						name="apartment">
-					<c:if
-						test="${not empty errors and errors.containsKey('apartmentPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.apartmentPattern}" />
-						</p>
-					</c:if>
-				</div>
-				<div class="col-md-3">
-					<label for="inputPorch" class="form-label">Подъезд</label> <input
-						type="text" class="form-control" id="inputPorch" name="porch">
-					<c:if
-						test="${not empty errors and errors.containsKey('porchPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.porchPattern}" />
-						</p>
-					</c:if>
-				</div>
+				
 
 			</div>
 		</form>

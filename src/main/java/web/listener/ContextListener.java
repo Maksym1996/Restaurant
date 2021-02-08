@@ -10,7 +10,7 @@ import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
 import db.dao.UserDao;
-import db.MySQL.SQLOrderDao;
+import db.MySQL.MySQLOrderView;
 import db.MySQL.MySQLProduct;
 import db.MySQL.MySQLUser;
 import db.dao.OrderDao;
@@ -30,7 +30,7 @@ public class ContextListener implements ServletContextListener {
 				
 		UserDao userDao = new MySQLUser(dataSource);
 		ProductDao productDao = new MySQLProduct(dataSource);
-		OrderDao orderDao = new SQLOrderDao(dataSource);
+		OrderDao orderDao = new MySQLOrderView(dataSource);
 		
 		ServletContext servletContext = event.getServletContext();
 		servletContext.setAttribute("userDao", userDao);

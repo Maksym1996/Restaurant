@@ -84,16 +84,13 @@ public class CartServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String phoneNumberRegex = "[0][0-9]{9}";
-		String porchRegex = "[0-9]+";
-		String apartmentRegex = "[0-9]+";
+	
 
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
 		String phoneNumber = request.getParameter("phoneNumber");
-		String street = request.getParameter("street");
-		String house = request.getParameter("house");
-		String apartment = request.getParameter("apartment");
-		String porch = request.getParameter("porch");
+		String address = request.getParameter("address");
+		
 		
 		HttpSession session = request.getSession(true);
 
@@ -108,21 +105,12 @@ public class CartServlet extends HttpServlet {
 		if (phoneNumber.isEmpty()) {
 			errors.put("phoneNumber", "Provide your first name");
 		}
-		if (street.isEmpty()) {
-			errors.put("street", "Indicate the street where the delivery will be");
-		}
-		if (house.isEmpty()) {
-			errors.put("house", "Indicate the house where the delivery will be");
+		if (address.isEmpty()) {
+			errors.put("address", "Indicate the address where the delivery will be");
 		}
 
 		if (!Pattern.matches(phoneNumberRegex, phoneNumber)) {
 			errors.put("phoneNumberPattern", "The entered phone number is incorrect");
-		}
-		if (!apartment.isEmpty() && !Pattern.matches(apartmentRegex, apartment)) {
-			errors.put("apartmentPattern", "Сannot contain any characters unless numbers");
-		}
-		if (!porch.isEmpty() && !Pattern.matches(porchRegex, porch)) {
-			errors.put("porchPattern", "Сannot contain any characters unless numbers");
 		}
 
 		Cart cart = (Cart) session.getAttribute("cart");
@@ -168,7 +156,7 @@ public class CartServlet extends HttpServlet {
 		String currentDate = formatForDateNow.format(date);
 		try {
 			orderId = orderDao
-					.insertOrder(Util.createOrder(currentDate, null, "NEW", street, house, apartment, porch, userId));
+					.insertOrder(Util.createOrder(currentDate, null, "NEW", address, userId));
 		} catch (Exception e) {
 
 			// TODO add some logger 05.02.2021

@@ -10,10 +10,7 @@ public class Order implements Serializable {
 	String orderDate;
 	String closingDate;
 	String status;
-	String street;
-	String house;
-	String apartment;
-	String porch;
+	String address;
 	int userId;
 	
 	public int getId() {
@@ -40,30 +37,13 @@ public class Order implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getStreet() {
-		return street;
+	public String getAddress() {
+		return address;
 	}
-	public void setStreet(String street) {
-		this.street = street;
+	public void setAddress(String address) {
+		this.address = address;
 	}
-	public String getHouse() {
-		return house;
-	}
-	public void setHouse(String house) {
-		this.house = house;
-	}
-	public String getApartment() {
-		return apartment;
-	}
-	public void setApartment(String apartment) {
-		this.apartment = apartment;
-	}
-	public String getPorch() {
-		return porch;
-	}
-	public void setPorch(String porch) {
-		this.porch = porch;
-	}
+	
 	public int getUserId() {
 		return userId;
 	}
@@ -94,7 +74,6 @@ public class Order implements Serializable {
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", orderDate=" + orderDate + ", closingDate=" + closingDate + ", status=" + status
-				+ ", street=" + street + ", house=" + house + ", apartment=" + apartment + ", porch=" + porch
-				+ ", userId=" + userId + "]";
+				+ ", address=" + address + ", userId=" + userId + "]";
 	}
 }
