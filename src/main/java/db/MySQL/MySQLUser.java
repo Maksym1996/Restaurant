@@ -15,7 +15,8 @@ import db.entity.User;
 
 public class MySQLUser implements UserDao {
 	private static final String SALT = "234jsdflakj";
-	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
+	private static final String GET_ALL_USERS = "SELECT * FROM user";
+	private static final String GET_REGISTERED_USERS = "SELECT * FROM user WHERE registered = ?";
 	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT
 			+ "')) ,?, DEFAULT, ?)";
 	private static final String GET_USER = "SELECT * FROM user WHERE phone_number = ? AND password = MD5(CONCAT(?,'" + SALT
@@ -39,7 +40,7 @@ public class MySQLUser implements UserDao {
 		try {
 			con = dataSource.getConnection();
 			stat = con.createStatement();
-			rs = stat.executeQuery(SELECT_ALL_USERS);
+			rs = stat.executeQuery(GET_ALL_USERS);
 			while (rs.next()) {
 				allUser.add(extraction(rs));
 			}
@@ -53,6 +54,32 @@ public class MySQLUser implements UserDao {
 		}
 
 		return allUser;
+	}
+	
+	@Override
+	public List<User> getRegisteredUsers(String registered) throws Exception {
+		List<User> registredUser = new ArrayList<>();
+		Connection con = null;
+		PreparedStatement prep = null;
+		ResultSet rs = null;
+		try {
+			con = dataSource.getConnection();
+			prep = con.prepareStatement(GET_REGISTERED_USERS);
+			prep.setString(1, registered);
+			rs = prep.executeQuery();
+			while (rs.next()) {
+				registredUser.add(extraction(rs));
+			}
+
+		} catch (SQLException e) {
+			// TODO some logger
+
+			throw new SQLException();
+		} finally {
+			close(con, prep, rs);
+		}
+
+		return registredUser;
 	}
 
 	

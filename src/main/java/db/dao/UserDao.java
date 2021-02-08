@@ -7,6 +7,8 @@ import db.entity.User;
 public interface UserDao {
 
 	List<User> getAllUsers() throws Exception;
+	
+	List<User> getRegisteredUsers(String registered) throws Exception;
 
 	int insertUser(User model) throws Exception;
  

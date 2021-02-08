@@ -55,7 +55,6 @@ public class CartServlet extends HttpServlet {
 
 		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute("count");
 
-
 		if (count == null) {
 			count = new HashMap<>();
 			session.setAttribute("count", count);
@@ -92,9 +91,9 @@ public class CartServlet extends HttpServlet {
 				return;
 			}
 		}
-		
+
 		int orderSumm = 0;
-		for(Product p: products) {
+		for (Product p : products) {
 			orderSumm += p.getPrice() * count.get(p.getId());
 		}
 
@@ -151,9 +150,20 @@ public class CartServlet extends HttpServlet {
 
 		// take user
 		int userId = 0;
-		User user = (User) session.getAttribute("user");
 		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
-		if (user == null) {
+		try {
+			for (User u : userDao.getRegisteredUsers("true")) {
+				if (u.getPhoneNumber().equals(phoneNumber)) {
+					userId = u.getId();
+				}
+			}
+		} catch (Exception e1) {
+			response.sendRedirect("SomeWrong.jsp");
+			// TODO add some logger 08.02.2021
+			return;
+		}
+		if (userId == 0) {
+
 			User model = Util.createUser(firstName, phoneNumber);
 
 			try {
@@ -163,10 +173,8 @@ public class CartServlet extends HttpServlet {
 				// TODO add some logger 05.02.2021
 				return;
 			}
-		} else {
-			userId = user.getId();
 		}
-		
+
 		// create order
 		OrderDao orderDao = (OrderDao) request.getServletContext().getAttribute("orderDao");
 		List<Product> products = cart.getProducts();
@@ -178,7 +186,7 @@ public class CartServlet extends HttpServlet {
 			response.sendRedirect("SomeWrong.jsp");
 			return;
 		}
-		
+
 		session.removeAttribute("count");
 		session.removeAttribute("cart");
 		response.sendRedirect("SuccessBuy.html");
