@@ -7,7 +7,7 @@
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
- <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your cart</title>
 <!--    Bootstap START-->
@@ -44,7 +44,7 @@
 <body class="otherPageBody">
 
 	<c:import url="/WEB-INF/jspf/header.jspf" />
-    
+
 	<div align="center" style="font-size: 1em">
 		Ваша корзина
 		<p>
@@ -54,8 +54,7 @@
 		</p>
 		<form class="form" action="Cart" method="post"
 			style="margin-left: 2rem">
-			<button type="submit" action="Cart" method="post"
-				class="btn btn-info">Оформить заказ</button>
+			<button type="submit" class="btn btn-info">Оформить заказ</button>
 
 			<div class="row row-cols-auto" align="left">
 				<div class="col-md-4">
@@ -98,16 +97,17 @@
 					</c:if>
 				</div>
 				<div class="col-md-3">
-					<label for="inputAddress" class="form-label">Адресс доставки<span
-						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputAddress" name="address" required>
+					<label for="inputAddress" class="form-label">Адресс
+						доставки<span style="color: red">*</span>
+					</label> <input type="text" class="form-control" id="inputAddress"
+						name="address" required>
 					<c:if test="${not empty errors and errors.containsKey('address')}">
 						<p style="color: red">
 							<c:out value="${errors.address}" />
 						</p>
 					</c:if>
 				</div>
-				
+
 
 			</div>
 		</form>

@@ -2,6 +2,7 @@ package web;
 
 import java.io.IOException;
 import java.util.List;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,8 @@ import util.Util;
 @WebServlet("/Pizza Preferita")
 public class BeforeMainServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String CATEGORIES = "categories";
+	private static final String SORT_VALUE = "sortValue";
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -30,10 +33,10 @@ public class BeforeMainServlet extends HttpServlet {
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
 
 		int currentPage = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
-		String[] categories = request.getParameterValues("categories") != null
-				? request.getParameterValues("categories")
+		String[] categories = request.getParameterValues(CATEGORIES) != null
+				? request.getParameterValues(CATEGORIES)
 				: new String[] {};
-		String sortValue = request.getParameter("sortValue") != null ? request.getParameter("sortValue").toLowerCase()
+		String sortValue = request.getParameter(SORT_VALUE) != null ? request.getParameter(SORT_VALUE).toLowerCase()
 				: "id";
 		String asc = request.getParameter("asc");
 		int productId = request.getParameter("productId") != null ? Integer.parseInt(request.getParameter("productId"))
@@ -68,7 +71,6 @@ public class BeforeMainServlet extends HttpServlet {
 		}
 
 		List<Product> cartProducts = cart.getProducts();
-		request.setAttribute("cartProducts", cartProducts);
 		if (productId != 0) {
 			boolean contain = false;
 			for (Product p : cartProducts) {
@@ -91,8 +93,8 @@ public class BeforeMainServlet extends HttpServlet {
 		request.setAttribute("productsList", partListProducts);
 		request.setAttribute("maxPages", Util.getMaxPages(productsCount, limitProductOnPage));
 		request.setAttribute("currentPage", currentPage);
-		request.setAttribute("categories", categories);
-		request.setAttribute("sortValue", sortValue);
+		request.setAttribute(CATEGORIES, categories);
+		request.setAttribute(SORT_VALUE, sortValue);
 		request.setAttribute("asc", asc);
 
 		dispatcher.forward(request, response);

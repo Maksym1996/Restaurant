@@ -30,7 +30,7 @@ import util.Util;
 @WebServlet("/Cart")
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	String emptyCart = "EmptyCart.html";
+	public static final String EMPTY_CART = "EmptyCart.html";
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -40,13 +40,13 @@ public class CartServlet extends HttpServlet {
 		Cart cart = (Cart) session.getAttribute("cart");
 		
 		if(cart == null) {
-			dispatcher = request.getRequestDispatcher(emptyCart);
+			dispatcher = request.getRequestDispatcher(EMPTY_CART);
 			dispatcher.forward(request, response);
 			return;
 		}
 		List<Product> products = cart.getProducts();
 		if (products.isEmpty()) {
-			dispatcher = request.getRequestDispatcher(emptyCart);
+			dispatcher = request.getRequestDispatcher(EMPTY_CART);
 			dispatcher.forward(request, response);
 			return;
 		}
@@ -62,7 +62,7 @@ public class CartServlet extends HttpServlet {
 				}
 			}
 			if (products.isEmpty()) {
-				dispatcher = request.getRequestDispatcher(emptyCart);
+				dispatcher = request.getRequestDispatcher(EMPTY_CART);
 				dispatcher.forward(request, response);
 				return;
 			}
@@ -149,36 +149,24 @@ public class CartServlet extends HttpServlet {
 		}
 
 		// create order
-		int orderId = 0;
 		OrderDao orderDao = (OrderDao) request.getServletContext().getAttribute("orderDao");
 		Date date = new Date();
 		SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.KOREA);
 		String currentDate = formatForDateNow.format(date);
+		List<Product> products = cart.getProducts();
 		try {
-			orderId = orderDao
-					.insertOrder(Util.createOrder(currentDate, null, "NEW", address, userId));
-		} catch (Exception e) {
-
-			// TODO add some logger 05.02.2021
-
-			if (user == null) {
-				try {
-					userDao.deleteUser(userId);
-				} catch (Exception e1) { 
-					// TODO add some logger 05.02.2021 
-					response.sendRedirect("SomeWrong.jsp");
-					return;
-				}
+			int orderId = orderDao
+					.insertOrder(Util.createOrder(currentDate, "NEW", address, userId));
+			
+			for(Product p: products) {
+				orderDao.updateOrder(orderId, p.getId(), 1, p.getPrice());
 			}
-
+		} catch (Exception e) {
+			// TODO add some logger 05.02.2021
 			response.sendRedirect("SomeWrong.jsp");
 			return;
 		}
 
-		// create receipt
-		List<Product> products = cart.getProducts();
-
-		// Receipt was be here
 		session.removeAttribute("cart");
 		response.sendRedirect("SuccessBuy.html");
 

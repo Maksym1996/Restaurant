@@ -65,6 +65,7 @@ public class MySQLUser implements UserDao {
 		int userId = 0;
 		try {
 			con = dataSource.getConnection();
+			con.setAutoCommit(false);
 			prep = con.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
 			prep.setString(k++, model.getEmail());
@@ -81,10 +82,10 @@ public class MySQLUser implements UserDao {
 					model.setId(userId);
 				}
 			}
-			
+			con.commit();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
-			
+			rollback(con);
 			// TODO some logger
 			throw new SQLException();
 		} finally {
@@ -126,6 +127,7 @@ public class MySQLUser implements UserDao {
 
 		try {
 			con = dataSource.getConnection();
+			con.setAutoCommit(false);
 			prep = con.prepareStatement(UPDATE_USER);
 			int k = 1;
 			prep.setInt(k++, model.getId());
