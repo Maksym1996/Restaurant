@@ -42,20 +42,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<filter>
-		<filter-name>PermissionFilter</filter-name>
-		<filter-class>filters.PermissionFilter</filter-class>
-		<init-param>
-			<param-name>active</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</filter>
 
-
-	<filter-mapping>
-		<filter-name>PermissionFilter</filter-name>
-		<url-pattern>/spy/*</url-pattern>
-	</filter-mapping>
 
 	<filter>
 		<filter-name>NoJSPFilter</filter-name>
@@ -79,7 +66,7 @@
 
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
-		<location>/SomeWrong.html</location>
+		<location>/Wrong.html</location>
 	</error-page>
 
 

@@ -39,10 +39,10 @@ public class NoJSPFilter implements Filter {
 
 			HttpSession session = httpServletRequest.getSession(true);
 			if (session == null || session.getAttribute("user") == null) {
-				httpServletResponse.sendRedirect("401.html");
+				httpServletResponse.sendError(401);
 				return;
 			} else {
-				httpServletResponse.sendRedirect("403.html");
+				httpServletResponse.sendError(403);
 				return;
 			}
 
