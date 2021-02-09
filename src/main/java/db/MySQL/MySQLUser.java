@@ -21,6 +21,7 @@ public class MySQLUser implements UserDao {
 			+ "')) ,?, DEFAULT, ?)";
 	private static final String GET_USER = "SELECT * FROM user WHERE phone_number = ? AND password = MD5(CONCAT(?,'" + SALT
 			+ "'))";
+	private static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
 	private static final String UPDATE_USER = "UPDATE user WHERE phone_number = ? SET first_name=?, last_name=?"
 			+ "password=?, registred=?";
 	private static final String DELETE_USER_BY_ID = "DELETE FROM user WHERE id =?";
@@ -240,5 +241,30 @@ public class MySQLUser implements UserDao {
 		}
 		return result;
 	}
+
+	@Override
+	public User getUser(int userId) throws Exception {
+		User model = new User();
+		Connection con = null;
+		PreparedStatement prep = null;
+		ResultSet rs = null;
+		try {
+			con = dataSource.getConnection();
+			prep = con.prepareStatement(GET_USER_BY_ID);
+			prep.setInt(1, userId);
+			rs = prep.executeQuery();
+
+			if (rs.next()) {
+				model = extraction(rs);
+			}
+		} catch (SQLException e) {
+			// TODO LOGGER
+			throw new SQLException();
+		} finally {
+			close(con, prep, rs);
+		}
+		return model;
+	}
+
 
 }

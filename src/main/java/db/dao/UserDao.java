@@ -13,6 +13,8 @@ public interface UserDao {
 	int insertUser(User model) throws Exception;
  
 	User getUser(String email, String password) throws Exception;
+	
+	User getUser(int id) throws Exception;
 
 	boolean updateUser(User model) throws Exception;
 	
