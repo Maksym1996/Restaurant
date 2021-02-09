@@ -44,10 +44,20 @@
 <body class="otherPageBody">
 
 	<c:import url="/WEB-INF/jspf/header.jspf" />
-	
+
 	<!-- Displaying user information -->
+
 	<div class="row row-cols-auto">
+
 		<div class="info col-sm-4">
+			<c:if test="${not empty role and role != 'CLIENT' }">
+				<p>
+					<a href="/restaurant-web" class="input-group-btn">
+						<button class="btn btn-success" type="button">В рабочий
+							раздел</button>
+					</a>
+				</p>
+			</c:if>
 			<p>
 				<label>Имя: </label>
 				<c:out value="${user.firstName}" />
@@ -71,6 +81,9 @@
 			</form>
 		</div>
 	</div>
+
+
+
 	<c:import url="/WEB-INF/jspf/footer.jspf" />
 
 </body>
