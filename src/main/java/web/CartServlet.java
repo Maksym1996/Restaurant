@@ -97,7 +97,7 @@ public class CartServlet extends HttpServlet {
 		int orderSumm = 0;
 
 		for (Product p : products) {
-			if(count.get(p.getId()) == null) {
+			if (count.get(p.getId()) == null) {
 				count.put(p.getId(), 1);
 			}
 			orderSumm += p.getPrice() * count.get(p.getId());
@@ -122,8 +122,8 @@ public class CartServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		Map<String, String> errors = new HashMap<>();
-
-		if(session.getAttribute("user") == null) {
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
 			if (firstName.isEmpty()) {
 				errors.put("firstName", "Provide your first name");
 			}
@@ -138,8 +138,6 @@ public class CartServlet extends HttpServlet {
 		if (address.isEmpty()) {
 			errors.put("address", "Indicate the address where the delivery will be");
 		}
-
-	
 
 		Cart cart = (Cart) session.getAttribute("cart");
 		if (!errors.isEmpty()) {
@@ -160,30 +158,35 @@ public class CartServlet extends HttpServlet {
 
 		// take user
 		int userId = 0;
-		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
-		try {
-			for (User u : userDao.getRegisteredUsers("true")) {
-				if (u.getPhoneNumber().equals(phoneNumber)) {
-					userId = u.getId();
-				}
-			}
-		} catch (Exception e1) {
-			response.sendRedirect("SomeWrong.jsp");
-			// TODO add some logger 08.02.2021
-			return;
-		}
-		if (userId == 0) {
-
-			User model = Util.createUser(firstName, phoneNumber);
-
+		if (user != null) {
+			userId = user.getId();
+		} else {
+			UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
 			try {
-				userId = userDao.insertUser(model);
-			} catch (Exception e) {
+				for (User u : userDao.getRegisteredUsers("true")) {
+					if (u.getPhoneNumber().equals(phoneNumber)) {
+						userId = u.getId();
+					}
+				}
+			} catch (Exception e1) {
 				response.sendRedirect("SomeWrong.jsp");
-				// TODO add some logger 05.02.2021
+				// TODO add some logger 08.02.2021
 				return;
 			}
+			if (userId == 0) {
+
+				User model = Util.createUser(firstName, phoneNumber);
+
+				try {
+					userId = userDao.insertUser(model);
+				} catch (Exception e) {
+					response.sendRedirect("SomeWrong.jsp");
+					// TODO add some logger 05.02.2021
+					return;
+				}
+			}
 		}
+		
 
 		// create order
 		OrderDao orderDao = (OrderDao) request.getServletContext().getAttribute("orderDao");

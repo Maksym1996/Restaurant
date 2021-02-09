@@ -21,7 +21,8 @@ public class MySQLOrderView implements OrderDao {
 	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE status = ?";
 	private static final String SET_NEW_ORDER = "INSERT INTO orderView(id, order_date, state, address, user_id) VALUES(DEFAULT, current_timestamp(), ?, ?, ?)";
 	private static final String SET_PRODUCT_FOR_ORDER = "INSERT INTO orderView(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
-	private static final String SET_STATE_AND_CLOSEDATE = "UPDATE orderView WHERE id = ? SET state=?, closing_date=? ";
+	private static final String SET_STATE_AND_CLOSEDATE = "UPDATE orderView WHERE id = ? SET state=?, closing_date=curremt_timestamp() ";
+	private static final String SET_STATE = "UPDATE orderView WHERE id = ? SET state=?";
 
 	private final DataSource dataSource;
 
@@ -117,6 +118,7 @@ public class MySQLOrderView implements OrderDao {
 
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
+			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 			prep = con.prepareStatement(SET_NEW_ORDER, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
 			prep.setString(k++, model.getStatus());
@@ -151,6 +153,39 @@ public class MySQLOrderView implements OrderDao {
 			close(con, prep, rs);
 		}
 		return orderId;
+	}
+
+	@Override
+	public boolean updateOrderState(int id, String status) throws Exception {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement prep = null;
+
+		try {
+			con = dataSource.getConnection();
+			con.setAutoCommit(false);
+			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+			if ("DECLINE".equals(status) || "CLOSED".equals(status)) {
+				prep = con.prepareStatement(SET_STATE_AND_CLOSEDATE);
+			} else {
+				prep = con.prepareStatement(SET_STATE);
+			}
+			prep.setInt(1, id);
+			prep.setString(2, status);
+			if (prep.executeUpdate() > 0) {
+				result = true;
+			}
+			con.commit();
+		} catch (SQLException e) {
+			rollback(con);
+			// TODO add some logger 03.02.2021
+			throw new SQLException();
+		} finally {
+			close(con, prep);
+		}
+
+		return result;
+
 	}
 
 	private Order extractionOrder(ResultSet rs) throws SQLException {

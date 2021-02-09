@@ -45,49 +45,15 @@
 
 	<c:import url="/WEB-INF/jspf/header.jspf" />
 
-	<!-- Displaying user information -->
-
 	<div class="row row-cols-auto">
-
-		<div class="info col-sm-10">
-			<c:if test="${not empty role and role != 'CLIENT' }">
-				<p>
-				<form action="WorkZone" method="get">
-					<button class="btn btn-success" type="submit">В рабочий
-						раздел</button>
-				</form>
-				</p>
-			</c:if>
-			<p>
-				<label>Имя: </label>
-				<c:out value="${user.firstName}" />
-			</p>
-			<p>
-				<label>Фамилия: </label>
-				<c:out value="${user.lastName}" />
-			</p>
-			<p>
-				<label>Эл. адресс: </label>
-				<c:out value="${user.email}" />
-			</p>
-			<p>
-				<label>Номер телефона: </label>
-				<c:out value="${user.phoneNumber}" />
-			</p>
-			<form action="Login page" method="get">
-				<input type="hidden" name="logout" value="logout" />
-				<button type="submit" class="btn btn-secondary">Выйти из
-					системы</button>
-			</form>
-		</div>
-	</div>
-
-	<div class="row row-cols-auto">
-		<div class="info col-sm-10">
+		<div class="col-sm-12">
 			<c:if test="${not empty orderList}">
 				<div class="row">
-					<div class="col-sm-2">Номер заказа</div>
-					<div class="col-sm-2">Название</div>
+					<div class="col-sm-1">№ заказа</div>
+					<div class="col-sm-1">Название</div>
+					<div class="col-sm-1">Имя</div>
+					<div class="col-sm-1">Телефон</div>
+					<div class="col-sm-1">Адресс</div>
 					<div class="col-sm-1">Кол-во</div>
 					<div class="col-sm-1">Цена</div>
 					<div class="col-sm-1">Статус</div>
@@ -95,18 +61,32 @@
 			</c:if>
 			<c:forEach var="order" items="${orderList}">
 				<div class="row">
-					<div class="col-sm-2">
+					<div class="col-sm-1">
 						№
 						<c:out value="${order.id}" />
 
 					</div>
-					<div class="col-sm-2">
-					<c:forEach var="product" items="${productList}">
-					<c:if test="${product.id == order.productId}">
-						<c:out value="${product.name}" />
-					</c:if>
+
+					<div class="col-sm-1">
+						<c:forEach var="product" items="${productList}">
+							<c:if test="${product.id == order.productId}">
+								<c:out value="${product.name}" />
+							</c:if>
+						</c:forEach>
+
+					</div>
+					<c:forEach var="user" items="${userList}">
+						<c:if test="${order.userId == user.id}">
+							<div class="col-sm-1">
+								<c:out value="${user.firstName}" />
+							</div>
+							<div class="col-sm-1">
+								<c:out value="${user.phoneNumber}" />
+							</div>
+						</c:if>
 					</c:forEach>
-					
+					<div class="col-sm-1">
+						<c:out value="${order.address}" />
 					</div>
 					<div class="col-sm-1">
 						<c:out value="${order.count }" />
@@ -117,18 +97,30 @@
 					<div class="col-sm-1">
 						<c:out value="${order.status}" />
 					</div>
-
 				</div>
+
+				<c:if
+					test="${order.status != 'DECLINE' or order.status != 'CLOSED'}">
+					<a class="col-sm-1"
+						href="/restaurant-web/WorkZone?status='${order.status}'&id='${order.id}'">
+						<button class="btn btn-success">Подтвердить</button>
+					</a>
+					<c:if test="${role == 'MANAGER'}">
+						<a
+							href="/restaurant-web/WorkZone?status='DECLINE'&id='${order.id}'"
+							class="col-sm-1">
+							<button class="btn btn-success">Подтвердить</button>
+						</a>
+					</c:if>
+				</c:if>
 			</c:forEach>
+
 		</div>
+
 
 	</div>
 
-
-
-
-
-
 	<c:import url="/WEB-INF/jspf/footer.jspf" />
+
 </body>
 </html>
