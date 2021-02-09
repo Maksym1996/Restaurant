@@ -79,28 +79,28 @@
 
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
-		<location>/SomeWrong.jsp</location>
+		<location>/SomeWrong.html</location>
 	</error-page>
 
 
 	<error-page>
 		<error-code>401</error-code>
-		<location>/401.jsp</location>
+		<location>/401.html</location>
 	</error-page>
 
 	<error-page>
 		<error-code>403</error-code>
-		<location>/403.jsp</location>
+		<location>/403.html</location>
 	</error-page>
 
 	<error-page>
 		<error-code>404</error-code>
-		<location>/404.jsp</location>
+		<location>/404.html</location>
 	</error-page>
 
 	<error-page>
 		<error-code>500</error-code>
-		<location>/500.jsp</location>
+		<location>/500.html</location>
 	</error-page>
 
 
