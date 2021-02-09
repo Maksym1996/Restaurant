@@ -162,6 +162,10 @@ public class MySQLOrderView implements OrderDao {
 		order.setStatus(rs.getString(k++));
 		order.setAddress(rs.getString(k++));
 		order.setUserId(rs.getInt(k++));
+		order.setOrderId(rs.getInt(k++));
+		order.setProductId(rs.getInt(k++));
+		order.setCount(rs.getInt(k++));
+		order.setPrice(rs.getInt(k++));
 
 		return order;
 	}

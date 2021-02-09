@@ -12,6 +12,10 @@ public class Order implements Serializable {
 	String status;
 	String address;
 	int userId;
+	int orderId;
+	int productId;
+	int count;
+	int price;
 	
 	public int getId() {
 		return id;
@@ -51,6 +55,30 @@ public class Order implements Serializable {
 		this.userId = userId;
 	}
 	
+	public int getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
+	}
+	public int getProductId() {
+		return productId;
+	}
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -74,6 +102,7 @@ public class Order implements Serializable {
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", orderDate=" + orderDate + ", closingDate=" + closingDate + ", status=" + status
-				+ ", address=" + address + ", userId=" + userId + "]";
+				+ ", address=" + address + ", userId=" + userId + ", productId=" + productId + ", count=" + count
+				+ ", price=" + price + "]";
 	}
 }
