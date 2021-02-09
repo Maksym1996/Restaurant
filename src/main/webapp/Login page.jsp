@@ -44,7 +44,7 @@
 <body class="otherPageBody">
 	<c:import url="/WEB-INF/jspf/header.jspf" />
 	<main>
-		<div class="row row-cols-auto" style=" margin-right:0px ">
+		<div class="row row-cols-auto" style="margin-right: 0px">
 
 			<span class="col-sm-4"></span>
 			<div class="col-sm-4">
@@ -59,9 +59,8 @@
 
 					<!-- Password input -->
 					<div class="form-floating">
-						<input type="password" class="form-control"
-							id="inputPassword" name="password"
-							placeholder="" required> <label
+						<input type="password" class="form-control" id="inputPassword"
+							name="password" placeholder="" required> <label
 							for="inputPassword">Пароль</label>
 					</div>
 
@@ -80,9 +79,12 @@
 					</div>
 				</form>
 				<br>
-				 
-				<form class="d-grid gap-2 d-md-flex justify-content-md-end" action="Registration" method="get">
-					<span class="formLabel" style="font-size:1.5em">Хотите быть с нами?</span>
+				
+				<!-- Form for registration -->
+				<form class="d-grid gap-2 d-md-flex justify-content-md-end"
+					action="Registration" method="get">
+					<span class="formLabel" style="font-size: 1.5em">Хотите быть
+						с нами?</span>
 					<button type="submit" class="btn btn-success btn-block">Зарегистрируйтесь</button>
 				</form>
 			</div>

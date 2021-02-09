@@ -45,7 +45,7 @@
 
 	<c:import url="/WEB-INF/jspf/header.jspf" />
 
-	<!-- Кнопки фильтрации -->
+	<!-- Filter buttons -->
 	<div class="row row-cols-auto"
 		style="margin-right: 0px; margin-left: 0px">
 		<form class="form text-center col-sm-1.5" action="Pizza Preferita"
@@ -86,6 +86,7 @@
 
 	</div>
 	<br>
+	<!-- Sort menu -->
 	<div class="dropdown sortMargin" style="margin-left: 20px">
 		<button class="btn btn-warning dropdown-toggle" type="button"
 			id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
@@ -107,7 +108,7 @@
 	<main class="container">
 
 
-		<!-- Вывод контента -->
+		<!-- Displaying content -->
 		<div class="row ">
 
 			<c:forEach var="product" items="${productsList}">
@@ -140,7 +141,7 @@
 
 		</div>
 		<div></div>
-		<!-- Паджинация -->
+		<!-- Pagination -->
 		<div class="row row-cols-auto">
 			<div class="text-center col-sm-5"></div>
 			<div class="text-center col-sm-0.5">

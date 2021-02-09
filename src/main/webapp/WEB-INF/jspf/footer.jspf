@@ -1,4 +1,4 @@
-<!-- Вывод нижней строки с контантами -->
+<!-- Bottom line output with contants -->
 	<footer class="footer">
 		<div class="row row-cols-auto">
 			<div class="text-center col-sm-4">

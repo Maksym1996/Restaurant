@@ -46,6 +46,7 @@
 	<c:import url="/WEB-INF/jspf/header.jspf" />
 
 	<main>
+	<!-- Registration form -->
 		<form class="form" action="Registration" method="post"
 			style="margin-left: 3rem">
 			<div class="row row-cols-auto">

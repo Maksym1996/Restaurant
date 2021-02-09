@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-		<!-- ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ -->
+		<!-- Brand -->
 		<div class="container-fluid">
 			<a class="navbar-brand"
 				href="/restaurant-web/Pizza Preferita?page=1">Pizza
 				Preferita</a>
 
-			<!-- ÐÐ½Ð¾Ð¿ÐºÐ° Ð´Ð»Ñ Ð²ÑÐ¿Ð°Ð´Ð°ÑÑÐµÐ³Ð¾ ÑÐ¿Ð¸ÑÐºÐ° Ð¿ÑÐ¸ ÑÐ¼ÐµÐ½ÑÑÐµÐ½Ð¸Ð¸ Ð¼Ð°ÑÑÐ°Ð±Ð° -->
+			<!-- Dropdown button when zooming out -->
 			<button class="navbar-toggler collapsed" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
 				aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -15,7 +15,7 @@
 
 			<div class="navbar-collapse collapse" id="navbarSupportedContent">
 
-				<!-- ÐÑÐ¿Ð°Ð´Ð°ÑÑÐ¸Ð¹ ÑÐ¿Ð¸ÑÐ¾Ðº Ð´Ð»Ñ ÑÐ·ÑÐºÐ¾Ð²-->
+				<!-- Dropdown list for languages-->
 				<div class="dropdown">
 					<button class="btn btn-secondary dropdown-toggle" type="button"
 						id="dropdownMenuButton" data-toggle="dropdown"
@@ -28,7 +28,7 @@
 					</ul>
 				</div>
 
-				<!--ÐÐºÐ¾Ð½ÐºÐ¸ ÐºÐ°Ð±Ð¸Ð½ÐµÑÐ° Ð¸ ÐºÐ¾ÑÐ·Ð¸Ð½Ñ-->
+				<!--Icons for user account and shopping cart-->
 				<div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
 				<div class="me-auto mb-2"></div>
 				<div class="me-2">

@@ -44,30 +44,33 @@
 <body class="otherPageBody">
 
 	<c:import url="/WEB-INF/jspf/header.jspf" />
-<div class="row row-cols-auto">
-	<div class="info col-sm-4">
-		<p>
-			<label>Имя: </label>
-			<c:out value="${user.firstName}" />
-		</p>
-		<p>
-			<label>Фамилия: </label>
-			<c:out value="${user.lastName}" />
-		</p>
-		<p>
-			<label>Эл. адресс: </label>
-			<c:out value="${user.email}" />
-		</p>
-		<p>
-			<label>Номер телефона: </label>
-			<c:out value="${user.phoneNumber}" />
-		</p>
-		<form action="Login page" method="get">
-		<input type="hidden" name="logout" value="logout"/>
-			<button type="submit" class="btn btn-secondary">Выйти из системы</button>
-		</form>
+	
+	<!-- Displaying user information -->
+	<div class="row row-cols-auto">
+		<div class="info col-sm-4">
+			<p>
+				<label>Имя: </label>
+				<c:out value="${user.firstName}" />
+			</p>
+			<p>
+				<label>Фамилия: </label>
+				<c:out value="${user.lastName}" />
+			</p>
+			<p>
+				<label>Эл. адресс: </label>
+				<c:out value="${user.email}" />
+			</p>
+			<p>
+				<label>Номер телефона: </label>
+				<c:out value="${user.phoneNumber}" />
+			</p>
+			<form action="Login page" method="get">
+				<input type="hidden" name="logout" value="logout" />
+				<button type="submit" class="btn btn-secondary">Выйти из
+					системы</button>
+			</form>
+		</div>
 	</div>
-</div>
 	<c:import url="/WEB-INF/jspf/footer.jspf" />
 
 </body>

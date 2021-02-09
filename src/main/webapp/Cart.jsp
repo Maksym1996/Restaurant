@@ -60,36 +60,41 @@
 			style="margin-left: 2rem">
 			<button type="submit" class="btn btn-info">Оформить заказ</button>
 
+			<!-- User filling in the information required for sending -->
 			<div class="row row-cols-auto" style="margin-top: 30px" align="left">
-				<div class="col-md-3">
-					<label for="inputFirstName">Имя<span style="color: red">*</span></label>
-					<input type="text" class="form-control" id="inputFirstName"
-						name="firstName" required>
-					<c:if
-						test="${not empty errors and errors.containsKey('firstName')}">
-						<p style="color: red">
-							<c:out value="${errors.firstName}" />
-						</p>
-					</c:if>
-				</div>
-				<div class="col-md-3">
-					<label for="inputPhoneNumber" class="formLabelCart">Номер
-						телефона<span style="color: red">*</span>
-					</label> <input type="tel" class="form-control" id="inputPhoneNumber"
-						name="phoneNumber" required>
-					<c:if
-						test="${not empty errors and errors.containsKey('phoneNumber')}">
-						<p style="color: red">
-							<c:out value="${errors.phoneNumber}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('phoneNumberPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.phoneNumberPattern}" />
-						</p>
-					</c:if>
-				</div>
+
+				<!-- The authorized user does not fill in the fields -->
+				<c:if test="${empty user}">
+					<div class="col-md-3">
+						<label for="inputFirstName">Имя<span style="color: red">*</span></label>
+						<input type="text" class="form-control" id="inputFirstName"
+							name="firstName" required>
+						<c:if
+							test="${not empty errors and errors.containsKey('firstName')}">
+							<p style="color: red">
+								<c:out value="${errors.firstName}" />
+							</p>
+						</c:if>
+					</div>
+					<div class="col-md-3">
+						<label for="inputPhoneNumber" class="formLabelCart">Номер
+							телефона<span style="color: red">*</span>
+						</label> <input type="tel" class="form-control" id="inputPhoneNumber"
+							name="phoneNumber" required>
+						<c:if
+							test="${not empty errors and errors.containsKey('phoneNumber')}">
+							<p style="color: red">
+								<c:out value="${errors.phoneNumber}" />
+							</p>
+						</c:if>
+						<c:if
+							test="${not empty errors and errors.containsKey('phoneNumberPattern')}">
+							<p style="color: red">
+								<c:out value="${errors.phoneNumberPattern}" />
+							</p>
+						</c:if>
+					</div>
+				</c:if>
 				<div class="col-md-4">
 					<label for="inputAddress" class="formLabelCart">Адресс
 						доставки<span style="color: red">*</span>
@@ -108,7 +113,7 @@
 
 	</div>
 
-	<!-- Вывод контента -->
+	<!-- Content output -->
 	<main class="container">
 		<div class="row ">
 			<c:forEach var="product" items="${productsList}">
@@ -131,6 +136,7 @@
 
 						</div>
 
+						<!-- Buttons to increase and decrease the amount of products -->
 						<div class="input-group">
 
 							<a href='/restaurant-web/Cart?id=${product.id}&change=dec'
@@ -140,9 +146,9 @@
 								class="form-control no-padding add-color text-center height-25">
 
 								<c:forEach items="${count}" var="entry">
-    								<c:if test="${entry.key == product.id}">
+									<c:if test="${entry.key == product.id}">
     								${entry.value}
-    								</c:if>  
+    								</c:if>
 								</c:forEach>
 
 							</label> <a href='/restaurant-web/Cart?id=${product.id}&change=inc'
@@ -156,6 +162,8 @@
 
 
 				</div>
+
+				<!-- Delete product from cart -->
 				<form action="Cart" method="get" class="col-md-1">
 					<button type="submit" style="color: red" class="btn btn-link "
 						id="deleteId" name="deleteId"
