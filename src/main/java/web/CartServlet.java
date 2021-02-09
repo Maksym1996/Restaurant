@@ -63,14 +63,16 @@ public class CartServlet extends HttpServlet {
 			}
 		} else if (changeId != null && change != 0) {
 			int id = Integer.parseInt(changeId);
-			int value = count.get(id) + change;
-			if (value <= 0) {
-				value = 1;
-			} else if (value >= 20) {
-				value = 20;
-			}
-			count.put(id, value);
+			if (count.get(id) != null) {
 
+				int value = count.get(id) + change;
+				if (value <= 0) {
+					value = 1;
+				} else if (value >= 20) {
+					value = 20;
+				}
+				count.put(id, value);
+			}
 		}
 
 		// realize delete product from cart
@@ -93,7 +95,11 @@ public class CartServlet extends HttpServlet {
 		}
 
 		int orderSumm = 0;
+
 		for (Product p : products) {
+			if(count.get(p.getId()) == null) {
+				count.put(p.getId(), 1);
+			}
 			orderSumm += p.getPrice() * count.get(p.getId());
 		}
 
@@ -117,19 +123,23 @@ public class CartServlet extends HttpServlet {
 
 		Map<String, String> errors = new HashMap<>();
 
-		if (firstName.isEmpty()) {
-			errors.put("firstName", "Provide your first name");
+		if(session.getAttribute("user") == null) {
+			if (firstName.isEmpty()) {
+				errors.put("firstName", "Provide your first name");
+			}
+			if (phoneNumber.isEmpty()) {
+				errors.put("phoneNumber", "Provide your first name");
+			}
+			if (!Pattern.matches(phoneNumberRegex, phoneNumber)) {
+				errors.put("phoneNumberPattern", "The entered phone number is incorrect");
+			}
 		}
-		if (phoneNumber.isEmpty()) {
-			errors.put("phoneNumber", "Provide your first name");
-		}
+
 		if (address.isEmpty()) {
 			errors.put("address", "Indicate the address where the delivery will be");
 		}
 
-		if (!Pattern.matches(phoneNumberRegex, phoneNumber)) {
-			errors.put("phoneNumberPattern", "The entered phone number is incorrect");
-		}
+	
 
 		Cart cart = (Cart) session.getAttribute("cart");
 		if (!errors.isEmpty()) {
