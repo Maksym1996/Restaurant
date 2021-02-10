@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import db.dao.OrderDao;
+import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
-import db.entity.Order;
+import db.entity.OrderView;
 import db.entity.Product;
 import db.entity.User;
 
@@ -34,36 +34,35 @@ public class WorkZoneServlet extends HttpServlet {
 
 		String status = request.getParameter("status");
 		String id = request.getParameter("id");
-		
-		List<String> stat = new ArrayList<>();
-		stat.add("NEW");
-		stat.add("APPROVAL");
-		stat.add("COOKING");
-		stat.add("COOKED");
-		stat.add("IN_DELIVERY");
-		stat.add("DELIVERED_AND_PAID");
-		stat.add("CLOSED");
 
-		if (!"DECLINE".equals(status) && !"CLOSED".equals(status)) {
+		if (status != null && !"DECLINE".equals(status) && !"CLOSED".equals(status)) {
+
+			List<String> stat = new ArrayList<>();
+			stat.add("NEW");
+			stat.add("APPROVAL");
+			stat.add("COOKING");
+			stat.add("COOKED");
+			stat.add("IN_DELIVERY");
+			stat.add("DELIVERED_AND_PAID");
+			stat.add("CLOSED");
 			status = stat.get(stat.indexOf(status) + 1);
 		}
 
 		HttpSession session = request.getSession(true);
 		String role = (String) session.getAttribute("role");
-		OrderDao orderDao = (OrderDao) request.getServletContext().getAttribute("orderDao");
+		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute("orderDao");
 		try {
 			orderDao.updateOrderState(Integer.parseInt(id), status);
 		} catch (Exception e2) {
-			//TODO add logger 09.02
+			// TODO add logger 09.02
 		}
-		
-		
-		List<Order> orderList = new ArrayList<>();
+
+		List<OrderView> orderViewList = new ArrayList<>();
 		String forwardPage;
 		switch (role) {
 		case "MANAGER":
 			try {
-				orderList = orderDao.getAllOrders();
+				orderViewList = orderDao.getAllOrders();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -72,7 +71,7 @@ public class WorkZoneServlet extends HttpServlet {
 			break;
 		case "COOK":
 			try {
-				orderList = orderDao.getOrdersByStatus("APPROVAL");
+				orderViewList = orderDao.getOrdersByStatus("APPROVAL");
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -81,7 +80,7 @@ public class WorkZoneServlet extends HttpServlet {
 			break;
 		case "DELIVERY":
 			try {
-				orderList = orderDao.getOrdersByStatus("COOKED");
+				orderViewList = orderDao.getOrdersByStatus("COOKED");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -95,30 +94,31 @@ public class WorkZoneServlet extends HttpServlet {
 			response.sendError(401);
 			return;
 		}
-		Set<Product> productList = new HashSet<>();
+		
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
-		for (Order o : orderList) {
-			try {
-				productList.add(productDao.getProduct(o.getProductId()));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		Set<User> userList = new HashSet<>();
 		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
-		for (Order o : orderList) {
+		
+		Set<Product> productList = new HashSet<>();
+		Set<User> userList = new HashSet<>();
+		Set<OrderView> orders = new HashSet<>();
+	
+		for (OrderView o : orderViewList) {
 			try {
-				userList.add(userDao.getUser(o.getId()));
+				orders.add(o);
+				productList.add(productDao.getProduct(o.getProductId()));
+				userList.add(userDao.getUser(o.getUserId()));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
-		request.setAttribute("orderList", orderList);
+		request.setAttribute("orderViewList", orderViewList);
 		request.setAttribute("productList", productList);
 		request.setAttribute("userList", userList);
+		request.setAttribute("orders", orders);
 		dispatcher.forward(request, response);
 
 	}

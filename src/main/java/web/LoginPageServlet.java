@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import db.dao.OrderDao;
+import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
-import db.entity.Order;
+import db.entity.OrderView;
 import db.entity.Product;
 import db.entity.User;
 

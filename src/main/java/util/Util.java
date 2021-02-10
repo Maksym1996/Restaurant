@@ -1,6 +1,6 @@
 package util;
 
-import db.entity.Order;
+import db.entity.OrderView;
 import db.entity.User;
 
 public class Util {
@@ -35,8 +35,8 @@ public class Util {
 
 	}
 
-	public static Order createOrder(String status, String address, int userId) {
-		Order order = new Order();
+	public static OrderView createOrder(String status, String address, int userId) {
+		OrderView order = new OrderView();
 
 		order.setStatus(status);
 		order.setAddress(address);

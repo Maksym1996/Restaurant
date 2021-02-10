@@ -13,7 +13,7 @@ import db.dao.UserDao;
 import db.MySQL.MySQLOrderView;
 import db.MySQL.MySQLProduct;
 import db.MySQL.MySQLUser;
-import db.dao.OrderDao;
+import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import exception.ContextInitException;
 
@@ -30,7 +30,7 @@ public class ContextListener implements ServletContextListener {
 				
 		UserDao userDao = new MySQLUser(dataSource);
 		ProductDao productDao = new MySQLProduct(dataSource);
-		OrderDao orderDao = new MySQLOrderView(dataSource);
+		OrderViewDao orderDao = new MySQLOrderView(dataSource);
 		
 		ServletContext servletContext = event.getServletContext();
 		servletContext.setAttribute("userDao", userDao);

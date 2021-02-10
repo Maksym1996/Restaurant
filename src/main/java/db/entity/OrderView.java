@@ -2,7 +2,7 @@ package db.entity;
 
 import java.io.Serializable;
 
-public class Order implements Serializable {
+public class OrderView implements Serializable {
 
 	private static final long serialVersionUID = 5965318754937941837L;
 	
@@ -94,7 +94,7 @@ public class Order implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Order other = (Order) obj;
+		OrderView other = (OrderView) obj;
 		if (id != other.id)
 			return false;
 		return true;

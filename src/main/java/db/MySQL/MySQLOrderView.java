@@ -11,11 +11,11 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import db.dao.OrderDao;
-import db.entity.Order;
+import db.dao.OrderViewDao;
+import db.entity.OrderView;
 import db.entity.Product;
 
-public class MySQLOrderView implements OrderDao {
+public class MySQLOrderView implements OrderViewDao {
 	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView";
 	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ?";
 	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE status = ?";
@@ -30,8 +30,8 @@ public class MySQLOrderView implements OrderDao {
 	}
 
 	@Override
-	public List<Order> getAllOrders() throws Exception {
-		List<Order> allOrders = new ArrayList<>();
+	public List<OrderView> getAllOrders() throws Exception {
+		List<OrderView> allOrders = new ArrayList<>();
 		Connection con = null;
 		Statement stat = null;
 		ResultSet rs = null;
@@ -55,8 +55,8 @@ public class MySQLOrderView implements OrderDao {
 	}
 
 	@Override
-	public List<Order> getOrdersByUserId(int userId) throws Exception {
-		List<Order> allOrders = new ArrayList<>();
+	public List<OrderView> getOrdersByUserId(int userId) throws Exception {
+		List<OrderView> allOrders = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -81,8 +81,8 @@ public class MySQLOrderView implements OrderDao {
 	}
 
 	@Override
-	public List<Order> getOrdersByStatus(String status) throws Exception {
-		List<Order> allOrders = new ArrayList<>();
+	public List<OrderView> getOrdersByStatus(String status) throws Exception {
+		List<OrderView> allOrders = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -107,7 +107,7 @@ public class MySQLOrderView implements OrderDao {
 	}
 
 	@Override
-	public int insertOrder(Order model, List<Product> products, Map<Integer, Integer> count) throws Exception {
+	public int insertOrder(OrderView model, List<Product> products, Map<Integer, Integer> count) throws Exception {
 		Connection con = null;
 
 		PreparedStatement prep = null;
@@ -187,8 +187,8 @@ public class MySQLOrderView implements OrderDao {
 
 	}
 
-	private Order extractionOrder(ResultSet rs) throws SQLException {
-		Order order = new Order();
+	private OrderView extractionOrder(ResultSet rs) throws SQLException {
+		OrderView order = new OrderView();
 		int k = 1;
 		order.setId(rs.getInt(k++));
 		order.setOrderDate(rs.getString(k++));

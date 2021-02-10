@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import db.dao.OrderDao;
+import db.dao.OrderViewDao;
 import db.dao.UserDao;
 import db.entity.Product;
 import db.entity.User;
@@ -189,7 +189,7 @@ public class CartServlet extends HttpServlet {
 		
 
 		// create order
-		OrderDao orderDao = (OrderDao) request.getServletContext().getAttribute("orderDao");
+		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute("orderDao");
 		List<Product> products = cart.getProducts();
 		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute("count");
 		try {
