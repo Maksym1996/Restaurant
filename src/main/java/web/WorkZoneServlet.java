@@ -41,10 +41,10 @@ public class WorkZoneServlet extends HttpServlet {
 		stat.add("COOKING");
 		stat.add("COOKED");
 		stat.add("IN_DELIVERY");
-		stat.add("DELIVERED AND PAID");
+		stat.add("DELIVERED_AND_PAID");
 		stat.add("CLOSED");
 
-		if (!"DECLINE".equals(status) || !"CLOSED".equals(status)) {
+		if (!"DECLINE".equals(status) && !"CLOSED".equals(status)) {
 			status = stat.get(stat.indexOf(status) + 1);
 		}
 

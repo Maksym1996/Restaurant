@@ -57,6 +57,8 @@
 					<div class="col-sm-1">Кол-во</div>
 					<div class="col-sm-1">Цена</div>
 					<div class="col-sm-1">Статус</div>
+					<div class="col-sm-2">Время получения</div>
+					<div class="col-sm-2">Время закрытия</div>
 				</div>
 			</c:if>
 			<c:forEach var="order" items="${orderList}">
@@ -97,19 +99,25 @@
 					<div class="col-sm-1">
 						<c:out value="${order.status}" />
 					</div>
+					<div class="col-sm-2">
+						<c:out value="${order.orderDate}" />
+					</div>
+					<div class="col-sm-2">
+						<c:out value="${order.closingDate}" />
+					</div>
 				</div>
 
 				<c:if
-					test="${order.status != 'DECLINE' or order.status != 'CLOSED'}">
+					test="${order.status != 'DECLINE' and order.status != 'CLOSED'}">
 					<a class="col-sm-1"
-						href="/restaurant-web/WorkZone?status='${order.status}'&id='${order.id}'">
+						href="/restaurant-web/WorkZone?status=${order.status}&id=${order.id}">
 						<button class="btn btn-success">Подтвердить</button>
 					</a>
 					<c:if test="${role == 'MANAGER'}">
 						<a
-							href="/restaurant-web/WorkZone?status='DECLINE'&id='${order.id}'"
+							href="/restaurant-web/WorkZone?status=DECLINE&id=${order.id}"
 							class="col-sm-1">
-							<button class="btn btn-success">Подтвердить</button>
+							<button class="btn btn-wrong">Отменить</button>
 						</a>
 					</c:if>
 				</c:if>

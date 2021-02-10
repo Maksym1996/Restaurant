@@ -21,8 +21,7 @@ public class MySQLOrderView implements OrderDao {
 	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE status = ?";
 	private static final String SET_NEW_ORDER = "INSERT INTO orderView(id, order_date, state, address, user_id) VALUES(DEFAULT, current_timestamp(), ?, ?, ?)";
 	private static final String SET_PRODUCT_FOR_ORDER = "INSERT INTO orderView(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
-	private static final String SET_STATE_AND_CLOSEDATE = "UPDATE orderView WHERE id = ? SET state=?, closing_date=curremt_timestamp() ";
-	private static final String SET_STATE = "UPDATE orderView WHERE id = ? SET state=?";
+
 
 	private final DataSource dataSource;
 
@@ -157,6 +156,7 @@ public class MySQLOrderView implements OrderDao {
 
 	@Override
 	public boolean updateOrderState(int id, String status) throws Exception {
+		String setState = "UPDATE orders SET state=? WHERE id = ?";
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -166,12 +166,11 @@ public class MySQLOrderView implements OrderDao {
 			con.setAutoCommit(false);
 			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 			if ("DECLINE".equals(status) || "CLOSED".equals(status)) {
-				prep = con.prepareStatement(SET_STATE_AND_CLOSEDATE);
-			} else {
-				prep = con.prepareStatement(SET_STATE);
-			}
-			prep.setInt(1, id);
-			prep.setString(2, status);
+				setState = "UPDATE orders SET state=?, closing_date = current_timestamp() WHERE id = ? ";
+			} 
+			prep = con.prepareStatement(setState);
+			prep.setString(1, status);
+			prep.setInt(2, id);
 			if (prep.executeUpdate() > 0) {
 				result = true;
 			}
