@@ -2,10 +2,8 @@ package web;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,11 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import db.dao.OrderViewDao;
-import db.dao.ProductDao;
 import db.dao.UserDao;
-import db.entity.OrderView;
-import db.entity.Product;
 import db.entity.User;
 
 /**
