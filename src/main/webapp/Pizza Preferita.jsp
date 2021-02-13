@@ -43,7 +43,7 @@
 </head>
 <body class="d-flex flex-column h-100 mainPageBody">
 
-	<c:import url="/WEB-INF/jspf/header.jspf" />
+	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<!-- Filter buttons -->
 	<div class="row row-cols-auto"
@@ -198,7 +198,7 @@
 		</div>
 	</main>
 
-	<c:import url="/WEB-INF/jspf/footer.jspf" />
+	<c:import url="/WEB-INF/resources/footer.jspf" />
 
 </body>
 </html>

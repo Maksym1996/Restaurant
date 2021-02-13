@@ -43,21 +43,14 @@
 </head>
 <body class="otherPageBody">
 
-	<c:import url="/WEB-INF/jspf/header.jspf" />
+	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<!-- Displaying user information -->
 
 	<div class="row row-cols-auto">
 
 		<div class="info col-sm-10">
-			<c:if test="${not empty role and role != 'CLIENT' }">
-				<p>
-				<form action="WorkZone" method="get">
-					<button class="btn btn-success" type="submit">В рабочий
-						раздел</button>
-				</form>
-				</p>
-			</c:if>
+			
 			<p>
 				<label>Имя: </label>
 				<c:out value="${user.firstName}" />
@@ -129,6 +122,6 @@
 
 
 
-	<c:import url="/WEB-INF/jspf/footer.jspf" />
+	<c:import url="/WEB-INF/resources/footer.jspf" />
 </body>
 </html>

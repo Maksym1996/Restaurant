@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="main.css">
 </head>
 <body class="otherPageBody">
-	<c:import url="/WEB-INF/jspf/header.jspf" />
+	<c:import url="/WEB-INF/resources/header.jsp" />
 	<main>
 		<div class="row row-cols-auto" style="margin-right: 0px">
 
@@ -91,7 +91,7 @@
 			<span class="col-sm-0"></span>
 		</div>
 	</main>
-	<c:import url="/WEB-INF/jspf/footer.jspf" />
+	<c:import url="/WEB-INF/resources/footer.jspf" />
 
 </body>
 </html>

@@ -43,7 +43,7 @@
 </head>
 <body class="otherPageBody">
 
-	<c:import url="/WEB-INF/jspf/header.jspf" />
+	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<main>
 	<!-- Registration form -->
@@ -208,7 +208,7 @@
 
 	</main>
 	<br>
-	<c:import url="/WEB-INF/jspf/footer.jspf" />
+	<c:import url="/WEB-INF/resources/footer.jspf" />
 
 
 </body>
