@@ -8,6 +8,8 @@ import db.entity.Product;
 
 public interface OrderViewDao {
 	
+	String getStateByOrderId(int orderId) throws Exception;
+	
 	List<OrderView> getAllOrders() throws Exception;
 	
 	List<OrderView> getOrdersByUserId(int userId) throws Exception;

@@ -47,7 +47,7 @@
 <body class="otherPageBody">
 
 
-	<c:import url="/WEB-INF/jspf/header.jspf" />
+	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<div align="center" style="font-size: 1em">
 		Ваша корзина
@@ -59,7 +59,7 @@
 		<form class="form" action="Cart" method="post"
 			style="margin-left: 2rem">
 			<button type="submit" class="btn btn-info">Оформить заказ</button>
-
+			<input type="hidden" name="sum" value="${orderSumm}">
 			<!-- User filling in the information required for sending -->
 			<div class="row row-cols-auto" style="margin-top: 30px" align="left">
 
@@ -178,7 +178,7 @@
 
 	</main>
 
-	<c:import url="/WEB-INF/jspf/footer.jspf" />
+	<c:import url="/WEB-INF/resources/footer.jspf" />
 </body>
 
 </html>

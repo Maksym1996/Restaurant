@@ -73,12 +73,6 @@
 					<h5 class="card-text">
 						<c:out value="${order.orderDate}" />
 					</h5>
-					<h5>
-						<span style="color: red; font-weight: 900;"><c:out
-								value="${order.status}" /></span>
-						<c:out value="${order.closingDate}" />
-
-					</h5>
 					<div class="row productList">
 						<div class="col-sm-4">Наименование</div>
 						<div class="col-sm-2">Кол-во</div>
@@ -117,14 +111,7 @@
 								<form action="WorkZone" method="post">
 									<input name="status" value="${order.status}" type="hidden" />
 									<input name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-success">Подтвердить</button>
-								</form>
-							</div>
-							<div class="col-sm-2">
-								<form action="WorkZone" method="post">
-									<input name="status" value="REJECTED" type="hidden" /> <input
-										name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-danger">Отклонить</button>
+									<button type="submit" class="btn btn-success">Доставлено и оплачено</button>
 								</form>
 							</div>
 						</div>

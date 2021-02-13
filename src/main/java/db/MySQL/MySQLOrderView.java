@@ -16,11 +16,12 @@ import db.entity.OrderView;
 import db.entity.Product;
 
 public class MySQLOrderView implements OrderViewDao {
-	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView";
-	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ?";
-	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE status = ?";
-	private static final String SET_NEW_ORDER = "INSERT INTO orderView(id, order_date, state, address, user_id) VALUES(DEFAULT, current_timestamp(), ?, ?, ?)";
+	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView WHERE state IN ('NEW', 'COOKED', 'DELIVERED_AND_PAID', 'PERFORMED', 'REJECTED') ORDER BY state ASC";
+	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ? ORDER BY id ASC";
+	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE state = ? ORDER BY id ASC";
+	private static final String SET_NEW_ORDER = "INSERT INTO orderView(id, order_date, state, address, user_id, sum) VALUES(DEFAULT, current_timestamp(), ?, ?, ?, ?)";
 	private static final String SET_PRODUCT_FOR_ORDER = "INSERT INTO orderView(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
+	private static final String GET_STATUS_BY_ORDER_ID = "SELECT state FROM order WHERE id = ?";
 
 
 	private final DataSource dataSource;
@@ -28,6 +29,34 @@ public class MySQLOrderView implements OrderViewDao {
 	public MySQLOrderView(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
+	
+	@Override
+	public String getStateByOrderId(int orderId) throws Exception {
+		String state = null;
+		Connection con = null;
+		PreparedStatement prep = null;
+		ResultSet rs = null;
+		try {
+			con = dataSource.getConnection();
+			prep = con.prepareStatement(GET_STATUS_BY_ORDER_ID);
+			prep.setInt(1, orderId);
+			rs = prep.executeQuery();
+			if (rs.next()) {
+				state = rs.getString(1);
+			}
+
+		} catch (SQLException e) {
+			// TODO some logger
+
+			throw new SQLException();
+		} finally {
+			close(con, prep, rs);
+		}
+
+		return state;
+	}
+	
+	
 
 	@Override
 	public List<OrderView> getAllOrders() throws Exception {
@@ -123,6 +152,7 @@ public class MySQLOrderView implements OrderViewDao {
 			prep.setString(k++, model.getStatus());
 			prep.setString(k++, model.getAddress());
 			prep.setInt(k++, model.getUserId());
+			prep.setString(k++, model.getSum());
 
 			if (prep.executeUpdate() > 0) {
 				rs = prep.getGeneratedKeys();
@@ -165,7 +195,7 @@ public class MySQLOrderView implements OrderViewDao {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
 			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-			if ("DECLINE".equals(status) || "CLOSED".equals(status)) {
+			if ("REJECTED".equals(status) || "PERFORMED".equals(status)) {
 				setState = "UPDATE orders SET state=?, closing_date = current_timestamp() WHERE id = ? ";
 			} 
 			prep = con.prepareStatement(setState);
@@ -196,6 +226,7 @@ public class MySQLOrderView implements OrderViewDao {
 		order.setStatus(rs.getString(k++));
 		order.setAddress(rs.getString(k++));
 		order.setUserId(rs.getInt(k++));
+		order.setSum(rs.getString(k++));
 		order.setOrderId(rs.getInt(k++));
 		order.setProductId(rs.getInt(k++));
 		order.setCount(rs.getInt(k++));

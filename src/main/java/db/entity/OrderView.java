@@ -12,6 +12,7 @@ public class OrderView implements Serializable {
 	String status;
 	String address;
 	int userId;
+	String sum;
 	int orderId;
 	int productId;
 	int count;
@@ -55,6 +56,12 @@ public class OrderView implements Serializable {
 		this.userId = userId;
 	}
 	
+	public String getSum() {
+		return sum;
+	}
+	public void setSum(String sum) {
+		this.sum = sum;
+	}
 	public int getOrderId() {
 		return orderId;
 	}

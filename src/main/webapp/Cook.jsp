@@ -53,36 +53,12 @@
 						№
 						<c:out value="${order.id}" />
 					</h5>
-					<h4 class="card-title">
-						<c:forEach var="user" items="${userList}">
-							<c:if test="${order.userId == user.id}">
-
-								<c:out value="${user.firstName}" />
-
-								<c:out value="${user.lastName}" />
-
-								тел. <c:out value="${user.phoneNumber}" />
-
-							</c:if>
-						</c:forEach>
-					</h4>
-					<h3 class="card-title">
-						<c:out value="${order.address}" />
-
-					</h3>
 					<h5 class="card-text">
 						<c:out value="${order.orderDate}" />
-					</h5>
-					<h5>
-						<span style="color: red; font-weight: 900;"><c:out
-								value="${order.status}" /></span>
-						<c:out value="${order.closingDate}" />
-
 					</h5>
 					<div class="row productList">
 						<div class="col-sm-4">Наименование</div>
 						<div class="col-sm-2">Кол-во</div>
-						<div class="col-sm-2">Цена</div>
 					</div>
 					<c:forEach var="orderView" items="${orderViewList}">
 						<c:if test="${orderView.id == order.id }">
@@ -99,15 +75,9 @@
 								<div class="col-sm-2">
 									<c:out value="${orderView.count }" />
 								</div>
-								<div class="col-sm-2">
-									<c:out value="${orderView.price * orderView.count}" />
-								</div>
 							</div>
 						</c:if>
 					</c:forEach>
-					<h5 style="margin-top: 1em">
-						Сумма заказа: 
-						<c:out value="${order.sum}"/> грн.</h5>
 					</div>
 					<c:if
 						test="${order.status != 'REJECTED' and order.status != 'PERFORMED'}">
@@ -117,14 +87,7 @@
 								<form action="WorkZone" method="post">
 									<input name="status" value="${order.status}" type="hidden" />
 									<input name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-success">Подтвердить</button>
-								</form>
-							</div>
-							<div class="col-sm-2">
-								<form action="WorkZone" method="post">
-									<input name="status" value="REJECTED" type="hidden" /> <input
-										name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-danger">Отклонить</button>
+									<button type="submit" class="btn btn-success">Приготовлено</button>
 								</form>
 							</div>
 						</div>

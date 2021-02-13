@@ -118,6 +118,7 @@ public class CartServlet extends HttpServlet {
 		String firstName = request.getParameter("firstName");
 		String phoneNumber = request.getParameter("phoneNumber");
 		String address = request.getParameter("address");
+		String sum = request.getParameter("sum");
 
 		HttpSession session = request.getSession(true);
 
@@ -193,7 +194,7 @@ public class CartServlet extends HttpServlet {
 		List<Product> products = cart.getProducts();
 		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute("count");
 		try {
-			orderDao.insertOrder(Util.createOrder("NEW", address, userId), products, count);
+			orderDao.insertOrder(Util.createOrder("NEW", address, userId, sum), products, count);
 		} catch (Exception e) {
 			// TODO add some logger 05.02.2021
 			response.sendRedirect("SomeWrong.jsp");

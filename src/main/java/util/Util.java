@@ -35,12 +35,13 @@ public class Util {
 
 	}
 
-	public static OrderView createOrder(String status, String address, int userId) {
+	public static OrderView createOrder(String status, String address, int userId, String sum) {
 		OrderView order = new OrderView();
 
 		order.setStatus(status);
 		order.setAddress(address);
 		order.setUserId(userId);
+		order.setSum(sum);
 
 		return order;
 
