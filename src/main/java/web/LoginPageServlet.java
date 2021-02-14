@@ -1,9 +1,13 @@
 package web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,7 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import db.dao.OrderViewDao;
+import db.dao.ProductDao;
 import db.dao.UserDao;
+import db.entity.OrderView;
+import db.entity.Product;
 import db.entity.User;
 
 /**
@@ -31,7 +39,6 @@ public class LoginPageServlet extends HttpServlet {
 		String logout = request.getParameter("logout");
 
 		if ("logout".equals(logout)) {
-
 			session.invalidate();
 
 			forwardPage = "Login page.jsp";
@@ -40,6 +47,26 @@ public class LoginPageServlet extends HttpServlet {
 		} else {
 			User user = (User) session.getAttribute("user");
 			session.setAttribute("role", user.getRole());
+			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
+			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute("orderDao");
+			Set<Product> productList = new HashSet<>();
+			Set<OrderView> orders = new LinkedHashSet<>();
+			List<OrderView> orderViewList = new ArrayList<>();
+			try {
+				orderViewList = orderDao.getOrdersByUserId(user.getId());
+				for (OrderView o : orderViewList) {
+					orders.add(o);
+					
+					productList.add(productDao.getProduct(o.getProductId()));
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			request.setAttribute("orderViewList", orderViewList);
+			request.setAttribute("productList", productList);
+			request.setAttribute("orders", orders);
+
 			forwardPage = "Account.jsp";
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
@@ -75,9 +102,7 @@ public class LoginPageServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		session.setAttribute("user", user);
 		session.setAttribute("role", user.getRole());
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Account.jsp");
-
-		dispatcher.forward(request, response);
+		response.sendRedirect("Login page");
 
 	}
 

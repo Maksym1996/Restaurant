@@ -75,47 +75,59 @@
 		</div>
 	</div>
 
-	<div class="row row-cols-auto">
-		<div class="info col-sm-10">
-			<c:if test="${not empty orderList}">
-				<div class="row">
-					<div class="col-sm-2">Номер заказа</div>
-					<div class="col-sm-2">Название</div>
-					<div class="col-sm-1">Кол-во</div>
-					<div class="col-sm-1">Цена</div>
-					<div class="col-sm-1">Статус</div>
-				</div>
-			</c:if>
-			<c:forEach var="order" items="${orderList}">
-				<div class="row">
-					<div class="col-sm-2">
+		<c:forEach var="order" items="${orders}">
+
+			<div class="card w-50" style="margin-left:3em">
+				<div class="card-body">
+					<h5 class="card-title">
 						№
 						<c:out value="${order.id}" />
+					</h5>
+					<h3 class="card-title">
+						<c:out value="${order.address}" />
 
+					</h3>
+					<h5 class="card-text">
+						<c:out value="${order.orderDate}" />
+					</h5>
+					<h5>
+						<span style="color: red; font-weight: 900;"><c:out
+								value="${order.status}" /></span>
+						<c:out value="${order.closingDate}" />
+
+					</h5>
+					<div class="row productList">
+						<div class="col-sm-4">Наименование</div>
+						<div class="col-sm-2">Кол-во</div>
+						<div class="col-sm-2">Цена</div>
 					</div>
-					<div class="col-sm-2">
-					<c:forEach var="product" items="${productList}">
-					<c:if test="${product.id == order.productId}">
-						<c:out value="${product.name}" />
-					</c:if>
+					<c:forEach var="orderView" items="${orderViewList}">
+						<c:if test="${orderView.id == order.id }">
+
+							<div class="row productList">
+								<c:forEach var="product" items="${productList}">
+									<c:if test="${product.id == orderView.productId}">
+										<div class="col-sm-4">
+											<c:out value="${product.name}" />
+										</div>
+									</c:if>
+								</c:forEach>
+
+								<div class="col-sm-2">
+									<c:out value="${orderView.count }" />
+								</div>
+								<div class="col-sm-2">
+									<c:out value="${orderView.price * orderView.count}" />
+								</div>
+							</div>
+						</c:if>
 					</c:forEach>
-					
+					<h5 style="margin-top: 1em">
+						Сумма заказа: 
+						<c:out value="${order.sum}"/> грн.</h5>
 					</div>
-					<div class="col-sm-1">
-						<c:out value="${order.count }" />
-					</div>
-					<div class="col-sm-1">
-						<c:out value="${order.price * order.count}" />
-					</div>
-					<div class="col-sm-1">
-						<c:out value="${order.status}" />
-					</div>
-
 				</div>
-			</c:forEach>
-		</div>
-
-	</div>
+		</c:forEach>
 
 
 
