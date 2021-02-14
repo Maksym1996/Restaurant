@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 
 import db.dao.ProductDao;
 import db.entity.Product;
+import util.Category;
 
 public class MySQLProduct implements ProductDao {
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE(DEFAULT, ?, ?, ?, ?, ?, ?,)";
@@ -107,7 +108,7 @@ public class MySQLProduct implements ProductDao {
 			prep.setInt(k++, model.getPrice());
 			prep.setString(k++, model.getDescription());
 			prep.setString(k++, model.getImageLink());
-			prep.setString(k++, model.getCategory());
+			prep.setString(k++, model.getCategory().toString());
 
 			if (prep.executeUpdate() > 0) {
 				rs = prep.getGeneratedKeys();
@@ -169,7 +170,7 @@ public class MySQLProduct implements ProductDao {
 			prep.setInt(k++, model.getPrice());
 			prep.setString(k++, model.getDescription());
 			prep.setString(k++, model.getImageLink());
-			prep.setString(k++, model.getCategory());
+			prep.setString(k++, model.getCategory().toString());
 
 			if (prep.executeUpdate() > 0) {
 				result = true;
@@ -195,7 +196,7 @@ public class MySQLProduct implements ProductDao {
 		product.setPrice(rs.getInt(k++));
 		product.setDescription(rs.getString(k++));
 		product.setImageLink(rs.getString(k++));
-		product.setCategory(rs.getString(k));
+		product.setCategory(Category.byTitle(rs.getString(k)));
 
 		return product;
 	}

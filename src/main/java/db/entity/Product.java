@@ -2,6 +2,8 @@ package db.entity;
 
 import java.io.Serializable;
 
+import util.Category;
+
 public class Product implements Serializable {
 
 	private static final long serialVersionUID = -1316160216076684280L;
@@ -11,7 +13,7 @@ public class Product implements Serializable {
 	int price;
 	String description;
 	String imageLink;
-	String category;
+	Category category;
 
 	public Integer getId() {
 		return id;
@@ -53,11 +55,11 @@ public class Product implements Serializable {
 		this.imageLink = imageLink;
 	}
 
-	public String getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 
