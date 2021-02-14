@@ -46,7 +46,7 @@ public class WorkZoneServlet extends HttpServlet {
 				orderViewList = orderDao.getAllOrders();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IOException();
 			}
 			forwardPage = "Manager.jsp";
 			break;
@@ -55,7 +55,7 @@ public class WorkZoneServlet extends HttpServlet {
 				orderViewList = orderDao.getOrdersByStatus("COOKING");
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				throw new IOException();
 			}
 			forwardPage = "Cook.jsp";
 			break;
@@ -64,7 +64,7 @@ public class WorkZoneServlet extends HttpServlet {
 				orderViewList = orderDao.getOrdersByStatus("IN_DELIVERY");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IOException();
 			}
 			forwardPage = "Delivery.jsp";
 			break;
@@ -90,7 +90,7 @@ public class WorkZoneServlet extends HttpServlet {
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IOException();
 			}
 		}
 
@@ -134,6 +134,7 @@ public class WorkZoneServlet extends HttpServlet {
 				orderDao.updateOrderState(orderId, status);
 			} catch (Exception e2) {
 				// TODO add logger 09.02
+				throw new IOException();
 			}
 		}
 

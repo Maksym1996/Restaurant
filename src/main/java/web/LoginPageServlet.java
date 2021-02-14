@@ -61,7 +61,7 @@ public class LoginPageServlet extends HttpServlet {
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IOException();
 			}
 			request.setAttribute("orderViewList", orderViewList);
 			request.setAttribute("productList", productList);
@@ -69,6 +69,7 @@ public class LoginPageServlet extends HttpServlet {
 
 			forwardPage = "Account.jsp";
 		}
+	
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
 		dispatcher.forward(request, response);
 
@@ -87,7 +88,7 @@ public class LoginPageServlet extends HttpServlet {
 			user = userDao.getUser(phoneNumber, password);
 		} catch (Exception e) {
 			// TODO add some logger 03.02.2021
-			response.sendRedirect("SomeWrong.jsp");
+			throw new IOException();
 		}
 		Map<String, String> errors = new HashMap<>();
 

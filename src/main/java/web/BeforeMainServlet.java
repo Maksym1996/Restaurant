@@ -52,14 +52,14 @@ public class BeforeMainServlet extends HttpServlet {
 			productsCount = productDao.getProductCount(categories);
 		} catch (Exception e) {
 			// TODO add some logger 03.02.2021
-			response.sendRedirect("SomeWrong.jsp");
+			throw new IOException();
 		}
 		try {
 			partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, asc, skip,
 					limitProductOnPage);
 		} catch (Exception e) {
 			// TODO add some logger 03.02.2021
-			response.sendRedirect("SomeWrong.jsp");
+			throw new IOException();
 		}
 
 		HttpSession session = request.getSession(true);
@@ -84,7 +84,7 @@ public class BeforeMainServlet extends HttpServlet {
 					cartProducts.add(productDao.getProduct(productId));
 				} catch (Exception e) {
 					// TODO add some logger 04.02.2021
-					response.sendRedirect("SomeWrong.jsp");
+					throw new IOException();
 				}
 			}
 		}

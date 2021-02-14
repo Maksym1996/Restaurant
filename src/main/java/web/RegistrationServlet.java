@@ -56,7 +56,7 @@ public class RegistrationServlet extends HttpServlet {
 			allUsers = userDao.getAllUsers();
 		} catch (Exception e1) {
 			// TODO add some logger 03.02.2021
-			response.sendRedirect("SomeWrong.jsp");
+			throw new IOException();
 		}
 
 		for (User user : allUsers) {
@@ -114,10 +114,8 @@ public class RegistrationServlet extends HttpServlet {
 		try {
 			userDao.insertUser(model);
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
 			// TODO add some logger 03.02.2021
-			response.sendRedirect("SomeWrong.jsp");
-			return;
+			throw new IOException();
 		}
 
 		HttpSession session = request.getSession(true);

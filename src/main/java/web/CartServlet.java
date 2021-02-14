@@ -170,9 +170,8 @@ public class CartServlet extends HttpServlet {
 					}
 				}
 			} catch (Exception e1) {
-				response.sendRedirect("SomeWrong.jsp");
 				// TODO add some logger 08.02.2021
-				return;
+				throw new IOException();
 			}
 			if (userId == 0) {
 
@@ -181,9 +180,8 @@ public class CartServlet extends HttpServlet {
 				try {
 					userId = userDao.insertUser(model);
 				} catch (Exception e) {
-					response.sendRedirect("SomeWrong.jsp");
 					// TODO add some logger 05.02.2021
-					return;
+					throw new IOException();
 				}
 			}
 		}
@@ -197,8 +195,7 @@ public class CartServlet extends HttpServlet {
 			orderDao.insertOrder(Util.createOrder("NEW", address, userId, sum), products, count);
 		} catch (Exception e) {
 			// TODO add some logger 05.02.2021
-			response.sendRedirect("SomeWrong.jsp");
-			return;
+			throw new IOException();
 		}
 
 		session.removeAttribute("count");
