@@ -46,7 +46,7 @@ public class RegistrationServlet extends HttpServlet {
 		String phoneNumber = request.getParameter("phoneNumber");
 		String password = request.getParameter("password");
 		String confirmPassword = request.getParameter("confirmPassword");
-		
+
 		Map<String, String> errors = new HashMap<>();
 
 		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
@@ -60,10 +60,10 @@ public class RegistrationServlet extends HttpServlet {
 		}
 
 		for (User user : allUsers) {
-			if (email.equals(user.getEmail())) {
+			if (user.getEmail().equals(email)) {
 				errors.put("emailOrigin", "An account with such email already exists!");
 			}
-			if (phoneNumber.equals(user.getPhoneNumber())) {
+			if (user.getPhoneNumber().equals(phoneNumber)) {
 				errors.put("phoneNumberOrigin", "An account with such phone number already exist!");
 			}
 		}
@@ -77,19 +77,17 @@ public class RegistrationServlet extends HttpServlet {
 		if (email == null || email.isEmpty()) {
 			errors.put("email", "Provide your email");
 		}
-		
+
 		if (phoneNumber == null || phoneNumber.isEmpty()) {
 			errors.put("phoneNumber", "Provide your first name");
 		}
 		if (password == null || password.isEmpty()) {
 			errors.put("password", "Provide your password");
+		} else if (!password.equals(confirmPassword)) {
+			errors.put("confirmPasswordSame", "The passwords you entered are different");
 		}
 		if (confirmPassword == null || confirmPassword.isEmpty()) {
 			errors.put("confirmPassword", "Confirm password");
-		}
-		
-		if(password != confirmPassword) {
-			errors.put("confirmPasswordSame", "The passwords you entered are different");
 		}
 
 		if (!Pattern.matches(emailRegex, email)) {
@@ -111,8 +109,8 @@ public class RegistrationServlet extends HttpServlet {
 		}
 
 		User model = Util.createUser(firstName, lastName, email, phoneNumber, password);
-		
-		//TODO update user by phone number
+
+		// TODO update user by phone number
 
 		try {
 			userDao.insertUser(model);
