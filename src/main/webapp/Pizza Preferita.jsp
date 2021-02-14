@@ -52,37 +52,39 @@
 			method="GET">
 			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox"
-					id="flexSwitchCheckDefault" value="Pizza" name="categories" /> <label
+					id="flexSwitchCheckDefault1" value="Pizza" name="categories" /> <label
 					class="form-check-label filtres switchers"
-					for="flexSwitchCheckDefault">Пицца <i
+					for="flexSwitchCheckDefault1">Пицца <i
 					class='fas fa-pizza-slice'></i>
 				</label>
 
 			</div>
 			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox"
-					id="flexSwitchCheckDefault" value="Burger" name="categories">
+					id="flexSwitchCheckDefault2" value="Burger" name="categories">
 				<label class="form-check-label filtres switchers"
-					for="flexSwitchCheckDefault">Бургеры <i
+					for="flexSwitchCheckDefault2">Бургеры <i
 					class='fas fa-hamburger'></i></label>
 			</div>
 			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox"
-					id="flexSwitchCheckDefault" value="Drinks" name="categories" /> <label
+					id="flexSwitchCheckDefault3" value="Drinks" name="categories" /> <label
 					class="form-check-label filtres switchers"
-					for="flexSwitchCheckDefault">Напитки <i
+					for="flexSwitchCheckDefault3">Напитки <i
 					class="bi bi-cup-straw"></i></label>
 			</div>
 			<button type="submit" class="btn btn-outline-warning">Применить
 				фильтр</button>
 		</form>
-		<!-- Кнопка очистки фильтров 
-		<form action="Pizza Preferita" method="get">
-			<button type="submit" class="btn btn-link switchers">
-				<i class="far fa-times-circle"></i>
-			</button>
-		</form> 
-		-->
+		<c:if test="${not empty role and role == 'ADMIN' }">
+			<div class="col-sm-8"></div>
+			<form class="form text-center col-sm-2" action="Admin" method="get">
+				<button type="submit" class="btn btn-success btn-lg">
+					Добавить товар</i>
+				</button>
+			</form>
+		</c:if>
+
 
 	</div>
 	<br>
@@ -119,6 +121,7 @@
 						<div class="card-body">
 							<h5 class="card-title">
 								<c:out value="${product.name}" />
+
 							</h5>
 							<p class="card-text">
 								<c:out value="${product.description}" />
@@ -133,7 +136,20 @@
 								</font>
 
 							</div>
-
+							<c:if test="${not empty role and role == 'ADMIN' }">
+								<div class="row row-cols-auto">
+									<form class="form col-sm-5" action="Admin" method="get">
+										<button type="submit" class="btn btn-primary btn-lg">
+											Изменить</i>
+										</button>
+									</form>
+									<form class="form col-sm-3" action="Admin" method="get">
+										<button type="submit" class="btn btn-danger btn-lg">
+											Удалить</i>
+										</button>
+									</form>
+								</div>
+							</c:if>
 						</div>
 					</div>
 				</div>
