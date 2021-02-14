@@ -87,7 +87,7 @@ public class RegistrationServlet extends HttpServlet {
 		if (confirmPassword == null || confirmPassword.isEmpty()) {
 			errors.put("confirmPassword", "Confirm password");
 		}
-		//if (password != null && !password.equals(confirmPassword)) {
+		
 		if(password != confirmPassword) {
 			errors.put("confirmPasswordSame", "The passwords you entered are different");
 		}
