@@ -33,7 +33,6 @@ public class WorkZoneServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-
 		HttpSession session = request.getSession(true);
 		String role = (String) session.getAttribute("role");
 		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute("orderDao");
@@ -68,12 +67,10 @@ public class WorkZoneServlet extends HttpServlet {
 			}
 			forwardPage = "Delivery.jsp";
 			break;
-		case "CLIENT":
+		default:
 			response.sendError(403);
 			return;
-		default:
-			response.sendError(401);
-			return;
+
 		}
 
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
@@ -87,7 +84,7 @@ public class WorkZoneServlet extends HttpServlet {
 				orders.add(o);
 				productList.add(productDao.getProduct(o.getProductId()));
 				userList.add(userDao.getUser(o.getUserId()));
-				
+
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				throw new IOException();
@@ -109,7 +106,7 @@ public class WorkZoneServlet extends HttpServlet {
 
 		String status = request.getParameter("status");
 		String id = request.getParameter("id");
-		
+
 		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute("orderDao");
 
 		if (id != null && status != null && !"REJECTED".equals(status) && !"PERFORMED".equals(status)) {
@@ -126,11 +123,11 @@ public class WorkZoneServlet extends HttpServlet {
 			int orderId = Integer.parseInt(id);
 			try {
 				int currentIndexStatus = statusList.indexOf(orderDao.getStateByOrderId(orderId));
-				if(indexStatus != currentIndexStatus) {
+				if (indexStatus != currentIndexStatus) {
 					response.sendError(400);
 					return;
-				}					
-					status = statusList.get(statusList.indexOf(status) + 1);
+				}
+				status = statusList.get(statusList.indexOf(status) + 1);
 				orderDao.updateOrderState(orderId, status);
 			} catch (Exception e2) {
 				// TODO add logger 09.02
