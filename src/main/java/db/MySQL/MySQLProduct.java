@@ -18,6 +18,7 @@ public class MySQLProduct implements ProductDao {
 	private static final String GET_PRODUCT = "SELECT * FROM product WHERE id = ?";
 	private static final String UPDATE_PRODUCT = "UPDATE product WHERE id = ? SET name=?,"
 			+ "price=?, description=?, count=?, image_link=?, category_id=?";
+	private static final String DELETE_PRODUCT_BY_ID = "DELETE FROM product WHERE id = ?";
 
 	private DataSource dataSource;
 
@@ -98,6 +99,7 @@ public class MySQLProduct implements ProductDao {
 		ResultSet rs = null;
 		try {
 			con = dataSource.getConnection();
+			con.setAutoCommit(false);
 			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			prep = con.prepareStatement(INSERT_PRODUCT);
 			int k = 1;
@@ -159,6 +161,7 @@ public class MySQLProduct implements ProductDao {
 
 		try {
 			con = dataSource.getConnection();
+			con.setAutoCommit(false);
 			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			prep = con.prepareStatement(UPDATE_PRODUCT);
 			int k = 1;
@@ -261,6 +264,37 @@ public class MySQLProduct implements ProductDao {
 		}
 
 		return result.append("LIMIT ? OFFSET ?").toString();
+
+	}
+
+	@Override
+	public boolean deleteProduct(int id) throws Exception {
+		boolean result = false;
+
+		Connection con = null;
+		PreparedStatement prep = null;
+		ResultSet rs = null;
+
+		try {
+			con = dataSource.getConnection();
+			con.setAutoCommit(false);
+			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			prep = con.prepareStatement(DELETE_PRODUCT_BY_ID);
+			prep.setInt(1, id);
+
+			if (prep.executeUpdate() > 0) {
+				result = true;
+			}
+			con.commit();
+		} catch (SQLException e) {
+			// TODO add some logger 14.02.2021
+			rollback(con);
+			throw new SQLException();
+		} finally {
+			close(con, prep, rs);
+		}
+
+		return result;
 
 	}
 
