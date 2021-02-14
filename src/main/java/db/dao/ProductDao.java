@@ -15,5 +15,7 @@ public interface ProductDao {
 	boolean updateProduct(Product model) throws Exception;
 
 	long getProductCount(String[] categories) throws Exception;
+	
+	boolean deleteProduct(int id) throws Exception;
 
 }
