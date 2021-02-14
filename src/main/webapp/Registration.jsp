@@ -53,7 +53,7 @@
 				<div class="col-md-6">
 					<label for="inputFirstName" class="form-label">Имя<span
 						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputFirstName" name="firstName">
+						class="form-control" id="inputFirstName" name="firstName" required>
 					<c:if
 						test="${not empty errors and errors.containsKey('firstName')}">
 						<p style="color: red">
@@ -90,7 +90,7 @@
 				<div class="col-md-6">
 					<label for="inputEmail" class="form-label">Электронная
 						почта<span style="color: red">*</span>
-					</label> <input type="text" class="form-control" id="inputEmail"
+					</label> <input type="email" class="form-control" id="inputEmail"
 						name="email">
 					<c:if test="${not empty errors and errors.containsKey('email')}">
 						<p style="color: red">
