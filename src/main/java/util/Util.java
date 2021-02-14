@@ -1,6 +1,7 @@
 package util;
 
 import db.entity.OrderView;
+import db.entity.Product;
 import db.entity.User;
 
 public class Util {
@@ -44,6 +45,20 @@ public class Util {
 		order.setSum(sum);
 
 		return order;
+
+	}
+
+	public static Product createProduct(String name, int price, String description, String imageLink,
+			Category category) {
+		Product product = new Product();
+
+		product.setName(name);
+		product.setPrice(price);
+		product.setDescription(description);
+		product.setImageLink(imageLink);
+		product.setCategory(category);
+
+		return product;
 
 	}
 
