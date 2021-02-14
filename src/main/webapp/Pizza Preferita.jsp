@@ -78,7 +78,7 @@
 		</form>
 		<c:if test="${not empty role and role == 'ADMIN' }">
 			<div class="col-sm-8"></div>
-			<form class="form text-center col-sm-2" action="Admin" method="get">
+			<form class="form text-center col-sm-2" action="DeleteProduct" method="get">
 				<button type="submit" class="btn btn-success btn-lg">
 					Добавить товар</i>
 				</button>
@@ -138,12 +138,13 @@
 							</div>
 							<c:if test="${not empty role and role == 'ADMIN' }">
 								<div class="row row-cols-auto">
-									<form class="form col-sm-5" action="Admin" method="get">
+									<form class="form col-sm-5" action="DeleteProduct" method="get">
 										<button type="submit" class="btn btn-primary btn-lg">
 											Изменить</i>
 										</button>
 									</form>
-									<form class="form col-sm-3" action="Admin" method="get">
+									<form class="form col-sm-3" action="DeleteProduct" method="post">
+									<input type="hidden" name="id" value="${product.id}">
 										<button type="submit" class="btn btn-danger btn-lg">
 											Удалить</i>
 										</button>
