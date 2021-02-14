@@ -16,9 +16,9 @@ import db.entity.OrderView;
 import db.entity.Product;
 
 public class MySQLOrderView implements OrderViewDao {
-	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView WHERE state IN ('NEW', 'COOKED', 'DELIVERED_AND_PAID', 'PERFORMED', 'REJECTED') ORDER BY state ASC";
-	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ? ORDER BY id ASC";
-	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE state = ? ORDER BY id ASC";
+	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView WHERE state IN ('NEW', 'COOKED', 'DELIVERED_AND_PAID', 'PERFORMED', 'REJECTED') ORDER BY id DESC";
+	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ? ORDER BY id DESC";
+	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE state = ? ORDER BY id DESC";
 	private static final String SET_NEW_ORDER = "INSERT INTO orderView(id, order_date, state, address, user_id, sum) VALUES(DEFAULT, current_timestamp(), ?, ?, ?, ?)";
 	private static final String SET_PRODUCT_FOR_ORDER = "INSERT INTO orderView(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
 	private static final String GET_STATUS_BY_ORDER_ID = "SELECT state FROM order WHERE id = ?";

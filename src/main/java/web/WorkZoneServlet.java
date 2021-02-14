@@ -3,6 +3,7 @@ package web;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -80,7 +81,7 @@ public class WorkZoneServlet extends HttpServlet {
 
 		Set<Product> productList = new HashSet<>();
 		Set<User> userList = new HashSet<>();
-		Set<OrderView> orders = new HashSet<>();
+		Set<OrderView> orders = new LinkedHashSet<>();
 		for (OrderView o : orderViewList) {
 			try {
 				orders.add(o);
