@@ -10,7 +10,6 @@ public class Product implements Serializable {
 	String name;
 	int price;
 	String description;
-	int count;
 	String imageLink;
 	String category;
 
@@ -46,14 +45,6 @@ public class Product implements Serializable {
 		this.description = description;
 	}
 
-	public Integer getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
-	}
-
 	public String getImageLink() {
 		return imageLink;
 	}
@@ -72,8 +63,7 @@ public class Product implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", count="
-				+ count + ", imageLink=" + imageLink + ", category=" + category + "]";
+		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + "imageLink=" + imageLink + ", category=" + category + "]";
 	}
 
 	@Override

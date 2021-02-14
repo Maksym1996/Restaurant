@@ -106,7 +106,6 @@ public class MySQLProduct implements ProductDao {
 			prep.setString(k++, model.getName());
 			prep.setInt(k++, model.getPrice());
 			prep.setString(k++, model.getDescription());
-			prep.setInt(k++, model.getCount());
 			prep.setString(k++, model.getImageLink());
 			prep.setString(k++, model.getCategory());
 
@@ -169,7 +168,6 @@ public class MySQLProduct implements ProductDao {
 			prep.setString(k++, model.getName());
 			prep.setInt(k++, model.getPrice());
 			prep.setString(k++, model.getDescription());
-			prep.setInt(k++, model.getCount());
 			prep.setString(k++, model.getImageLink());
 			prep.setString(k++, model.getCategory());
 
@@ -196,7 +194,6 @@ public class MySQLProduct implements ProductDao {
 		product.setName(rs.getString(k++));
 		product.setPrice(rs.getInt(k++));
 		product.setDescription(rs.getString(k++));
-		product.setCount(rs.getInt(k++));
 		product.setImageLink(rs.getString(k++));
 		product.setCategory(rs.getString(k));
 
