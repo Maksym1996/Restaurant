@@ -47,7 +47,7 @@
 	<main>
 		<c:forEach var="order" items="${orders}">
 
-			<div class="card w-50">
+			<div class="card w-50" style="margin-left:3em">
 				<div class="card-body">
 					<h5 class="card-title">
 						№
