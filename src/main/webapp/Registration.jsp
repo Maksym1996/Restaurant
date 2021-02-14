@@ -53,7 +53,7 @@
 				<div class="col-md-6">
 					<label for="inputFirstName" class="form-label">Имя<span
 						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputFirstName" name="firstName" required>
+						class="form-control" id="inputFirstName" name="firstName">
 					<c:if
 						test="${not empty errors and errors.containsKey('firstName')}">
 						<p style="color: red">

@@ -68,26 +68,27 @@ public class RegistrationServlet extends HttpServlet {
 			}
 		}
 
-		if (firstName.isEmpty()) {
+		if (firstName == null || firstName.isEmpty()) {
 			errors.put("firstName", "Provide your first name");
 		}
-		if (lastName.isEmpty()) {
+		if (lastName == null || lastName.isEmpty()) {
 			errors.put("lastName", "Provide your last name");
 		}
-		if (email.isEmpty()) {
+		if (email == null || email.isEmpty()) {
 			errors.put("email", "Provide your email");
 		}
 		
-		if (phoneNumber.isEmpty()) {
+		if (phoneNumber == null || phoneNumber.isEmpty()) {
 			errors.put("phoneNumber", "Provide your first name");
 		}
-		if (password.isEmpty()) {
+		if (password == null || password.isEmpty()) {
 			errors.put("password", "Provide your password");
 		}
-		if (confirmPassword.isEmpty()) {
+		if (confirmPassword == null || confirmPassword.isEmpty()) {
 			errors.put("confirmPassword", "Confirm password");
 		}
-		if (!password.isEmpty() && !confirmPassword.isEmpty() && !password.equals(confirmPassword)) {
+		//if (password != null && !password.equals(confirmPassword)) {
+		if(password != confirmPassword) {
 			errors.put("confirmPasswordSame", "The passwords you entered are different");
 		}
 
@@ -110,6 +111,8 @@ public class RegistrationServlet extends HttpServlet {
 		}
 
 		User model = Util.createUser(firstName, lastName, email, phoneNumber, password);
+		
+		//TODO update user by phone number
 
 		try {
 			userDao.insertUser(model);
