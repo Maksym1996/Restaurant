@@ -35,7 +35,7 @@
 			<div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
 			<div class="me-auto mb-2"></div>
 			<div class="me-2">
-				<c:if test="${not empty role and role != 'CLIENT' }">
+				<c:if test="${not empty role and role != 'CLIENT' and role != 'ADMIN'}">
 					<a href="WorkZone" title="Сопровождение заказов"> <i
 					class="bi bi-briefcase-fill cartMan"></i>
 				</a>

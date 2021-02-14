@@ -58,6 +58,7 @@ public class BeforeMainServlet extends HttpServlet {
 			partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, asc, skip,
 					limitProductOnPage);
 		} catch (Exception e) {
+			System.err.println(e);
 			// TODO add some logger 03.02.2021
 			throw new IOException();
 		}
