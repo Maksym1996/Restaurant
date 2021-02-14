@@ -17,7 +17,5 @@ public interface UserDao {
 	User getUser(int id) throws Exception;
 
 	boolean updateUser(User model) throws Exception;
-	
-	boolean deleteUser(int id) throws Exception;
 
 }
