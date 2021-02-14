@@ -194,7 +194,7 @@ public class MySQLOrderView implements OrderViewDao {
 		try {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
-			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			if ("REJECTED".equals(status) || "PERFORMED".equals(status)) {
 				setState = "UPDATE orders SET state=?, closing_date = current_timestamp() WHERE id = ? ";
 			} 
