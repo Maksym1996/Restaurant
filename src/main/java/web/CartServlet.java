@@ -19,6 +19,7 @@ import db.dao.UserDao;
 import db.entity.Product;
 import db.entity.User;
 import util.Cart;
+import util.Status;
 import util.Util;
 
 /**
@@ -192,7 +193,7 @@ public class CartServlet extends HttpServlet {
 		List<Product> products = cart.getProducts();
 		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute("count");
 		try {
-			orderDao.insertOrder(Util.createOrder("NEW", address, userId, sum), products, count);
+			orderDao.insertOrder(Util.createOrder(Status.NEW, address, userId, sum), products, count);
 		} catch (Exception e) {
 			// TODO add some logger 05.02.2021
 			throw new IOException();
