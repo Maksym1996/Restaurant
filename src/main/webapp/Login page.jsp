@@ -64,14 +64,6 @@
 							for="inputPassword">Пароль</label>
 					</div>
 
-					<!-- 2 column grid layout for inline styling -->
-					<div class="row mb-4">
-						<div class="col">
-							<!-- Simple link -->
-							<a href="#!">Forgot password?</a>
-						</div>
-					</div>
-
 					<!-- Submit button -->
 					<div class="d-grid gap-2">
 						<button type="submit" class="btn btn-light btn-block">Войти
