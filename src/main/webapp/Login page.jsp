@@ -63,7 +63,8 @@
 							name="password" placeholder="" required> <label
 							for="inputPassword">Пароль</label>
 					</div>
-
+					<div class="d-grid gap-2"></div>
+					<br>
 					<!-- Submit button -->
 					<div class="d-grid gap-2">
 						<button type="submit" class="btn btn-light btn-block">Войти
@@ -71,7 +72,7 @@
 					</div>
 				</form>
 				<br>
-				
+
 				<!-- Form for registration -->
 				<form class="d-grid gap-2 d-md-flex justify-content-md-end"
 					action="Registration" method="get">

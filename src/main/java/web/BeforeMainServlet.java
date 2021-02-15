@@ -52,7 +52,9 @@ public class BeforeMainServlet extends HttpServlet {
 			productsCount = productDao.getProductCount(categories);
 		} catch (Exception e) {
 			// TODO add some logger 03.02.2021
-			throw new IOException();
+			System.err.println(e);
+			response.sendError(500);
+			return;
 		}
 		try {
 			partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, asc, skip,

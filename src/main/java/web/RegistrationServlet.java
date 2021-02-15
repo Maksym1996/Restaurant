@@ -51,15 +51,15 @@ public class RegistrationServlet extends HttpServlet {
 
 		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
 
-		List<User> allUsers = null;
+		List<User> allRegistredUsers = null;
 		try {
-			allUsers = userDao.getAllUsers();
+			allRegistredUsers = userDao.getRegisteredUsers("true");
 		} catch (Exception e1) {
 			// TODO add some logger 03.02.2021
 			throw new IOException();
 		}
 
-		for (User user : allUsers) {
+		for (User user : allRegistredUsers) {
 			if (user.getEmail().equals(email)) {
 				errors.put("emailOrigin", "An account with such email already exists!");
 			}
@@ -109,18 +109,26 @@ public class RegistrationServlet extends HttpServlet {
 		}
 
 		User model = Util.createUser(firstName, lastName, email, phoneNumber, password);
-
-		// TODO update user by phone number
-
+		User user = null;
 		try {
-			userDao.insertUser(model);
+			user = userDao.getUser(phoneNumber);
+			if (user == null) {
+				user = userDao.getUser(userDao.insertUser(model));
+			} else {
+				userDao.updateUser(model);
+			}
+			
+			
+
 		} catch (Exception e) {
 			// TODO add some logger 03.02.2021
-			throw new IOException();
+			System.err.println(e);
+			response.sendError(500);
+			return;
 		}
 
 		HttpSession session = request.getSession(true);
-		session.setAttribute("user", model);
+		session.setAttribute("user", user);
 		response.sendRedirect("Pizza Preferita");
 
 	}

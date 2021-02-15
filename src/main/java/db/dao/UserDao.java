@@ -18,4 +18,6 @@ public interface UserDao {
 
 	boolean updateUser(User model) throws Exception;
 
+	User getUser(String phoneNumber) throws Exception;
+
 }

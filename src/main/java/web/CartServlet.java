@@ -27,7 +27,7 @@ import util.Util;
 @WebServlet("/Cart")
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static final String EMPTY_CART = "EmptyCart.html";
+	public static final String EMPTY_CART = "EmptyCart.jsp";
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -164,7 +164,7 @@ public class CartServlet extends HttpServlet {
 		} else {
 			UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
 			try {
-				for (User u : userDao.getRegisteredUsers("true")) {
+				for (User u : userDao.getAllUsers()) {
 					if (u.getPhoneNumber().equals(phoneNumber)) {
 						userId = u.getId();
 					}
@@ -200,7 +200,7 @@ public class CartServlet extends HttpServlet {
 
 		session.removeAttribute("count");
 		session.removeAttribute("cart");
-		response.sendRedirect("SuccessBuy.html");
+		response.sendRedirect("Login page");
 
 	}
 

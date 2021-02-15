@@ -19,12 +19,13 @@ public class MySQLUser implements UserDao {
 	private static final String GET_REGISTERED_USERS = "SELECT * FROM user WHERE registered = ?";
 	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT
 			+ "')) ,?, DEFAULT, ?)";
-	private static final String GET_USER = "SELECT * FROM user WHERE phone_number = ? AND password = MD5(CONCAT(?,'" + SALT
-			+ "'))";
+	private static final String GET_USER = "SELECT * FROM user WHERE phone_number = ? AND password = MD5(CONCAT(?,'"
+			+ SALT + "'))";
 	private static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
-	private static final String UPDATE_USER = "UPDATE user WHERE phone_number = ? SET first_name=?, last_name=?"
-			+ "password=?, registred=?";
-	
+	private static final String GET_USER_BY_NUMBER = "SELECT * FROM user WHERE phone_number = ?";
+	private static final String UPDATE_USER = "UPDATE user SET first_name=?, last_name=?, password = MD5(CONCAT(?,'"
+			+ SALT + "')), registered=?, email = ? WHERE phone_number = ?";
+
 	private final DataSource dataSource;
 
 	public MySQLUser(DataSource dataSource) {
@@ -55,7 +56,7 @@ public class MySQLUser implements UserDao {
 
 		return allUser;
 	}
-	
+
 	@Override
 	public List<User> getRegisteredUsers(String registered) throws Exception {
 		List<User> registredUser = new ArrayList<>();
@@ -81,8 +82,6 @@ public class MySQLUser implements UserDao {
 
 		return registredUser;
 	}
-
-	
 
 	@Override
 	public int insertUser(User model) throws Exception {
@@ -140,6 +139,32 @@ public class MySQLUser implements UserDao {
 			}
 		} catch (SQLException e) {
 			// TODO LOGGER
+			System.err.println(e);
+			throw new SQLException();
+		} finally {
+			close(con, prep, rs);
+		}
+		return model;
+	}
+
+	@Override
+	public User getUser(String phoneNumber) throws Exception {
+		User model = new User();
+		Connection con = null;
+		PreparedStatement prep = null;
+		ResultSet rs = null;
+		try {
+			con = dataSource.getConnection();
+			prep = con.prepareStatement(GET_USER_BY_NUMBER);
+			prep.setString(1, phoneNumber);
+			rs = prep.executeQuery();
+
+			if (rs.next()) {
+				model = extraction(rs);
+			}
+		} catch (SQLException e) {
+			// TODO LOGGER
+			System.err.println(e);
 			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
@@ -159,12 +184,12 @@ public class MySQLUser implements UserDao {
 			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			prep = con.prepareStatement(UPDATE_USER);
 			int k = 1;
-			prep.setInt(k++, model.getId());
 			prep.setString(k++, model.getFirstName());
 			prep.setString(k++, model.getLastName());
 			prep.setString(k++, model.getPassword());
-			prep.setString(k++, model.getPhoneNumber());
 			prep.setString(k++, model.getRegistered());
+			prep.setString(k++, model.getEmail());
+			prep.setString(k++, model.getPhoneNumber());
 
 			if (prep.executeUpdate() > 0) {
 				result = true;
@@ -173,6 +198,7 @@ public class MySQLUser implements UserDao {
 		} catch (SQLException e) {
 			rollback(con);
 			// TODO logger
+			System.err.println(e);
 			throw new SQLException();
 		} finally {
 			close(con, prep);
@@ -209,7 +235,7 @@ public class MySQLUser implements UserDao {
 			}
 		}
 	}
-	
+
 	private void rollback(Connection connect) throws SQLException {
 		try {
 			connect.rollback();
@@ -242,6 +268,5 @@ public class MySQLUser implements UserDao {
 		}
 		return model;
 	}
-
 
 }

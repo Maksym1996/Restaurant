@@ -17,8 +17,8 @@ import util.Category;
 public class MySQLProduct implements ProductDao {
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE(DEFAULT, ?, ?, ?, ?, ?, ?,)";
 	private static final String GET_PRODUCT = "SELECT * FROM product WHERE id = ?";
-	private static final String UPDATE_PRODUCT = "UPDATE product WHERE id = ? SET name=?,"
-			+ "price=?, description=?, count=?, image_link=?, category_id=?";
+	private static final String UPDATE_PRODUCT = "UPDATE product SET name=?,"
+			+ "price=?, description=?, count=?, image_link=?, category_id=?  WHERE id = ? ";
 	private static final String DELETE_PRODUCT_BY_ID = "DELETE FROM product WHERE id = ?";
 
 	private DataSource dataSource;
@@ -85,6 +85,7 @@ public class MySQLProduct implements ProductDao {
 
 		} catch (SQLException e) {
 			// TODO add some logger 03.02.2021
+			System.err.println("Get Count: " + e);
 			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
@@ -165,12 +166,12 @@ public class MySQLProduct implements ProductDao {
 			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			prep = con.prepareStatement(UPDATE_PRODUCT);
 			int k = 1;
-			prep.setInt(k++, model.getId());
 			prep.setString(k++, model.getName());
 			prep.setInt(k++, model.getPrice());
 			prep.setString(k++, model.getDescription());
 			prep.setString(k++, model.getImageLink());
 			prep.setString(k++, model.getCategory().toString());
+			prep.setInt(k++, model.getId());
 
 			if (prep.executeUpdate() > 0) {
 				result = true;
