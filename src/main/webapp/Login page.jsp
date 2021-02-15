@@ -53,7 +53,7 @@
 					<!-- Email input -->
 					<div class="form-floating">
 						<input type="tel" class="form-control" id="inputTel"
-							placeholder="0123456789" name="phoneNumber" required> <label
+							 name="phoneNumber" required> <label
 							for="inputTel">Номер телефона</label>
 					</div>
 
