@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>416 Диапазон не достижим</title>
+<title><f:message key="416.title"/></title>
 <!--    Bootstap START-->
 
 <link
@@ -47,7 +48,7 @@
 	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<div class="errorBody">
-		Код ошибки: 416 <br> Диапазон не достижим!!!
+		<f:message key="416.body.1"/><br><f:message key="416.body.2"/>
 	</div>
 	
 	<c:import url="/WEB-INF/resources/footer.jspf" />

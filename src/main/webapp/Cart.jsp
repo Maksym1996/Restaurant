@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ваша корзина</title>
+<title><f:message key="Cart.title"/></title>
 <!--    Bootstap START-->
 
 <link
@@ -50,15 +51,15 @@
 	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<div align="center" style="font-size: 1em">
-		Ваша корзина
+		<f:message key="Cart.title"/>
 		<p>
-			Сумма заказа:
+			<f:message key="sumOrder"/>:
 			<c:out value="${orderSumm}" />
-			грн
+			<f:message key="grn"/>
 		</p>
 		<form class="form" action="Cart" method="post"
 			style="margin-left: 2rem">
-			<button type="submit" class="btn btn-info">Оформить заказ</button>
+			<button type="submit" class="btn btn-info"><f:message key="drawUpOrder"/></button>
 			<input type="hidden" name="sum" value="${orderSumm}">
 			<!-- User filling in the information required for sending -->
 			<div class="row row-cols-auto" style="margin-top: 30px" align="left">
@@ -66,7 +67,7 @@
 				<!-- The authorized user does not fill in the fields -->
 				<c:if test="${empty user}">
 					<div class="col-md-3">
-						<label for="inputFirstName">Имя<span style="color: red">*</span></label>
+						<label for="inputFirstName"><f:message key="firstName"/><span style="color: red">*</span></label>
 						<input type="text" class="form-control" id="inputFirstName"
 							name="firstName" required>
 						<c:if
@@ -77,8 +78,7 @@
 						</c:if>
 					</div>
 					<div class="col-md-3">
-						<label for="inputPhoneNumber" class="formLabelCart">Номер
-							телефона<span style="color: red">*</span>
+						<label for="inputPhoneNumber" class="formLabelCart"><f:message key="number"/><span style="color: red">*</span>
 						</label> <input type="tel" class="form-control" id="inputPhoneNumber"
 							name="phoneNumber" required>
 						<c:if
@@ -96,8 +96,7 @@
 					</div>
 				</c:if>
 				<div class="col-md-4">
-					<label for="inputAddress" class="formLabelCart">Адресс
-						доставки<span style="color: red">*</span>
+					<label for="inputAddress" class="formLabelCart"><f:message key="address"/><span style="color: red">*</span>
 					</label> <input type="text" class="form-control" id="inputAddress"
 						name="address" required>
 					<c:if test="${not empty errors and errors.containsKey('address')}">
@@ -129,7 +128,7 @@
 							<div class="row row-cols-auto">
 
 								<font size=+2 class="col"> <c:out
-										value="${product.price}" /> грн
+										value="${product.price}" /> <f:message key="grn"/>
 								</font>
 
 							</div>

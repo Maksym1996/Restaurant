@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Измениение товара</title>
+<title><f:message key="EditionProduct"/></title>
 <!--    Bootstap START-->
 
 <link
@@ -51,7 +52,7 @@
 			style="margin-left: 3rem">
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputName" class="form-label">Название<span
+					<label for="inputName" class="form-label"><f:message key="name"/><span
 						style="color: red">*</span></label> <input type="text"
 						class="form-control" id="inputName" name="name"
 						value="${product.name}" required>
@@ -70,7 +71,7 @@
 			</div>
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputPrice" class="form-label">Цена<span
+					<label for="inputPrice" class="form-label"><f:message key="price"/><span
 						style="color: red">*</span></label> <input type="number"
 						class="form-control" id="inputPrice" name="price"
 						value="${product.price}" required>
@@ -95,7 +96,7 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputDescription" class="form-label">Описание<span
+					<label for="inputDescription" class="form-label"><f:message key="description"/><span
 						style="color: red">*</span>
 					</label> <input type="text" class="form-control" id="inputDescription"
 						name="description" value="${product.description}" required>
@@ -117,8 +118,7 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputImageLink" class="form-label">Ссылка на
-						картинку<span style="color: red">*</span>
+					<label for="inputImageLink" class="form-label"><f:message key="imageLink"/><span style="color: red">*</span>
 					</label> <input type="text" class="form-control" id="inputImageLink"
 						name="imageLink" value="${product.imageLink}" required>
 					<c:if
@@ -137,7 +137,7 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputCategory1" class="form-label">Категория:<span
+					<label for="inputCategory1" class="form-label"><f:message key="category"/>:<span
 						style="color: red">*</span></label>
 					<p>
 						<c:if test="${product.category.toString() == 'Pizza'}">
@@ -148,7 +148,7 @@
 							<input type="radio" id="inputCategory1" name="category"
 								value="Pizza">
 						</c:if>
-						<label for="inputCategory1">Пицца</label>
+						<label for="inputCategory1"><f:message key="pizza"/></label>
 					</p>
 					<p>
 						<c:if test="${product.category.toString() == 'Burger'}">
@@ -159,7 +159,7 @@
 							<input type="radio" id="inputCategory2" name="category"
 								value="Burger">
 						</c:if>
-						<label for="inputCategory2">Бургер</label>
+						<label for="inputCategory2"><f:message key="burger"/></label>
 					</p>
 					<p>
 
@@ -171,7 +171,7 @@
 							<input type="radio" id="inputCategory3" name="category"
 								value="Drinks">
 						</c:if>
-						<label for="inputCategory3">Напиток</label>
+						<label for="inputCategory3"><f:message key="drinks"/></label>
 					</p>
 					<c:if test="${not empty errors and errors.containsKey('category')}">
 						<p style="color: red">
@@ -198,7 +198,7 @@
 				</p>
 			</c:if>
 			<input type="hidden" name="id" value="${product.id}">
-			<button type="submit" class="btn btn-light">Изменить товар</button>
+			<button type="submit" class="btn btn-light"><f:message key="EditProduct"/></button>
 		</form>
 
 	</main>

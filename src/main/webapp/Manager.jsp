@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Страница управления заказами</title>
+<title><f:message key="ManagePage.title"/></title>
 <!--    Bootstap START-->
 
 <link
@@ -80,9 +81,9 @@
 
 					</h5>
 					<div class="row productList">
-						<div class="col-sm-4">Наименование</div>
-						<div class="col-sm-2">Кол-во</div>
-						<div class="col-sm-2">Цена</div>
+						<div class="col-sm-4"><f:message key="name"/></div>
+						<div class="col-sm-2"><f:message key="count"/></div>
+						<div class="col-sm-2"><f:message key="price"/></div>
 					</div>
 					<c:forEach var="orderView" items="${orderViewList}">
 						<c:if test="${orderView.id == order.id }">
@@ -106,8 +107,8 @@
 						</c:if>
 					</c:forEach>
 					<h5 style="margin-top: 1em">
-						Сумма заказа: 
-						<c:out value="${order.sum}"/> грн.</h5>
+						<f:message key="sumOrder"/>: 
+						<c:out value="${order.sum}"/> <f:message key="grn"/>.</h5>
 					</div>
 					<c:if
 						test="${order.status.name() != 'REJECTED' and order.status.name() != 'PERFORMED'}">
@@ -117,14 +118,14 @@
 								<form action="WorkZone" method="post">
 									<input name="status" value="${order.status.name()}" type="hidden" />
 									<input name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-success">Подтвердить</button>
+									<button type="submit" class="btn btn-success"><f:message key="accept"/></button>
 								</form>
 							</div>
 							<div class="col-sm-2">
 								<form action="WorkZone" method="post">
 									<input name="status" value="REJECTED" type="hidden" /> <input
 										name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-danger">Отклонить</button>
+									<button type="submit" class="btn btn-danger"><f:message key="decline"/></button>
 								</form>
 							</div>
 						</div>

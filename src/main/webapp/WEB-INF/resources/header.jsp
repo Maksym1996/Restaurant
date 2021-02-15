@@ -2,6 +2,13 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<c:if test="${not empty param.language}">
+	<c:set var="language" value="${param.language}" scope="session" />
+</c:if>
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
+
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
 	<!-- Brand -->
 	<div class="container-fluid">
@@ -26,8 +33,8 @@
 					<i class="bi bi-globe2"></i>
 				</button>
 				<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					<li><a class="dropdown-item" href="#">English</a></li>
-					<li><a class="dropdown-item" href="#">Русский</a></li>
+					<li><a class="dropdown-item" href="language?lang=en">English</a></li>
+					<li><a class="dropdown-item" href="language?lang=ru">Русский</a></li>
 				</ul>
 			</div>
 
@@ -35,20 +42,21 @@
 			<div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
 			<div class="me-auto mb-2"></div>
 			<div class="me-2">
-				<c:if test="${not empty role and role != 'CLIENT' and role != 'ADMIN'}">
-					<a href="WorkZone" title="Сопровождение заказов"> <i
-					class="bi bi-briefcase-fill cartMan"></i>
-				</a>
+				<c:if
+					test="${not empty role and role != 'CLIENT' and role != 'ADMIN'}">
+					<a href="WorkZone" title=<f:message key="header.workZone.title"/>> <i
+						class="bi bi-briefcase-fill cartMan"></i>
+					</a>
 				</c:if>
 			</div>
 
 			<div class="me-2">
-				<a href="Login page" title="Личный кабинет"> <i
+				<a href="Login page" title=<f:message key="header.loginPage.title"/>> <i
 					class="bi bi-person-square cartMan"></i>
 				</a>
 			</div>
 			<div class="me-2">
-				<a href="Cart" title="Ваша корзина"> <i
+				<a href="Cart" title=<f:message key="header.cart.title"/>> <i
 					class="bi bi-cart3 cartMan"></i>
 				</a>
 			</div>

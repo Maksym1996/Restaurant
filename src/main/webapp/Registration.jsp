@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Регистрация</title>
+<title><f:message key="registration"/></title>
 <!--    Bootstap START-->
 
 <link
@@ -51,7 +52,7 @@
 			style="margin-left: 3rem">
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputFirstName" class="form-label">Имя<span
+					<label for="inputFirstName" class="form-label"><f:message key="firstName"/><span
 						style="color: red">*</span></label> <input type="text"
 						class="form-control" id="inputFirstName" name="firstName" required>
 					<c:if
@@ -70,7 +71,7 @@
 			</div>
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputLastName" class="form-label">Фамилия<span
+					<label for="inputLastName" class="form-label"><f:message key="lastName"/><span
 						style="color: red">*</span></label> <input type="text"
 						class="form-control" id="inputLastName" name="lastName" required>
 					<c:if test="${not empty errors and errors.containsKey('lastName')}">
@@ -88,8 +89,8 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputEmail" class="form-label">Электронная
-						почта<span style="color: red">*</span>
+					<label for="inputEmail" class="form-label"><f:message key="email"/>
+						<span style="color: red">*</span>
 					</label> <input type="email" class="form-control" id="inputEmail"
 						name="email">
 					<c:if test="${not empty errors and errors.containsKey('email')}">
@@ -121,8 +122,7 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputPhone" class="form-label">Контактный номер
-						телефон<span style="color: red">*</span>
+					<label for="inputPhone" class="form-label"><f:message key="number"/><span style="color: red">*</span>
 					</label> <input type="tel" class="form-control" id="inputPhone"
 						name="phoneNumber" required>
 					<c:if
@@ -155,7 +155,7 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputPassword" class="form-label">Пароль<span
+					<label for="inputPassword" class="form-label"><f:message key="password"/><span
 						style="color: red">*</span></label> <input type="password"
 						class="form-control" id="inputPassword" name="password" required>
 					<c:if test="${not empty errors and errors.containsKey('password')}">
@@ -178,8 +178,7 @@
 			<div class="row row-cols-auto">
 
 				<div class="col-md-6">
-					<label for="inputConfirm" class="form-label">Повторите
-						пароль<span style="color: red">*</span>
+					<label for="inputConfirm" class="form-label"><f:message key="repeatePassword"/><span style="color: red">*</span>
 					</label> <input type="password" class="form-control" id="inputConfirm"
 						name="confirmPassword" required>
 					<c:if
@@ -203,7 +202,7 @@
 
 
 			<br>
-			<button type="submit" class="btn btn-light">Зарегистрироваться</button>
+			<button type="submit" class="btn btn-light"><f:message key="registered"/></button>
 		</form>
 
 	</main>

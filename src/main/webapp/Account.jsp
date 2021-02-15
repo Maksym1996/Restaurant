@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аккаунт</title>
+<title><f:message key="Account.title"/></title>
 <!--    Bootstap START-->
 
 <link
@@ -52,25 +53,24 @@
 		<div class="info col-sm-10">
 
 			<p>
-				<label>Имя: </label>
+				<label><f:message key="firstName"/>: </label>
 				<c:out value="${user.firstName}" />
 			</p>
 			<p>
-				<label>Фамилия: </label>
+				<label><f:message key="lastName"/>: </label>
 				<c:out value="${user.lastName}" />
 			</p>
 			<p>
-				<label>Эл. адресс: </label>
+				<label><f:message key="email"/>: </label>
 				<c:out value="${user.email}" />
 			</p>
 			<p>
-				<label>Номер телефона: </label>
+				<label><f:message key="number"/>: </label>
 				<c:out value="${user.phoneNumber}" />
 			</p>
 			<form action="Login page" method="get">
 				<input type="hidden" name="logout" value="logout" />
-				<button type="submit" class="btn btn-secondary">Выйти из
-					системы</button>
+				<button type="submit" class="btn btn-secondary"><f:message key="logOut"/></button>
 			</form>
 		</div>
 	</div>
@@ -97,9 +97,9 @@
 
 				</h5>
 				<div class="row productList">
-					<div class="col-sm-4">Наименование</div>
-					<div class="col-sm-2">Кол-во</div>
-					<div class="col-sm-2">Цена</div>
+					<div class="col-sm-4"><f:message key="name"/></div>
+					<div class="col-sm-2"><f:message key="count"/></div>
+					<div class="col-sm-2"><f:message key="price"/></div>
 				</div>
 				<c:forEach var="orderView" items="${orderViewList}">
 					<c:if test="${orderView.id == order.id }">
@@ -123,9 +123,9 @@
 					</c:if>
 				</c:forEach>
 				<h5 style="margin-top: 1em">
-					Сумма заказа:
+					<f:message key="sumOrder"/>:
 					<c:out value="${order.sum}" />
-					грн.
+					<f:message key="grn"/>.
 				</h5>
 			</div>
 		</div>

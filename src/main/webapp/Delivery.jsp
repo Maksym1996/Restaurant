@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Доставщик</title>
+<title><f:message key="deliveryPage" /></title>
 <!--    Bootstap START-->
 
 <link
@@ -47,7 +48,7 @@
 	<main>
 		<c:forEach var="order" items="${orders}">
 
-			<div class="card w-50" style="margin-left:3em">
+			<div class="card w-50" style="margin-left: 3em">
 				<div class="card-body">
 					<h5 class="card-title">
 						№
@@ -61,7 +62,7 @@
 
 								<c:out value="${user.lastName}" />
 
-								тел. <c:out value="${user.phoneNumber}" />
+								<f:message key="tel" />. <c:out value="${user.phoneNumber}" />
 
 							</c:if>
 						</c:forEach>
@@ -74,9 +75,15 @@
 						<c:out value="${order.orderDate}" />
 					</h5>
 					<div class="row productList">
-						<div class="col-sm-4">Наименование</div>
-						<div class="col-sm-2">Кол-во</div>
-						<div class="col-sm-2">Цена</div>
+						<div class="col-sm-4">
+							<f:message key="name" />
+						</div>
+						<div class="col-sm-2">
+							<f:message key="count" />
+						</div>
+						<div class="col-sm-2">
+							<f:message key="price" />
+						</div>
 					</div>
 					<c:forEach var="orderView" items="${orderViewList}">
 						<c:if test="${orderView.id == order.id }">
@@ -100,24 +107,30 @@
 						</c:if>
 					</c:forEach>
 					<h5 style="margin-top: 1em">
-						Сумма заказа: 
-						<c:out value="${order.sum}"/> грн.</h5>
-					</div>
-					<c:if
-						test="${order.status != 'REJECTED' and order.status != 'PERFORMED'}">
-
-						<div class="row" style="margin-top: 1em">
-							<div class="col-sm-4">
-								<form action="WorkZone" method="post">
-									<input name="status" value="${order.status}" type="hidden" />
-									<input name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-success">Доставлено и оплачено</button>
-								</form>
-							</div>
-						</div>
-					</c:if>
+						<f:message key="sumOrder" />
+						:
+						<c:out value="${order.sum}" />
+						<f:message key="grn" />
+						.
+					</h5>
 				</div>
+				<c:if
+					test="${order.status != 'REJECTED' and order.status != 'PERFORMED'}">
+
+					<div class="row" style="margin-top: 1em">
+						<div class="col-sm-4">
+							<form action="WorkZone" method="post">
+								<input name="status" value="${order.status}" type="hidden" /> <input
+									name="id" value="${order.id}" type="hidden" />
+								<button type="submit" class="btn btn-success">
+									<f:message key="deliveredAndPaid" />
+								</button>
+							</form>
+						</div>
+					</div>
+				</c:if>
 			</div>
+
 		</c:forEach>
 	</main>
 	<c:import url="/WEB-INF/resources/footer.jspf" />

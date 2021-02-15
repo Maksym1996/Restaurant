@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>401 Не авторизован</title>
+<title><f:message key="401.title"/></title>
 <!--    Bootstap START-->
 
 <link
@@ -47,8 +48,7 @@
 	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<div class="errorBody">
-		401<br> Авторизируйтесь<br> Чтобы выполнить данное
-		действие!!!
+		401<br><f:message key="401.body.1"/><br><f:message key="401.body.1"/>
 	</div>
 
 	<c:import url="/WEB-INF/resources/footer.jspf" />

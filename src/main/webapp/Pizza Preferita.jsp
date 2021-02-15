@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="t" uri="WEB-INF/taglib.tld"%>
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +56,7 @@
 				<input class="form-check-input" type="checkbox"
 					id="flexSwitchCheckDefault1" value="Pizza" name="categories" /> <label
 					class="form-check-label filtres switchers"
-					for="flexSwitchCheckDefault1">Пицца <i
+					for="flexSwitchCheckDefault1"><f:message key="pizza"/> <i
 					class='fas fa-pizza-slice'></i>
 				</label>
 
@@ -63,24 +65,23 @@
 				<input class="form-check-input" type="checkbox"
 					id="flexSwitchCheckDefault2" value="Burger" name="categories">
 				<label class="form-check-label filtres switchers"
-					for="flexSwitchCheckDefault2">Бургеры <i
+					for="flexSwitchCheckDefault2"><f:message key="burger"/> <i
 					class='fas fa-hamburger'></i></label>
 			</div>
 			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox"
 					id="flexSwitchCheckDefault3" value="Drinks" name="categories" /> <label
 					class="form-check-label filtres switchers"
-					for="flexSwitchCheckDefault3">Напитки <i
+					for="flexSwitchCheckDefault3"><f:message key="drinks"/> <i
 					class="bi bi-cup-straw"></i></label>
 			</div>
-			<button type="submit" class="btn btn-outline-warning">Применить
-				фильтр</button>
+			<button type="submit" class="btn btn-outline-warning"><f:message key="applyFilter"/></button>
 		</form>
 		<c:if test="${not empty role and role == 'ADMIN' }">
 			<div class="col-sm-8"></div>
 			<form class="form text-center col-sm-2" action="AddProduct" method="get">
 				<button type="submit" class="btn btn-success btn-lg">
-					Добавить товар</i>
+					<f:message key="addproduct"/>
 				</button>
 			</form>
 		</c:if>
@@ -92,19 +93,17 @@
 	<div class="dropdown sortMargin" style="margin-left: 20px">
 		<button class="btn btn-warning dropdown-toggle" type="button"
 			id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
-			Отсортировать по</i>
+			<f:message key="sortBy"/>
 		</button>
 		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 			<li><a class="dropdown-item"
-				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "name" asc= "true"/>'>Названию</a></li>
+				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "name" asc= "true"/>'><f:message key="name"/></a></li>
 			<li><a class="dropdown-item"
-				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "price" asc= "true"/>'>От
-					дешевых к дорогим</a></li>
+				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "price" asc= "true"/>'><f:message key="cheapExpensive"/></a></li>
 			<li><a class="dropdown-item"
-				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "price" asc= "false"/>'>От
-					дорогих к дешевым</a></li>
+				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "price" asc= "false"/>'><f:message key="ExpensiveCheap"/></a></li>
 			<li><a class="dropdown-item"
-				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "category" asc= "true"/>'>Категориям</a></li>
+				href='<t:page-link pageNumber="1" categories="${categories}" sortValue = "category" asc= "true"/>'><f:message key="categories"/></a></li>
 		</ul>
 	</div>
 	<main class="container">
@@ -130,9 +129,9 @@
 
 								<a
 									href='<t:page-link pageNumber="${currentPage}" categories="${categories}" sortValue = "${sortValue}" asc= "${asc}" productId="${product.id}"/>'
-									class="btn btn-primary col-sm-7 cart"> Заказать</a> <font
+									class="btn btn-primary col-sm-7 cart"><f:message key="Order"/></a> <font
 									size=+2 class="col-sm-5"> <c:out
-										value="${product.price}" /> грн
+										value="${product.price}" /> <f:message key="grn"/>
 								</font>
 
 							</div>
@@ -141,13 +140,13 @@
 									<form class="form col-sm-5" action="UpdateProduct" method="get">
 									<input type="hidden" name="id" value="${product.id}">
 										<button type="submit" class="btn btn-primary btn-lg">
-											Изменить</i>
+											<f:message key="Edit"/></i>
 										</button>
 									</form>
 									<form class="form col-sm-3" action="DeleteProduct" method="post">
 									<input type="hidden" name="id" value="${product.id}">
 										<button type="submit" class="btn btn-danger btn-lg">
-											Удалить</i>
+											<f:message key="Delete"/></i>
 										</button>
 									</form>
 								</div>

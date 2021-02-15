@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>403 Не уполномочен</title>
+<title><f:message key="403.title"/></title>
 <!--    Bootstap START-->
 
 <link
@@ -47,7 +48,7 @@
 	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<div class="errorBody">
-		403 <br>У Вас нет прав на просмотр данной страницы!!!
+		403 <br><f:message key="403.body"/>
 	</div>
 
 	<c:import url="/WEB-INF/resources/footer.jspf" />

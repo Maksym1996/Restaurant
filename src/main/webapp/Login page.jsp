@@ -2,14 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<f:setLocale value="${lang}" />
+<f:setBundle basename="Bundles" />
 <!DOCTYPE html>
 <html>
 <head>
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Страница авторизации</title>
+<title><f:message key="LoginPage.title"/></title>
 <!--    Bootstap START-->
 
 <link
@@ -49,26 +50,25 @@
 			<span class="col-sm-4"></span>
 			<div class="col-sm-4">
 				<form action="Login page" method="post">
-					<p class="formLabel">Авторизуйтесь</p>
+					<p class="formLabel"><f:message key="autorize"/></p>
 					<!-- Email input -->
 					<div class="form-floating">
 						<input type="tel" class="form-control" id="inputTel"
 							 name="phoneNumber" required> <label
-							for="inputTel">Номер телефона</label>
+							for="inputTel"><f:message key="number"/></label>
 					</div>
 
 					<!-- Password input -->
 					<div class="form-floating">
 						<input type="password" class="form-control" id="inputPassword"
 							name="password" placeholder="" required> <label
-							for="inputPassword">Пароль</label>
+							for="inputPassword"><f:message key="password"/></label>
 					</div>
 					<div class="d-grid gap-2"></div>
 					<br>
 					<!-- Submit button -->
 					<div class="d-grid gap-2">
-						<button type="submit" class="btn btn-light btn-block">Войти
-							в систему</button>
+						<button type="submit" class="btn btn-light btn-block"><f:message key="logIn"/></button>
 					</div>
 				</form>
 				<br>
@@ -76,9 +76,8 @@
 				<!-- Form for registration -->
 				<form class="d-grid gap-2 d-md-flex justify-content-md-end"
 					action="Registration" method="get">
-					<span class="formLabel" style="font-size: 1.5em">Хотите быть
-						с нами?</span>
-					<button type="submit" class="btn btn-success btn-block">Зарегистрируйтесь</button>
+					<span class="formLabel" style="font-size: 1.5em"><f:message key="LoginPage.field"/></span>
+					<button type="submit" class="btn btn-success btn-block"><f:message key="registered"/></button>
 				</form>
 			</div>
 			<span class="col-sm-0"></span>
