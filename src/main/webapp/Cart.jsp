@@ -9,7 +9,7 @@
 <META http-equiv="content-language" CONTENT="ru-RU">
 <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your cart</title>
+<title>Ваша корзина</title>
 <!--    Bootstap START-->
 
 <link

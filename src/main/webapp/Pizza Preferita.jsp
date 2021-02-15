@@ -139,6 +139,7 @@
 							<c:if test="${not empty role and role == 'ADMIN' }">
 								<div class="row row-cols-auto">
 									<form class="form col-sm-5" action="UpdateProduct" method="get">
+									<input type="hidden" name="id" value="${product.id}">
 										<button type="submit" class="btn btn-primary btn-lg">
 											Изменить</i>
 										</button>
