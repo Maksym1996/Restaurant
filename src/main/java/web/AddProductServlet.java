@@ -79,7 +79,7 @@ public class AddProductServlet extends HttpServlet {
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
 		
 		try {
-			productDao.insertProduct(Util.createProduct(name, Integer.parseInt(price), description, imageLink, categoryObject));
+			productDao.insertProduct(Util.createProduct(name, Integer.parseInt(price), description, imageLink, categoryObject, 0));
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			System.err.println(e);

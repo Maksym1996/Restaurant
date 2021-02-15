@@ -19,7 +19,7 @@ public class MySQLProduct implements ProductDao {
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE(DEFAULT, ?, ?, ?, ?, ?)";
 	private static final String GET_PRODUCT = "SELECT * FROM product WHERE id = ?";
 	private static final String UPDATE_PRODUCT = "UPDATE product SET name=?,"
-			+ "price=?, description=?, count=?, image_link=?, category_id=?  WHERE id = ? ";
+			+ "price=?, description=?, image_link=?, category=?  WHERE id = ?";
 	private static final String DELETE_PRODUCT_BY_ID = "DELETE FROM product WHERE id = ?";
 
 	private DataSource dataSource;
