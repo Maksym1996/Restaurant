@@ -1,11 +1,11 @@
 package web;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,6 +21,7 @@ import db.dao.UserDao;
 import db.entity.OrderView;
 import db.entity.Product;
 import db.entity.User;
+import util.Status;
 
 /**
  * Servlet implementation class WorkZoneServlet
@@ -37,7 +38,7 @@ public class WorkZoneServlet extends HttpServlet {
 		String role = (String) session.getAttribute("role");
 		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute("orderDao");
 
-		List<OrderView> orderViewList = new ArrayList<>();
+		List<OrderView> orderViewList;
 		String forwardPage;
 		switch (role) {
 		case "MANAGER":
@@ -104,38 +105,40 @@ public class WorkZoneServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String status = request.getParameter("status");
-		String id = request.getParameter("id");
-
 		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute("orderDao");
 
-		if (id != null && status != null && !"REJECTED".equals(status) && !"PERFORMED".equals(status)) {
+		String idPattern = "[1-9]{1}[0-9]*";
 
-			List<String> statusList = new ArrayList<>();
-			statusList.add("NEW");
-			statusList.add("COOKING");
-			statusList.add("COOKED");
-			statusList.add("IN_DELIVERY");
-			statusList.add("DELIVERED_AND_PAID");
-			statusList.add("PERFORMED");
-			statusList.add("REJECTED");
-			int indexStatus = statusList.indexOf(status);
-			int orderId = Integer.parseInt(id);
-			try {
-				int currentIndexStatus = statusList.indexOf(orderDao.getStateByOrderId(orderId));
-				if (indexStatus != currentIndexStatus) {
-					response.sendError(400);
-					return;
-				}
-				status = statusList.get(statusList.indexOf(status) + 1);
-				orderDao.updateOrderState(orderId, status);
-			} catch (Exception e2) {
-				// TODO add logger 09.02
-				throw new IOException();
-			}
+		String status = request.getParameter("status");
+		String requestId = request.getParameter("id");
+
+		if (status == null || status.isEmpty() || requestId == null || requestId.isEmpty()) {
+			response.sendError(416);
+			return;
 		}
+		if (!Pattern.matches(idPattern, requestId)) {
+			response.sendError(415);
+			return;
+		}
+		// if illegalStateException or NumberFormatException will be redirect to
+		// Wrong.jsp
+		Status requestStatus = Status.valueOf(status);
+		int orderId = Integer.parseInt(requestId);
 
+		Status resultStatus;
+		try {
+			Status currentStatus = Status.valueOf(orderDao.getStateByOrderId(orderId));
+			if (!requestStatus.equals(Status.REJECTED) && requestStatus.equals(currentStatus)) {
+				resultStatus = currentStatus.getNextStatuses().get(0);
+			} else {
+				resultStatus = currentStatus.getNextStatuses().get(1);
+			}
+			orderDao.updateOrderState(orderId, resultStatus.name());
+		} catch (Exception e) {
+			System.err.println("GetState:" + e);
+			response.sendError(500);
+			return;
+		}
 		response.sendRedirect("WorkZone");
 	}
-
 }

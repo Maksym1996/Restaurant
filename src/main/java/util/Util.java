@@ -36,7 +36,7 @@ public class Util {
 
 	}
 
-	public static OrderView createOrder(String status, String address, int userId, String sum) {
+	public static OrderView createOrder(Status status, String address, int userId, String sum) {
 		OrderView order = new OrderView();
 
 		order.setStatus(status);

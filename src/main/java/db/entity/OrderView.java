@@ -2,6 +2,8 @@ package db.entity;
 
 import java.io.Serializable;
 
+import util.Status;
+
 public class OrderView implements Serializable {
 
 	private static final long serialVersionUID = 5965318754937941837L;
@@ -9,7 +11,7 @@ public class OrderView implements Serializable {
 	int id;
 	String orderDate;
 	String closingDate;
-	String status;
+	Status status;
 	String address;
 	int userId;
 	String sum;
@@ -36,10 +38,11 @@ public class OrderView implements Serializable {
 	public void setClosingDate(String closingDate) {
 		this.closingDate = closingDate;
 	}
-	public String getStatus() {
+	
+	public Status getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 	public String getAddress() {

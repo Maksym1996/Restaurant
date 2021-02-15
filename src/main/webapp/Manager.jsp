@@ -74,7 +74,7 @@
 						<c:out value="${order.orderDate}" />
 					</h5>
 					<h5>
-						<span style="color: red; font-weight: 900;"><c:out
+						<span style="color: <c:out value="${order.status.getColor()}" /> ; font-weight: 900"><c:out
 								value="${order.status}" /></span>
 						<c:out value="${order.closingDate}" />
 
@@ -110,12 +110,12 @@
 						<c:out value="${order.sum}"/> грн.</h5>
 					</div>
 					<c:if
-						test="${order.status != 'REJECTED' and order.status != 'PERFORMED'}">
+						test="${order.status.name() != 'REJECTED' and order.status.name() != 'PERFORMED'}">
 
 						<div class="row" style="margin-top: 1em">
 							<div class="col-sm-4">
 								<form action="WorkZone" method="post">
-									<input name="status" value="${order.status}" type="hidden" />
+									<input name="status" value="${order.status.name()}" type="hidden" />
 									<input name="id" value="${order.id}" type="hidden" />
 									<button type="submit" class="btn btn-success">Подтвердить</button>
 								</form>

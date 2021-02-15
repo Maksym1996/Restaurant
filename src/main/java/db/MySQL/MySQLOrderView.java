@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import db.dao.OrderViewDao;
 import db.entity.OrderView;
 import db.entity.Product;
+import util.Status;
 
 public class MySQLOrderView implements OrderViewDao {
 	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView WHERE state IN ('NEW', 'COOKED', 'DELIVERED_AND_PAID', 'PERFORMED', 'REJECTED') ORDER BY id DESC";
@@ -21,7 +22,7 @@ public class MySQLOrderView implements OrderViewDao {
 	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE state = ? ORDER BY id DESC";
 	private static final String SET_NEW_ORDER = "INSERT INTO orderView(id, order_date, state, address, user_id, sum) VALUES(DEFAULT, current_timestamp(), ?, ?, ?, ?)";
 	private static final String SET_PRODUCT_FOR_ORDER = "INSERT INTO orderView(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
-	private static final String GET_STATUS_BY_ORDER_ID = "SELECT state FROM order WHERE id = ?";
+	private static final String GET_STATUS_BY_ORDER_ID = "SELECT state FROM orders WHERE id = ?";
 
 
 	private final DataSource dataSource;
@@ -47,7 +48,7 @@ public class MySQLOrderView implements OrderViewDao {
 
 		} catch (SQLException e) {
 			// TODO some logger
-
+			System.err.println("GET order:" + e);
 			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
@@ -74,7 +75,7 @@ public class MySQLOrderView implements OrderViewDao {
 
 		} catch (SQLException e) {
 			// TODO some logger
-
+			System.err.println(e.getMessage());
 			throw new SQLException();
 		} finally {
 			close(con, stat, rs);
@@ -100,7 +101,7 @@ public class MySQLOrderView implements OrderViewDao {
 
 		} catch (SQLException e) {
 			// TODO some logger
-
+			System.err.println(e.getMessage());
 			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
@@ -126,7 +127,7 @@ public class MySQLOrderView implements OrderViewDao {
 
 		} catch (SQLException e) {
 			// TODO some logger
-
+			System.err.println(e.getMessage());
 			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
@@ -149,7 +150,7 @@ public class MySQLOrderView implements OrderViewDao {
 			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 			prep = con.prepareStatement(SET_NEW_ORDER, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
-			prep.setString(k++, model.getStatus());
+			prep.setString(k++, model.getStatus().name());
 			prep.setString(k++, model.getAddress());
 			prep.setInt(k++, model.getUserId());
 			prep.setString(k++, model.getSum());
@@ -207,6 +208,7 @@ public class MySQLOrderView implements OrderViewDao {
 			con.commit();
 		} catch (SQLException e) {
 			rollback(con);
+			System.err.println(e.getMessage());
 			// TODO add some logger 03.02.2021
 			throw new SQLException();
 		} finally {
@@ -223,7 +225,7 @@ public class MySQLOrderView implements OrderViewDao {
 		order.setId(rs.getInt(k++));
 		order.setOrderDate(rs.getString(k++));
 		order.setClosingDate(rs.getString(k++));
-		order.setStatus(rs.getString(k++));
+		order.setStatus(Status.valueOf(rs.getString(k++)));
 		order.setAddress(rs.getString(k++));
 		order.setUserId(rs.getInt(k++));
 		order.setSum(rs.getString(k++));
@@ -241,6 +243,7 @@ public class MySQLOrderView implements OrderViewDao {
 				try {
 					ac.close();
 				} catch (Exception e) {
+					System.err.println(e.getMessage());
 					// TODO add some logger 03.02.2021
 					throw new Exception();
 				}
@@ -252,6 +255,7 @@ public class MySQLOrderView implements OrderViewDao {
 		try {
 			connect.rollback();
 		} catch (SQLException e) {
+			System.err.println(e.getMessage());
 			// TODO add some logger 03.02.2021
 			throw new SQLException();
 		}
