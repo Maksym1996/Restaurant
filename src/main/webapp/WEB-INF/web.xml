@@ -58,6 +58,23 @@
 		<filter-name>NoJSPFilter</filter-name>
 		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
+	
+	<filter>
+		<filter-name>PermissionFilter</filter-name>
+		<filter-class>filters.PermissionFilter</filter-class>
+		<init-param>
+			<param-name>active</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+
+	<filter-mapping>
+		<filter-name>PermissionFilter</filter-name>
+		<url-pattern>/AddProduct</url-pattern>
+		<url-pattern>/UpdateProduct</url-pattern>
+		<url-pattern>/DeleteProduct</url-pattern>
+	</filter-mapping>
 
 
 
