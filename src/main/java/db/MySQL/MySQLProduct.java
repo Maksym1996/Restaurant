@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +16,7 @@ import db.entity.Product;
 import util.Category;
 
 public class MySQLProduct implements ProductDao {
-	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE(DEFAULT, ?, ?, ?, ?, ?, ?,)";
+	private static final String INSERT_PRODUCT = "INSERT INTO product VALUE(DEFAULT, ?, ?, ?, ?, ?)";
 	private static final String GET_PRODUCT = "SELECT * FROM product WHERE id = ?";
 	private static final String UPDATE_PRODUCT = "UPDATE product SET name=?,"
 			+ "price=?, description=?, count=?, image_link=?, category_id=?  WHERE id = ? ";
@@ -55,6 +56,7 @@ public class MySQLProduct implements ProductDao {
 
 		} catch (SQLException e) {
 			// TODO add some logger 03.02.2021
+			System.err.println(e);
 			throw new SQLException();
 		} finally {
 			close(con, prep, rs);
@@ -103,7 +105,7 @@ public class MySQLProduct implements ProductDao {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
 			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-			prep = con.prepareStatement(INSERT_PRODUCT);
+			prep = con.prepareStatement(INSERT_PRODUCT, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
 			prep.setString(k++, model.getName());
 			prep.setInt(k++, model.getPrice());
@@ -121,6 +123,7 @@ public class MySQLProduct implements ProductDao {
 			con.commit();
 		} catch (SQLException e) {
 			rollback(con);
+			System.err.println(e);
 			// TODO add some logger 03.02.2021
 			throw new SQLException();
 		} finally {
@@ -145,6 +148,7 @@ public class MySQLProduct implements ProductDao {
 				model = extractionProduct(rs);
 			}
 		} catch (SQLException e) {
+			System.err.println(e);
 			// TODO add some logger 03.02.2021
 			throw new SQLException();
 		} finally {
@@ -179,6 +183,7 @@ public class MySQLProduct implements ProductDao {
 			con.commit();
 		} catch (SQLException e) {
 			rollback(con);
+			System.err.println(e);
 			// TODO add some logger 03.02.2021
 			throw new SQLException();
 		} finally {
@@ -208,6 +213,7 @@ public class MySQLProduct implements ProductDao {
 				try {
 					ac.close();
 				} catch (Exception e) {
+					System.err.println(e);
 					// TODO add some logger 03.02.2021
 					throw new Exception();
 				}
@@ -220,6 +226,7 @@ public class MySQLProduct implements ProductDao {
 			connect.rollback();
 		} catch (SQLException e) {
 			// TODO add some logger 03.02.2021
+			System.err.println(e);
 			throw new SQLException();
 		}
 	}
@@ -288,6 +295,7 @@ public class MySQLProduct implements ProductDao {
 		} catch (SQLException e) {
 			// TODO add some logger 14.02.2021
 			rollback(con);
+			System.err.println(e);
 			throw new SQLException();
 		} finally {
 			close(con, prep, rs);

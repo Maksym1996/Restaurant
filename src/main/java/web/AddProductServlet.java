@@ -82,10 +82,14 @@ public class AddProductServlet extends HttpServlet {
 			productDao.insertProduct(Util.createProduct(name, Integer.parseInt(price), description, imageLink, categoryObject));
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
-			throw new IOException();
+			System.err.println(e);
+			response.sendError(500);
+			return;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			throw new IOException();
+			System.err.println(e);
+			response.sendError(500);
+			return;
 		}
 
 		response.sendRedirect("Pizza Preferita");
