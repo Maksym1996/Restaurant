@@ -9,7 +9,7 @@
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registration</title>
+<title>Измениение товара</title>
 <!--    Bootstap START-->
 
 <link
@@ -46,74 +46,70 @@
 	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<main>
-	<!-- Registration form -->
-		<form class="form" action="Registration" method="post"
+		<!-- Registration form -->
+		<form class="form" action="UpdateProduct" method="post"
 			style="margin-left: 3rem">
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputFirstName" class="form-label">Имя<span
+					<label for="inputName" class="form-label">Название<span
 						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputFirstName" name="firstName" required>
-					<c:if
-						test="${not empty errors and errors.containsKey('firstName')}">
+						class="form-control" id="inputName" name="name"
+						value="${product.name}" required>
+					<c:if test="${not empty errors and errors.containsKey('name')}">
 						<p style="color: red">
-							<c:out value="${errors.firstName}" />
+							<c:out value="${errors.name}" />
 						</p>
 					</c:if>
 
 				</div>
 
 				<button type="button" style="color: red" class="btn btn-link "
-					onclick="document.getElementById('inputFirstName').value = ''">
+					onclick="document.getElementById('inputName').value = ''">
 					<i class="far fa-times-circle"></i>
 				</button>
 			</div>
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputLastName" class="form-label">Фамилия<span
-						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputLastName" name="lastName" required>
-					<c:if test="${not empty errors and errors.containsKey('lastName')}">
+					<label for="inputPrice" class="form-label">Цена<span
+						style="color: red">*</span></label> <input type="number"
+						class="form-control" id="inputPrice" name="price"
+						value="${product.price}" required>
+					<c:if test="${not empty errors and errors.containsKey('price')}">
 						<p style="color: red">
-							<c:out value="${errors.lastName}" />
+							<c:out value="${errors.price}" />
+						</p>
+					</c:if>
+					<c:if
+						test="${not empty errors and errors.containsKey('pricePattern')}">
+						<p style="color: red">
+							<c:out value="${errors.pricePattern}" />
 						</p>
 					</c:if>
 				</div>
 
 				<button type="button" style="color: red" class="btn btn-link "
-					onclick="document.getElementById('inputLastName').value = ''">
+					onclick="document.getElementById('inputPrice').value = ''">
 					<i class="far fa-times-circle"></i>
 				</button>
 			</div>
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputEmail" class="form-label">Электронная
-						почта<span style="color: red">*</span>
-					</label> <input type="text" class="form-control" id="inputEmail"
-						name="email">
-					<c:if test="${not empty errors and errors.containsKey('email')}">
-						<p style="color: red">
-							<c:out value="${errors.email}" />
-						</p>
-					</c:if>
+					<label for="inputDescription" class="form-label">Описание<span
+						style="color: red">*</span>
+					</label> <input type="text" class="form-control" id="inputDescription"
+						name="description" value="${product.description}" required>
 					<c:if
-						test="${not empty errors and errors.containsKey('emailOrigin')}">
+						test="${not empty errors and errors.containsKey('description')}">
 						<p style="color: red">
-							<c:out value="${errors.emailOrigin}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('emailPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.emailPattern}" />
+							<c:out value="${errors.description}" />
 						</p>
 					</c:if>
 				</div>
 
 
 				<button type="button" style="color: red" class="btn btn-link "
-					onclick="document.getElementById('inputEmail').value = ''">
+					onclick="document.getElementById('inputDescription').value = ''">
 					<i class="far fa-times-circle"></i>
 				</button>
 
@@ -121,30 +117,16 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputPhone" class="form-label">Контактный номер
-						телефон<span style="color: red">*</span>
-					</label> <input type="tel" class="form-control" id="inputPhone"
-						name="phoneNumber" required>
+					<label for="inputImageLink" class="form-label">Ссылка на
+						картинку<span style="color: red">*</span>
+					</label> <input type="text" class="form-control" id="inputImageLink"
+						name="imageLink" value="${product.imageLink}" required>
 					<c:if
-						test="${not empty errors and errors.containsKey('phoneNumber')}">
+						test="${not empty errors and errors.containsKey('imageLink')}">
 						<p style="color: red">
-							<c:out value="${errors.phoneNumber}" />
+							<c:out value="${errors.imageLink}" />
 						</p>
 					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('phoneNumberOrigin')}">
-						<p style="color: red">
-							<c:out value="${errors.phoneNumberOrigin}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('phoneNumberPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.phoneNumberPattern}" />
-						</p>
-					</c:if>
-
-
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputPhone').value = ''">
@@ -155,55 +137,68 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputPassword" class="form-label">Пароль<span
-						style="color: red">*</span></label> <input type="password"
-						class="form-control" id="inputPassword" name="password" required>
-					<c:if test="${not empty errors and errors.containsKey('password')}">
+					<label for="inputCategory1" class="form-label">Категория:<span
+						style="color: red">*</span></label>
+					<p>
+						<c:if test="${product.category.toString() == 'Pizza'}">
+							<input type="radio" id="inputCategory1" name="category"
+								value="Pizza" checked>
+						</c:if>
+						<c:if test="${product.category.toString() != 'Pizza'}">
+							<input type="radio" id="inputCategory1" name="category"
+								value="Pizza">
+						</c:if>
+						<label for="inputCategory1">Пицца</label>
+					</p>
+					<p>
+						<c:if test="${product.category.toString() == 'Burger'}">
+							<input type="radio" id="inputCategory2" name="category"
+								value="Burger" checked>
+						</c:if>
+						<c:if test="${product.category.toString() != 'Burger'}">
+							<input type="radio" id="inputCategory2" name="category"
+								value="Burger">
+						</c:if>
+						<label for="inputCategory2">Бургер</label>
+					</p>
+					<p>
+
+						<c:if test="${product.category.toString() == 'Drinks'}">
+							<input type="radio" id="inputCategory3" name="category"
+								value="Drinks" checked>
+						</c:if>
+						<c:if test="${product.category.toString() != 'Drinks'}">
+							<input type="radio" id="inputCategory3" name="category"
+								value="Drinks">
+						</c:if>
+						<label for="inputCategory3">Напиток</label>
+					</p>
+					<c:if test="${not empty errors and errors.containsKey('category')}">
 						<p style="color: red">
-							<c:out value="${errors.password}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('passwordPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.passwordPattern}" />
+							<c:out value="${errors.category}" />
 						</p>
 					</c:if>
 				</div>
-				<button type="button" style="color: red" class="btn btn-link "
-					onclick="document.getElementById('inputPassword').value = ''">
-					<i class="far fa-times-circle"></i>
-				</button>
+
 			</div>
-			<div class="row row-cols-auto">
-
-				<div class="col-md-6">
-					<label for="inputConfirm" class="form-label">Повторите
-						пароль<span style="color: red">*</span>
-					</label> <input type="password" class="form-control" id="inputConfirm"
-						name="confirmPassword" required>
-					<c:if
-						test="${not empty errors and errors.containsKey('confirmPassword')}">
-						<p style="color: red">
-							<c:out value="${errors.confirmPassword}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('confirmPasswordSame')}">
-						<p style="color: red">
-							<c:out value="${errors.confirmPasswordSame}" />
-						</p>
-					</c:if>
-				</div>
-				<button type="button" style="color: red" class="btn btn-link "
-					onclick="document.getElementById('inputConfirm').value = ''">
-					<i class="far fa-times-circle"></i>
-				</button>
-			</div>
-
-
 			<br>
-			<button type="submit" class="btn btn-light">Зарегистрироваться</button>
+			<c:if test="${not empty errors and errors.containsKey('id')}">
+				<p style="color: red">
+					<c:out value="${errors.id}" />
+				</p>
+			</c:if>
+			<c:if test="${not empty errors and errors.containsKey('idPattern')}">
+				<p style="color: red">
+					<c:out value="${errors.idPattern}" />
+				</p>
+			</c:if>
+			<c:if test="${not empty errors and errors.containsKey('idNone')}">
+				<p style="color: red">
+					<c:out value="${errors.idNone}" />
+				</p>
+			</c:if>
+			<input type="hidden" name="id" value="${product.id}">
+			<button type="submit" class="btn btn-light">Изменить товар</button>
 		</form>
 
 	</main>

@@ -49,7 +49,7 @@ public class Util {
 	}
 
 	public static Product createProduct(String name, int price, String description, String imageLink,
-			Category category) {
+			Category category, int id) {
 		Product product = new Product();
 
 		product.setName(name);
@@ -57,6 +57,7 @@ public class Util {
 		product.setDescription(description);
 		product.setImageLink(imageLink);
 		product.setCategory(category);
+		product.setId(id);
 
 		return product;
 
