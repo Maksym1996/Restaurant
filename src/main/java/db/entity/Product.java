@@ -65,14 +65,14 @@ public class Product implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + "imageLink=" + imageLink + ", category=" + category + "]";
+		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", imageLink=" + imageLink + ", category=" + category + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + id;
 		return result;
 	}
 
@@ -85,12 +85,11 @@ public class Product implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Product other = (Product) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
+		if (id != other.id)
 			return false;
 		return true;
 	}
+
+	
 
 }
