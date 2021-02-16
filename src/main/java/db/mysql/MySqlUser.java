@@ -1,4 +1,4 @@
-package db.MySQL;
+package db.mysql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,11 +13,11 @@ import javax.sql.DataSource;
 import db.dao.UserDao;
 import db.entity.User;
 
-public class MySQLUser implements UserDao {
+public class MySqlUser implements UserDao {
 	private static final String SALT = "234jsdflakj";
 	private static final String GET_ALL_USERS = "SELECT * FROM user";
 	private static final String GET_REGISTERED_USERS = "SELECT * FROM user WHERE registered = ?";
-	private static final String INSERT_USER = "INSERT INTO user VALUE(DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT
+	private static final String INSERT_USER = "INSERT INTO user VALUES (DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT
 			+ "')) ,?, DEFAULT, ?)";
 	private static final String GET_USER = "SELECT * FROM user WHERE phone_number = ? AND password = MD5(CONCAT(?,'"
 			+ SALT + "'))";
@@ -28,7 +28,7 @@ public class MySQLUser implements UserDao {
 
 	private final DataSource dataSource;
 
-	public MySQLUser(DataSource dataSource) {
+	public MySqlUser(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 

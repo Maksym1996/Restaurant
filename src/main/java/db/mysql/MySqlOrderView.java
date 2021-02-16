@@ -1,4 +1,4 @@
-package db.MySQL;
+package db.mysql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,7 +16,7 @@ import db.entity.OrderView;
 import db.entity.Product;
 import util.Status;
 
-public class MySQLOrderView implements OrderViewDao {
+public class MySqlOrderView implements OrderViewDao {
 	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView WHERE state IN ('NEW', 'COOKED', 'DELIVERED_AND_PAID', 'PERFORMED', 'REJECTED') ORDER BY id DESC";
 	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ? ORDER BY id DESC";
 	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE state = ? ORDER BY id DESC";
@@ -27,7 +27,7 @@ public class MySQLOrderView implements OrderViewDao {
 
 	private final DataSource dataSource;
 
-	public MySQLOrderView(DataSource dataSource) {
+	public MySqlOrderView(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 	
