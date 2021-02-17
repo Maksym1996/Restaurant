@@ -12,19 +12,16 @@ import javax.sql.DataSource;
 
 import db.dao.UserDao;
 import db.entity.User;
+import util.Util;
 
 public class MySqlUser implements UserDao {
-	private static final String SALT = "234jsdflakj";
 	private static final String GET_ALL_USERS = "SELECT * FROM user";
 	private static final String GET_REGISTERED_USERS = "SELECT * FROM user WHERE registered = ?";
-	private static final String INSERT_USER = "INSERT INTO user VALUES (DEFAULT,?,?,?, MD5(CONCAT(?,'" + SALT
-			+ "')) ,?, DEFAULT, ?)";
-	private static final String GET_USER = "SELECT * FROM user WHERE phone_number = ? AND password = MD5(CONCAT(?,'"
-			+ SALT + "'))";
+	private static final String INSERT_USER = "INSERT INTO user VALUES (DEFAULT,?,?,?,?,?, DEFAULT, ?)";
+	private static final String GET_USER = "SELECT * FROM user WHERE phone_number = ? AND password = ?";
 	private static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
 	private static final String GET_USER_BY_NUMBER = "SELECT * FROM user WHERE phone_number = ?";
-	private static final String UPDATE_USER = "UPDATE user SET first_name=?, last_name=?, password = MD5(CONCAT(?,'"
-			+ SALT + "')), registered=?, email = ? WHERE phone_number = ?";
+	private static final String UPDATE_USER = "UPDATE user SET first_name=?, last_name=?, password = ?, registered=?, email = ? WHERE phone_number = ?";
 
 	private final DataSource dataSource;
 
@@ -98,7 +95,7 @@ public class MySqlUser implements UserDao {
 			prep.setString(k++, model.getEmail());
 			prep.setString(k++, model.getFirstName());
 			prep.setString(k++, model.getLastName());
-			prep.setString(k++, model.getPassword());
+			prep.setString(k++, Util.stringToMD5(model.getPassword()));
 			prep.setString(k++, model.getPhoneNumber());
 			prep.setString(k++, model.getRegistered());
 
@@ -131,7 +128,7 @@ public class MySqlUser implements UserDao {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(GET_USER);
 			prep.setString(1, phoneNumber);
-			prep.setString(2, password);
+			prep.setString(2, Util.stringToMD5(password));
 			rs = prep.executeQuery();
 
 			if (rs.next()) {
@@ -186,7 +183,7 @@ public class MySqlUser implements UserDao {
 			int k = 1;
 			prep.setString(k++, model.getFirstName());
 			prep.setString(k++, model.getLastName());
-			prep.setString(k++, model.getPassword());
+			prep.setString(k++, Util.stringToMD5(model.getPassword()));
 			prep.setString(k++, model.getRegistered());
 			prep.setString(k++, model.getEmail());
 			prep.setString(k++, model.getPhoneNumber());
