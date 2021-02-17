@@ -1,5 +1,9 @@
 package util;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import db.entity.OrderView;
 import db.entity.Product;
 import db.entity.User;
@@ -61,6 +65,33 @@ public class Util {
 
 		return product;
 
+	}
+	
+	private static final String SALT = "234jsdflakj";
+	
+	public static String stringToMD5(String password) {
+		String saltedPassword = SALT.concat(password);
+	    MessageDigest messageDigest = null;
+	    byte[] digest = new byte[0];
+
+	    try {
+	        messageDigest = MessageDigest.getInstance("MD5");
+	        messageDigest.reset();
+	        messageDigest.update(saltedPassword.getBytes());
+	        digest = messageDigest.digest();
+	    } catch (NoSuchAlgorithmException e) {
+	        System.err.println(e);
+	        
+	    }
+
+	    BigInteger bigInt = new BigInteger(1, digest);
+	    String md5Hex = bigInt.toString(16);
+
+	    while( md5Hex.length() < 32 ){
+	        md5Hex = "0" + md5Hex;
+	    }
+
+	    return md5Hex;
 	}
 
 }
