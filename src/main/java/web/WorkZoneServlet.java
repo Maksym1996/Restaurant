@@ -23,6 +23,7 @@ import db.dao.UserDao;
 import db.entity.OrderView;
 import db.entity.Product;
 import db.entity.User;
+import exception.DBException;
 import provider.OrderPage;
 import provider.OrderPageProvider;
 import provider.OrderPageProviderContainer;
@@ -68,7 +69,7 @@ public class WorkZoneServlet extends HttpServlet {
 				productList.add(productDao.getProductById(o.getProductId()));
 				userList.add(userDao.getUserById(o.getUserId()));
 
-			} catch (Exception e) {
+			} catch (DBException e) {
 				// TODO Auto-generated catch block
 				throw new IOException();
 			}
@@ -108,7 +109,7 @@ public class WorkZoneServlet extends HttpServlet {
 				resultStatus = currentStatus.getNextStatuses().get(1);
 			}
 			orderDao.updateStatusById(orderId, resultStatus.name());
-		} catch (Exception e) {
+		} catch (DBException e) {
 			System.err.println("GetState:" + e);
 			response.sendError(500);
 			return;

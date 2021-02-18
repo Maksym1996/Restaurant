@@ -24,6 +24,7 @@ import db.dao.ProductDao;
 import db.entity.Product;
 import db.mysql.MySqlOrderView;
 import db.mysql.MySqlProduct;
+import exception.DBException;
 import util.SqlTestUtil;
 import util.Status;
 import util.Util;
@@ -32,14 +33,14 @@ public class MySqlOrderViewTest {
 	private static DataSource dataSource;
 
 	private OrderViewDao orderViewDao;
-	
+
 	@BeforeClass
 	public static void setUpClass() {
 		dataSource = SqlTestUtil.getDatasource();
 	}
 
 	@Before
-	public void beforeTest() throws Exception {
+	public void beforeTest() throws SQLException {
 		orderViewDao = new MySqlOrderView(dataSource);
 		try (Connection con = dataSource.getConnection(); Statement statement = con.createStatement()) {
 			statement.executeUpdate(SqlTestUtil.getSqlScript());
@@ -47,7 +48,7 @@ public class MySqlOrderViewTest {
 	}
 
 	@Test
-	public void insertOrderView() throws Exception {
+	public void insertOrderView() throws DBException {
 		ProductDao productDao = new MySqlProduct(dataSource);
 		List<Product> products = new ArrayList<>();
 		products.add(productDao.getProductById(1));
@@ -60,7 +61,7 @@ public class MySqlOrderViewTest {
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void insertOrderViewNullCount() throws Exception {
+	public void insertOrderViewNullCount() throws DBException {
 		ProductDao productDao = new MySqlProduct(dataSource);
 		List<Product> products = new ArrayList<>();
 		products.add(productDao.getProductById(1));
@@ -70,8 +71,8 @@ public class MySqlOrderViewTest {
 		orderViewDao.insertOrder(Util.createOrder(Status.NEW, "Плеханово", 2, "500"), products, count);
 	}
 
-	@Test(expected = SQLException.class)
-	public void insertOrderViewInvaliduserID() throws Exception {
+	@Test(expected = DBException.class)
+	public void insertOrderViewInvaliduserID() throws DBException {
 		ProductDao productDao = new MySqlProduct(dataSource);
 		List<Product> products = new ArrayList<>();
 		products.add(productDao.getProductById(3));
@@ -83,59 +84,59 @@ public class MySqlOrderViewTest {
 	}
 
 	@Test
-	public void getStateByOrderIdEqOneStateEqNEW() throws Exception {
+	public void getStateByOrderIdEqOneStateEqNEW() throws DBException {
 		assertEquals(Status.NEW.toString(), orderViewDao.getStatusByOrderId(1));
 	}
 
 	@Test
-	public void getStateByOrderIdEqTenExpSQLException() throws Exception {
+	public void getStateByOrderIdEqTenExpSQLException() throws DBException {
 		assertNull(orderViewDao.getStatusByOrderId(10));
 	}
 
 	@Test
-	public void getAllOrderViewResFour() throws Exception {
+	public void getAllOrderViewResFour() throws DBException {
 		// Thread.sleep(1000);
 		assertEquals(4, orderViewDao.getAllOrderViews().size());
 	}
 
 	@Test
-	public void getOrderViewsByUserIdTwoExpectTwo() throws Exception {
+	public void getOrderViewsByUserIdTwoExpectTwo() throws DBException {
 		assertEquals(2, orderViewDao.getOrderViewsByUserId(2).size());
 	}
 
 	@Test
-	public void getOrderViewsByInvalidUserIdExpectZero() throws Exception {
+	public void getOrderViewsByInvalidUserIdExpectZero() throws DBException {
 		assertEquals(0, orderViewDao.getOrderViewsByUserId(10).size());
 	}
 
 	@Test
-	public void getOrderByStatusNEWExpTwo() throws Exception {
+	public void getOrderByStatusNEWExpTwo() throws DBException {
 		// Thread.sleep(100);
 		assertEquals(2, orderViewDao.getOrdersByStatus(Status.NEW.toString()).size());
 	}
 
 	@Test
-	public void getOrderByStatusInvalidExpZero() throws Exception {
+	public void getOrderByStatusInvalidExpZero() throws DBException {
 		assertEquals(0, orderViewDao.getOrdersByStatus("CHO").size());
 	}
 
 	@Test
-	public void UpdateOrderStatusCOOKEDExpTrue() throws Exception {
+	public void UpdateOrderStatusCOOKEDExpTrue() throws DBException {
 		assertTrue(orderViewDao.updateStatusById(1, Status.COOKED.toString()));
 	}
 
 	@Test
-	public void UpdateOrderStatusCOOKEDInvalidOrderIDExpFalse() throws Exception {
+	public void UpdateOrderStatusCOOKEDInvalidOrderIDExpFalse() throws DBException {
 		assertFalse(orderViewDao.updateStatusById(10, Status.COOKED.toString()));
 	}
 
 	@Test
-	public void UpdateOrderStatusREJECTEDExpTrue() throws Exception {
+	public void UpdateOrderStatusREJECTEDExpTrue() throws DBException {
 		assertTrue(orderViewDao.updateStatusById(2, Status.REJECTED.toString()));
 	}
 
 	@Test
-	public void UpdateOrderStatusPERFORMEDExpTrue() throws Exception {
+	public void UpdateOrderStatusPERFORMEDExpTrue() throws DBException {
 		assertTrue(orderViewDao.updateStatusById(2, Status.PERFORMED.toString()));
 	}
 }

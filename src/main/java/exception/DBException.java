@@ -1,6 +1,6 @@
 package exception;
 
-public class DBException extends RuntimeException {
+public class DBException extends Exception {
 
 	private static final long serialVersionUID = -4858243871976691879L;
 

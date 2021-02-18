@@ -7,11 +7,10 @@ import consts.Dao;
 import consts.ForwardPages;
 import consts.Params;
 import db.dao.ProductDao;
+import exception.DBException;
 import util.Cart;
 
 import static org.mockito.Mockito.*;
-
-import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -30,6 +29,7 @@ public class MainPageServletTest {
 	private ProductDao productDao;
 	private ServletContext context;
 	private HttpSession session;
+	Cart cart = mock(Cart.class);
 
 	@Before
 	public void setUp() {
@@ -40,6 +40,7 @@ public class MainPageServletTest {
 		productDao = mock(ProductDao.class);
 		context = mock(ServletContext.class);
 		session = mock(HttpSession.class);
+		cart = mock(Cart.class);
 	}
 
 	@Test
@@ -60,8 +61,6 @@ public class MainPageServletTest {
 
 	@Test
 	public void whenCallDoGetWithParamThenServletReturnPage() throws Exception {
-
-		Cart cart = mock(Cart.class);
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
@@ -84,8 +83,6 @@ public class MainPageServletTest {
 	@Test
 	public void whenCallDoGetWithParamThenServletReturnError500() throws Exception {
 
-		Cart cart = mock(Cart.class);
-
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
@@ -93,7 +90,7 @@ public class MainPageServletTest {
 		when(session.getAttribute(Params.CART)).thenReturn(cart);
 		when(request.getParameter(Params.PRODUCT_ID)).thenReturn("1");
 
-		when(productDao.getProductById(1)).thenThrow(new SQLException());
+		when(productDao.getProductById(1)).thenThrow(new DBException(new Throwable()));
 
 		servlet.doGet(request, response);
 
@@ -102,8 +99,6 @@ public class MainPageServletTest {
 
 	@Test
 	public void whenCallDoGetWithInvalidParamThenServletReturnPage() throws Exception {
-
-		Cart cart = mock(Cart.class);
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
@@ -131,7 +126,7 @@ public class MainPageServletTest {
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(productDao.getProductCount(any())).thenThrow(new SQLException());
+		when(productDao.getProductCount(any())).thenThrow(new DBException(new Throwable()));
 
 		servlet.doPost(request, response);
 

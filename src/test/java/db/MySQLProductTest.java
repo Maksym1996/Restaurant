@@ -7,6 +7,7 @@ import org.junit.Test;
 import db.dao.ProductDao;
 import db.entity.Product;
 import db.mysql.MySqlProduct;
+import exception.DBException;
 import util.Category;
 import util.SqlTestUtil;
 import util.Util;
@@ -42,20 +43,20 @@ public class MySQLProductTest {
 	}
 
 	@Test
-	public void insertProductReturnId() throws Exception {
+	public void insertProductReturnId() throws DBException {
 		assertEquals(7, productDao
 				.insertProduct(Util.createProduct("Prod", 100, "description", "imageLink", Category.BURGER, 0)));
 	}
 
-	@Test(expected = SQLException.class)
-	public void insertInvalidProduct() throws Exception {
+	@Test(expected = DBException.class)
+	public void insertInvalidProduct() throws DBException {
 		Product product = new Product();
 		product.setCategory(Category.BURGER);
 		productDao.insertProduct(product);
 	}
 
 	@Test
-	public void getProduct() throws Exception {
+	public void getProduct() throws DBException {
 		Product productFromDB = productDao.getProductById(2);
 
 		Product product = new Product();
@@ -72,13 +73,13 @@ public class MySQLProductTest {
 	}
 
 	@Test
-	public void getNullProduct() throws Exception {
+	public void getNullProduct() throws DBException {
 		Product productFromDB = productDao.getProductById(0);
 		assertNull(productFromDB.getCategory());
 	}
 
 	@Test
-	public void updateProduct() throws Exception {
+	public void updateProduct() throws DBException {
 		Product product = new Product();
 		product.setId(2);
 		product.setName("Маргари");
@@ -90,8 +91,8 @@ public class MySQLProductTest {
 		assertTrue(productDao.updateProduct(product));
 	}
 
-	@Test(expected = SQLException.class)
-	public void updateProductDublicateName() throws Exception {
+	@Test(expected = DBException.class)
+	public void updateProductDublicateName() throws DBException {
 		Product product = new Product();
 		product.setId(2);
 		product.setName("Gamburger");
@@ -103,42 +104,42 @@ public class MySQLProductTest {
 	}
 
 	@Test
-	public void getProductCountByCategory() throws Exception {
+	public void getProductCountByCategory() throws DBException {
 		long actual = productDao.getProductCount(new String[] { Category.BURGER.toString() });
 		long expected = 2;
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void getProductCountByInvalidCategory() throws Exception {
+	public void getProductCountByInvalidCategory() throws DBException {
 		long actual = productDao.getProductCount(new String[] { "Milk" });
 		long expected = 0;
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void getProductCountByEmptyCategory() throws Exception {
+	public void getProductCountByEmptyCategory() throws DBException {
 		long actual = productDao.getProductCount(new String[] { "" });
 		long expected = 0;
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void getProductByCategoriesOnPage() throws Exception {
+	public void getProductByCategoriesOnPage() throws DBException {
 		List<Product> products = productDao.getProductByCategoriesOnPage(new String[] {}, "name", "true", 2, 8);
 		long expected = 4;
 		assertEquals(expected, products.size());
 	}
 
 	@Test
-	public void getProductByCategoriesOnPageInvalidArguments() throws Exception {
+	public void getProductByCategoriesOnPageInvalidArguments() throws DBException {
 		List<Product> products = productDao.getProductByCategoriesOnPage(new String[] {}, "price", "false", -1, -2);
 		long expected = 6;
 		assertEquals(expected, products.size());
 	}
 
 	@Test
-	public void getProductByCategoryOnPage() throws Exception {
+	public void getProductByCategoryOnPage() throws DBException {
 		List<Product> products = productDao.getProductByCategoriesOnPage(new String[] { Category.BURGER.toString() },
 				"category", "false", 0, 10);
 		long expected = 2;
@@ -146,7 +147,7 @@ public class MySQLProductTest {
 	}
 
 	@Test
-	public void getProductByCategoryOnPageByPrice() throws Exception {
+	public void getProductByCategoryOnPageByPrice() throws DBException {
 		List<Product> products = productDao.getProductByCategoriesOnPage(new String[] { Category.PIZZA.toString() },
 				"description", "true", 0, 10);
 		long expected = 2;
@@ -154,12 +155,12 @@ public class MySQLProductTest {
 	}
 
 	@Test
-	public void deleteProduct() throws Exception {
+	public void deleteProduct() throws DBException {
 		assertTrue(productDao.deleteProductById(2));
 	}
 
 	@Test
-	public void deleteNonExistentProduct() throws Exception {
+	public void deleteNonExistentProduct() throws DBException {
 		assertFalse(productDao.deleteProductById(9));
 	}
 
