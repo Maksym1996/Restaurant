@@ -21,7 +21,7 @@ import util.Util;
  */
 
 @WebServlet("/Pizza Preferita")
-public class BeforeMainServlet extends HttpServlet {
+public class MainPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String CATEGORIES = "categories";
 	private static final String SORT_VALUE = "sortValue";
@@ -29,12 +29,11 @@ public class BeforeMainServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		response.setContentType("text/html;charset=UTF-8");
+
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
 
 		int currentPage = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
-		String[] categories = request.getParameterValues(CATEGORIES) != null
-				? request.getParameterValues(CATEGORIES)
+		String[] categories = request.getParameterValues(CATEGORIES) != null ? request.getParameterValues(CATEGORIES)
 				: new String[] {};
 		String sortValue = request.getParameter(SORT_VALUE) != null ? request.getParameter(SORT_VALUE).toLowerCase()
 				: "id";
