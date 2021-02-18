@@ -265,8 +265,10 @@ public class MySqlProduct implements ProductDao {
 			break;
 		}
 
-		if ("false".equals(desc)) {
+		if (!"true".equals(desc)) {
 			result.append("DESC ");
+		} else {
+			result.append("ASC ");
 		}
 
 		return result.append("LIMIT ? OFFSET ?").toString();
