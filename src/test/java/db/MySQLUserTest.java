@@ -124,11 +124,6 @@ public class MySQLUserTest {
 		assertNull(user.getPhoneNumber());
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void getUserByNullNumberAndNullPassword() throws Exception {
-		userDao.getUser(null, null);
-	}
-
 	@Test(expected = SQLException.class)
 	public void UpdateUserDublicatEmail() throws Exception {
 		User user = userDao.getUser(1);
