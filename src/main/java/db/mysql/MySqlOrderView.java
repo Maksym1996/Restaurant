@@ -147,7 +147,7 @@ public class MySqlOrderView implements OrderViewDao {
 
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
-			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			prep = con.prepareStatement(SET_NEW_ORDER, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
 			prep.setString(k++, model.getStatus().name());
