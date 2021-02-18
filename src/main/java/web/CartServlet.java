@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import consts.ForwardPages;
+import consts.Params;
 import db.dao.OrderViewDao;
 import db.dao.UserDao;
 import db.entity.Product;
@@ -28,7 +30,6 @@ import util.Util;
 @WebServlet("/Cart")
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static final String EMPTY_CART = "EmptyCart.jsp";
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -36,29 +37,29 @@ public class CartServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		RequestDispatcher dispatcher;
 
-		Cart cart = (Cart) session.getAttribute("cart");
+		Cart cart = (Cart) session.getAttribute(Params.CART);
 
 		if (cart == null) {
-			dispatcher = request.getRequestDispatcher(EMPTY_CART);
+			dispatcher = request.getRequestDispatcher(ForwardPages.EMPTY_CART);
 			dispatcher.forward(request, response);
 			return;
 		}
 		List<Product> products = cart.getProducts();
 		if (products.isEmpty()) {
-			dispatcher = request.getRequestDispatcher(EMPTY_CART);
+			dispatcher = request.getRequestDispatcher(ForwardPages.EMPTY_CART);
 			dispatcher.forward(request, response);
 			return;
 		}
 
-		String changeId = request.getParameter("id");
-		int change = "inc".equals(request.getParameter("change")) ? 1
-				: "dec".equals(request.getParameter("change")) ? -1 : 0;
+		String changeId = request.getParameter(Params.ID);
+		int change = Params.INC.equals(request.getParameter(Params.CHANGE)) ? 1
+				: Params.DEC.equals(request.getParameter(Params.CHANGE)) ? -1 : 0;
 
-		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute("count");
+		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute(Params.COUNT);
 
 		if (count == null) {
 			count = new HashMap<>();
-			session.setAttribute("count", count);
+			session.setAttribute(Params.COUNT, count);
 			for (Product p : products) {
 				count.put(p.getId(), 1);
 			}
@@ -77,7 +78,7 @@ public class CartServlet extends HttpServlet {
 		}
 
 		// realize delete product from cart
-		String deleteId = request.getParameter("deleteId");
+		String deleteId = request.getParameter(Params.DELETE_ID);
 		if (deleteId != null) {
 			for (Product p : products) {
 				if (p.getId() == Integer.parseInt(deleteId)) {
@@ -88,8 +89,8 @@ public class CartServlet extends HttpServlet {
 				}
 			}
 			if (products.isEmpty()) {
-				session.removeAttribute("count");
-				dispatcher = request.getRequestDispatcher(EMPTY_CART);
+				session.removeAttribute(Params.COUNT);
+				dispatcher = request.getRequestDispatcher(ForwardPages.EMPTY_CART);
 				dispatcher.forward(request, response);
 				return;
 			}
@@ -104,9 +105,9 @@ public class CartServlet extends HttpServlet {
 			orderSumm += p.getPrice() * count.get(p.getId());
 		}
 
-		dispatcher = request.getRequestDispatcher("Cart.jsp");
-		request.setAttribute("productsList", products);
-		request.setAttribute("orderSumm", orderSumm);
+		dispatcher = request.getRequestDispatcher(ForwardPages.CART_JSP);
+		request.setAttribute(Params.PRODUCTS_LIST, products);
+		request.setAttribute(Params.ORDER_SUMM, orderSumm);
 		dispatcher.forward(request, response);
 
 	}
@@ -186,7 +187,6 @@ public class CartServlet extends HttpServlet {
 				}
 			}
 		}
-		
 
 		// create order
 		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute("orderDao");

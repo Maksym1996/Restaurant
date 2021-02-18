@@ -14,9 +14,15 @@ public class Params {
 	public static final String ROLE = "role";
 	public static final String ORDER_VIEW_LIST = "orderViewList";
 	public static final String ORDERS = "orders";
+	public static final String ORDER_SUMM = "orderSumm";
 	public static final String USER_LIST = "userList";
 	public static final String STATUS = "status";
 	public static final String ID = "id";
+	public static final String COUNT = "count";
+	public static final String CHANGE = "change";
+	public static final String INC = "inc";
+	public static final String DEC = "dec";
+	public static final String DELETE_ID = "deleteId";
 	
 	
 
