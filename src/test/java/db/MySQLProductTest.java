@@ -60,7 +60,7 @@ public class MySQLProductTest {
 
 		Product product = new Product();
 		product.setId(2);
-		product.setName("Маргарита");
+		product.setName("Margarita");
 		product.setPrice(250);
 		product.setDescription("");
 		product.setImageLink("");
@@ -94,7 +94,7 @@ public class MySQLProductTest {
 	public void updateProductDublicateName() throws Exception {
 		Product product = new Product();
 		product.setId(2);
-		product.setName("Гамбургер");
+		product.setName("Gamburger");
 		product.setPrice(250);
 		product.setDescription("");
 		product.setImageLink("");
