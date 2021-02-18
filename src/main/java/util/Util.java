@@ -11,6 +11,7 @@ import db.entity.User;
 public class Util {
 
 	private Util() {
+		throw new IllegalStateException("Utility class");
 	};
 
 	public static int getMaxPages(long itemsCount, long pageSize) {
@@ -70,7 +71,10 @@ public class Util {
 	private static final String SALT = "234jsdflakj";
 	
 	public static String stringToMD5(String password) {
-		String saltedPassword = SALT.concat(password);
+		if(password == null) {
+			return null;
+		}
+		String saltedPassword = password.concat(SALT);
 	    MessageDigest messageDigest = null;
 	    byte[] digest = new byte[0];
 
