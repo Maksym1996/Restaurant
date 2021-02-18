@@ -9,6 +9,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
+import consts.Dao;
 import db.dao.UserDao;
 import db.mysql.MySqlOrderView;
 import db.mysql.MySqlProduct;
@@ -33,9 +34,9 @@ public class ContextListener implements ServletContextListener {
 		OrderViewDao orderDao = new MySqlOrderView(dataSource);
 		
 		ServletContext servletContext = event.getServletContext();
-		servletContext.setAttribute("userDao", userDao);
-		servletContext.setAttribute("productDao", productDao);
-		servletContext.setAttribute("orderDao", orderDao);
+		servletContext.setAttribute(Dao.USER, userDao);
+		servletContext.setAttribute(Dao.PRODUCT, productDao);
+		servletContext.setAttribute(Dao.ORDER_VIEW, orderDao);
 	}
 	
 	private DataSource getDataSource() {
