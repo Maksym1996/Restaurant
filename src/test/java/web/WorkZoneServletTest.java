@@ -2,9 +2,6 @@ package web;
 
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -20,9 +17,7 @@ import consts.Params;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
-import db.entity.OrderView;
 import exception.DBException;
-import provider.OrderPage;
 import util.Status;
 import util.UserRole;
 
