@@ -112,16 +112,21 @@ public class MySQLUserTest {
 		userDao.insertUser(Util.createUser("doctor", "no", "123", "qweryt", "admin"));
 		assertEquals(6,userDao.getUsersForManager().size());
 	}
+	
+	@Test(expected = DBException.class)
+	public void insertDublicatUser() throws Exception {
+		userDao.insertUser(Util.createUser("doctor", "no", "kordonets1996@ukr.net", "0969055386", "admin"));
+	}
 
 	@Test
 	public void getUserByNumberAndPassword() throws Exception {
-		User user = userDao.getUserByEmailAndPass("kordonets1996@ukr.net", "admin");
-		assertNotNull(user);
+		User user = userDao.getUserByNumberAndPass("0969055386", "admin");
+		assertNotNull(user.getEmail());
 	}
 
 	@Test
 	public void getUserByNumberAndInvalidPassword() throws Exception {
-		User user = userDao.getUserByEmailAndPass("kordonets1996@ukr.net", "client");
+		User user = userDao.getUserByNumberAndPass("0969055386", "client");
 		assertNull(user.getPhoneNumber());
 	}
 

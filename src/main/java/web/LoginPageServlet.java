@@ -87,7 +87,7 @@ public class LoginPageServlet extends HttpServlet {
 		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
 		User user = null;
 		try {
-			user = userDao.getUserByEmailAndPass(phoneNumber, password);
+			user = userDao.getUserByNumberAndPass(phoneNumber, password);
 		} catch (Exception e) {
 			// TODO add some logger 03.02.2021
 			throw new IOException();

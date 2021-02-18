@@ -11,7 +11,7 @@ public interface UserDao {
 
 	List<User> getUsersByRegistered(String registered) throws DBException;
 
-	User getUserByEmailAndPass(String email, String password) throws DBException;
+	User getUserByNumberAndPass(String email, String password) throws DBException;
 
 	User getUserById(int id) throws DBException;
 

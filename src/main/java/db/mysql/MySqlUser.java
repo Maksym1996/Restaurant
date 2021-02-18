@@ -120,7 +120,7 @@ public class MySqlUser implements UserDao {
 	}
 
 	@Override
-	public User getUserByEmailAndPass(String phoneNumber, String password) throws DBException {
+	public User getUserByNumberAndPass(String phoneNumber, String password) throws DBException {
 		User model = new User();
 		Connection con = null;
 		PreparedStatement prep = null;
