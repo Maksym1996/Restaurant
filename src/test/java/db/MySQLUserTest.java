@@ -7,6 +7,7 @@ import org.junit.Test;
 import db.dao.UserDao;
 import db.entity.User;
 import db.mysql.MySqlUser;
+import exception.DBException;
 import util.SqlTestUtil;
 import util.Util;
 
@@ -42,7 +43,7 @@ public class MySQLUserTest {
 	@Test
 	public void getAllUserExpectFive() throws Exception {
 		int expected = 5;
-		int actual = userDao.getAllUsers().size();
+		int actual = userDao.getUsersForManager().size();
 		assertEquals(expected, actual);
 	}
 
@@ -50,7 +51,7 @@ public class MySQLUserTest {
 	public void getRegistredUsers() throws Exception {
 		int expected = 5;
 
-		int actual = userDao.getRegisteredUsers("true").size();
+		int actual = userDao.getUsersByRegistered("true").size();
 		assertEquals(expected, actual);
 	}
 
@@ -62,32 +63,32 @@ public class MySQLUserTest {
 		statement.executeUpdate(
 				"INSERT INTO user VALUES(6, 'maxkor@gmail.com', 'Админ', 'Распорядитович', '6bb19089370f5bb5478f7ec1b337f255', '0969055334', 'CLIENT', 'false')");
 
-		int actual = userDao.getRegisteredUsers("false").size();
+		int actual = userDao.getUsersByRegistered("false").size();
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void getUnknownUsers() throws Exception {
 		int expected = 0;
-		int actual = userDao.getRegisteredUsers("Unknown").size();
+		int actual = userDao.getUsersByRegistered("Unknown").size();
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void getUserByPhoneNumberNotNull() throws Exception {
-		User actual = userDao.getUser("0969055386");
+		User actual = userDao.getUserByNumber("0969055386");
 		assertNotNull(actual);
 
 	}
 
 	@Test
 	public void getUserByInvalidNumber() throws Exception {
-		assertNull(userDao.getUser("096905538699").getPhoneNumber());
+		assertNull(userDao.getUserByNumber("096905538699").getPhoneNumber());
 	}
 
 	@Test
 	public void getUserByValidNumberEqualUsers() throws Exception {
-		assertEquals("0969055386", userDao.getUser("0969055386").getPhoneNumber());
+		assertEquals("0969055386", userDao.getUserByNumber("0969055386").getPhoneNumber());
 	}
 
 	@Test
@@ -95,7 +96,7 @@ public class MySQLUserTest {
 		User user = new User();
 		user.setPhoneNumber("0969055386");
 
-		assertTrue(user.equals(userDao.getUser(1)));
+		assertTrue(user.equals(userDao.getUserById(1)));
 	}
 
 	@Test
@@ -103,37 +104,37 @@ public class MySQLUserTest {
 		User user = new User();
 		user.setPhoneNumber("0969055386");
 
-		assertEquals(user.hashCode(), userDao.getUser(1).hashCode());
+		assertEquals(user.hashCode(), userDao.getUserById(1).hashCode());
 	}
 
 	@Test
 	public void insertUser() throws Exception {
 		userDao.insertUser(Util.createUser("doctor", "no", "123", "qweryt", "admin"));
-		assertEquals(6,userDao.getAllUsers().size());
+		assertEquals(6,userDao.getUsersForManager().size());
 	}
 
 	@Test
 	public void getUserByNumberAndPassword() throws Exception {
-		User user = userDao.getUser("kordonets1996@ukr.net", "admin");
+		User user = userDao.getUserByEmailAndPass("kordonets1996@ukr.net", "admin");
 		assertNotNull(user);
 	}
 
 	@Test
 	public void getUserByNumberAndInvalidPassword() throws Exception {
-		User user = userDao.getUser("kordonets1996@ukr.net", "client");
+		User user = userDao.getUserByEmailAndPass("kordonets1996@ukr.net", "client");
 		assertNull(user.getPhoneNumber());
 	}
 
-	@Test(expected = SQLException.class)
+	@Test(expected = DBException.class)
 	public void UpdateUserDublicatEmail() throws Exception {
-		User user = userDao.getUser(1);
+		User user = userDao.getUserById(1);
 		user.setEmail("maxkorodnets@gmail.com");
 		userDao.updateUser(user);
 	}
 
 	@Test
 	public void UpdateUserValid() throws Exception {
-		User user = userDao.getUser(1);
+		User user = userDao.getUserById(1);
 		user.setEmail("maxkordonets@gmail.com");
 		assertTrue(userDao.updateUser(user));
 	}

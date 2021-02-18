@@ -18,7 +18,7 @@ public class ManagerOrderPageProvider implements OrderPageProvider {
 	public OrderPage getOrderPage() {
 		List<OrderView> orderViewList;
 		try {
-			orderViewList = orderDao.getAllOrders();
+			orderViewList = orderDao.getAllOrderViews();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw new DBException(e);

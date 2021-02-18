@@ -50,21 +50,21 @@ public class MySqlOrderViewTest {
 	public void insertOrderView() throws Exception {
 		ProductDao productDao = new MySqlProduct(dataSource);
 		List<Product> products = new ArrayList<>();
-		products.add(productDao.getProduct(1));
-		products.add(productDao.getProduct(2));
+		products.add(productDao.getProductById(1));
+		products.add(productDao.getProductById(2));
 		Map<Integer, Integer> count = new HashMap<>();
 		count.put(1, 2);
 		count.put(2, 1);
 		orderViewDao.insertOrder(Util.createOrder(Status.NEW, "Плеханово", 2, "500"), products, count);
-		assertEquals(6, orderViewDao.getAllOrders().size());
+		assertEquals(6, orderViewDao.getAllOrderViews().size());
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void insertOrderViewNullCount() throws Exception {
 		ProductDao productDao = new MySqlProduct(dataSource);
 		List<Product> products = new ArrayList<>();
-		products.add(productDao.getProduct(1));
-		products.add(productDao.getProduct(2));
+		products.add(productDao.getProductById(1));
+		products.add(productDao.getProductById(2));
 		Map<Integer, Integer> count = new HashMap<>();
 		count.put(1, 2);
 		orderViewDao.insertOrder(Util.createOrder(Status.NEW, "Плеханово", 2, "500"), products, count);
@@ -74,8 +74,8 @@ public class MySqlOrderViewTest {
 	public void insertOrderViewInvaliduserID() throws Exception {
 		ProductDao productDao = new MySqlProduct(dataSource);
 		List<Product> products = new ArrayList<>();
-		products.add(productDao.getProduct(3));
-		products.add(productDao.getProduct(4));
+		products.add(productDao.getProductById(3));
+		products.add(productDao.getProductById(4));
 		Map<Integer, Integer> count = new HashMap<>();
 		count.put(3, 2);
 		count.put(4, 1);
@@ -84,28 +84,28 @@ public class MySqlOrderViewTest {
 
 	@Test
 	public void getStateByOrderIdEqOneStateEqNEW() throws Exception {
-		assertEquals(Status.NEW.toString(), orderViewDao.getStateByOrderId(1));
+		assertEquals(Status.NEW.toString(), orderViewDao.getStatusByOrderId(1));
 	}
 
 	@Test
 	public void getStateByOrderIdEqTenExpSQLException() throws Exception {
-		assertNull(orderViewDao.getStateByOrderId(10));
+		assertNull(orderViewDao.getStatusByOrderId(10));
 	}
 
 	@Test
 	public void getAllOrderViewResFour() throws Exception {
 		// Thread.sleep(1000);
-		assertEquals(4, orderViewDao.getAllOrders().size());
+		assertEquals(4, orderViewDao.getAllOrderViews().size());
 	}
 
 	@Test
 	public void getOrderViewsByUserIdTwoExpectTwo() throws Exception {
-		assertEquals(2, orderViewDao.getOrdersByUserId(2).size());
+		assertEquals(2, orderViewDao.getOrderViewsByUserId(2).size());
 	}
 
 	@Test
 	public void getOrderViewsByInvalidUserIdExpectZero() throws Exception {
-		assertEquals(0, orderViewDao.getOrdersByUserId(10).size());
+		assertEquals(0, orderViewDao.getOrderViewsByUserId(10).size());
 	}
 
 	@Test
@@ -121,21 +121,21 @@ public class MySqlOrderViewTest {
 
 	@Test
 	public void UpdateOrderStatusCOOKEDExpTrue() throws Exception {
-		assertTrue(orderViewDao.updateOrderState(1, Status.COOKED.toString()));
+		assertTrue(orderViewDao.updateStatusById(1, Status.COOKED.toString()));
 	}
 
 	@Test
 	public void UpdateOrderStatusCOOKEDInvalidOrderIDExpFalse() throws Exception {
-		assertFalse(orderViewDao.updateOrderState(10, Status.COOKED.toString()));
+		assertFalse(orderViewDao.updateStatusById(10, Status.COOKED.toString()));
 	}
 
 	@Test
 	public void UpdateOrderStatusREJECTEDExpTrue() throws Exception {
-		assertTrue(orderViewDao.updateOrderState(2, Status.REJECTED.toString()));
+		assertTrue(orderViewDao.updateStatusById(2, Status.REJECTED.toString()));
 	}
 
 	@Test
 	public void UpdateOrderStatusPERFORMEDExpTrue() throws Exception {
-		assertTrue(orderViewDao.updateOrderState(2, Status.PERFORMED.toString()));
+		assertTrue(orderViewDao.updateStatusById(2, Status.PERFORMED.toString()));
 	}
 }

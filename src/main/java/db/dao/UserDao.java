@@ -3,21 +3,22 @@ package db.dao;
 import java.util.List;
 
 import db.entity.User;
+import exception.DBException;
 
 public interface UserDao {
 
-	List<User> getAllUsers() throws Exception;
-	
-	List<User> getRegisteredUsers(String registered) throws Exception;
+	List<User> getUsersForManager() throws DBException;
 
-	int insertUser(User model) throws Exception;
- 
-	User getUser(String email, String password) throws Exception;
-	
-	User getUser(int id) throws Exception;
+	List<User> getUsersByRegistered(String registered) throws DBException;
 
-	boolean updateUser(User model) throws Exception;
+	User getUserByEmailAndPass(String email, String password) throws DBException;
 
-	User getUser(String phoneNumber) throws Exception;
+	User getUserById(int id) throws DBException;
+
+	User getUserByNumber(String phoneNumber) throws DBException;
+
+	int insertUser(User model) throws DBException;
+
+	boolean updateUser(User model) throws DBException;
 
 }

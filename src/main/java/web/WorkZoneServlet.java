@@ -65,8 +65,8 @@ public class WorkZoneServlet extends HttpServlet {
 		for (OrderView o : orderViewList) {
 			try {
 				orders.add(o);
-				productList.add(productDao.getProduct(o.getProductId()));
-				userList.add(userDao.getUser(o.getUserId()));
+				productList.add(productDao.getProductById(o.getProductId()));
+				userList.add(userDao.getUserById(o.getUserId()));
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -101,13 +101,13 @@ public class WorkZoneServlet extends HttpServlet {
 
 		Status resultStatus;
 		try {
-			Status currentStatus = Status.valueOf(orderDao.getStateByOrderId(orderId));
+			Status currentStatus = Status.valueOf(orderDao.getStatusByOrderId(orderId));
 			if (!requestStatus.equals(Status.REJECTED) && requestStatus.equals(currentStatus)) {
 				resultStatus = currentStatus.getNextStatuses().get(0);
 			} else {
 				resultStatus = currentStatus.getNextStatuses().get(1);
 			}
-			orderDao.updateOrderState(orderId, resultStatus.name());
+			orderDao.updateStatusById(orderId, resultStatus.name());
 		} catch (Exception e) {
 			System.err.println("GetState:" + e);
 			response.sendError(500);

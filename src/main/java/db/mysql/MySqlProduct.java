@@ -13,12 +13,13 @@ import javax.sql.DataSource;
 
 import db.dao.ProductDao;
 import db.entity.Product;
+import exception.DBException;
 import util.Category;
 
 public class MySqlProduct implements ProductDao {
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUES (DEFAULT, ?, ?, ?, ?, ?)";
-	private static final String GET_PRODUCT = "SELECT * FROM product WHERE id = ?";
-	private static final String UPDATE_PRODUCT = "UPDATE product SET name=?,"
+	private static final String SELECT_PRODUCT_BY_ID = "SELECT * FROM product WHERE id = ?";
+	private static final String UPDATE_PRODUCT_BY_ID = "UPDATE product SET name=?,"
 			+ "price=?, description=?, image_link=?, category=?  WHERE id = ?";
 	private static final String DELETE_PRODUCT_BY_ID = "DELETE FROM product WHERE id = ?";
 
@@ -30,7 +31,7 @@ public class MySqlProduct implements ProductDao {
 
 	@Override
 	public List<Product> getProductByCategoriesOnPage(String[] categories, String sortValue, String desc, int skip,
-			int limit) throws Exception {
+			int limit) throws DBException {
 		List<Product> productByCategories = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -57,7 +58,7 @@ public class MySqlProduct implements ProductDao {
 		} catch (SQLException e) {
 			// TODO add some logger 03.02.2021
 			System.err.println(e);
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
@@ -66,7 +67,7 @@ public class MySqlProduct implements ProductDao {
 	}
 
 	@Override
-	public long getProductCount(String[] categories) throws Exception {
+	public long getProductCount(String[] categories) throws DBException {
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -88,7 +89,7 @@ public class MySqlProduct implements ProductDao {
 		} catch (SQLException e) {
 			// TODO add some logger 03.02.2021
 			System.err.println("Get Count: " + e);
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
@@ -96,7 +97,7 @@ public class MySqlProduct implements ProductDao {
 	}
 
 	@Override
-	public int insertProduct(Product model) throws Exception {
+	public int insertProduct(Product model) throws DBException {
 		int productId = 0;
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -125,7 +126,7 @@ public class MySqlProduct implements ProductDao {
 			rollback(con);
 			System.err.println(e);
 			// TODO add some logger 03.02.2021
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
@@ -133,14 +134,14 @@ public class MySqlProduct implements ProductDao {
 	}
 
 	@Override
-	public Product getProduct(int id) throws Exception {
+	public Product getProductById(int id) throws DBException {
 		Product model = new Product();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
 		try {
 			con = dataSource.getConnection();
-			prep = con.prepareStatement(GET_PRODUCT);
+			prep = con.prepareStatement(SELECT_PRODUCT_BY_ID);
 			prep.setInt(1, id);
 			rs = prep.executeQuery();
 
@@ -150,7 +151,7 @@ public class MySqlProduct implements ProductDao {
 		} catch (SQLException e) {
 			System.err.println(e);
 			// TODO add some logger 03.02.2021
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
@@ -159,7 +160,7 @@ public class MySqlProduct implements ProductDao {
 	}
 
 	@Override
-	public boolean updateProduct(Product model) throws Exception {
+	public boolean updateProduct(Product model) throws DBException {
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -168,7 +169,7 @@ public class MySqlProduct implements ProductDao {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
 			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-			prep = con.prepareStatement(UPDATE_PRODUCT);
+			prep = con.prepareStatement(UPDATE_PRODUCT_BY_ID);
 			int k = 1;
 			prep.setString(k++, model.getName());
 			prep.setInt(k++, model.getPrice());
@@ -185,7 +186,7 @@ public class MySqlProduct implements ProductDao {
 			rollback(con);
 			System.err.println(e);
 			// TODO add some logger 03.02.2021
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep);
 		}
@@ -207,7 +208,7 @@ public class MySqlProduct implements ProductDao {
 		return product;
 	}
 
-	private void close(AutoCloseable... autoCloseables) throws Exception {
+	private void close(AutoCloseable... autoCloseables) throws DBException {
 		for (AutoCloseable ac : autoCloseables) {
 			if (ac != null) {
 				try {
@@ -215,19 +216,19 @@ public class MySqlProduct implements ProductDao {
 				} catch (Exception e) {
 					System.err.println(e);
 					// TODO add some logger 03.02.2021
-					throw new Exception();
+					throw new DBException(e);
 				}
 			}
 		}
 	}
 
-	private void rollback(Connection connect) throws SQLException {
+	private void rollback(Connection connect) throws DBException {
 		try {
 			connect.rollback();
 		} catch (SQLException e) {
 			// TODO add some logger 03.02.2021
 			System.err.println(e);
-			throw new SQLException();
+			throw new DBException(e);
 		}
 	}
 
@@ -276,7 +277,7 @@ public class MySqlProduct implements ProductDao {
 	}
 
 	@Override
-	public boolean deleteProduct(int id) throws Exception {
+	public boolean deleteProductById(int id) throws DBException {
 		boolean result = false;
 
 		Connection con = null;
@@ -298,7 +299,7 @@ public class MySqlProduct implements ProductDao {
 			// TODO add some logger 14.02.2021
 			rollback(con);
 			System.err.println(e);
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}

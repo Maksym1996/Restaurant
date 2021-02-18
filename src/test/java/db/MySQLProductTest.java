@@ -56,7 +56,7 @@ public class MySQLProductTest {
 
 	@Test
 	public void getProduct() throws Exception {
-		Product productFromDB = productDao.getProduct(2);
+		Product productFromDB = productDao.getProductById(2);
 
 		Product product = new Product();
 		product.setId(2);
@@ -73,7 +73,7 @@ public class MySQLProductTest {
 
 	@Test
 	public void getNullProduct() throws Exception {
-		Product productFromDB = productDao.getProduct(0);
+		Product productFromDB = productDao.getProductById(0);
 		assertNull(productFromDB.getCategory());
 	}
 
@@ -155,12 +155,12 @@ public class MySQLProductTest {
 
 	@Test
 	public void deleteProduct() throws Exception {
-		assertTrue(productDao.deleteProduct(2));
+		assertTrue(productDao.deleteProductById(2));
 	}
 
 	@Test
 	public void deleteNonExistentProduct() throws Exception {
-		assertFalse(productDao.deleteProduct(9));
+		assertFalse(productDao.deleteProductById(9));
 	}
 
 }

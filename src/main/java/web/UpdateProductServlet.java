@@ -43,7 +43,7 @@ public class UpdateProductServlet extends HttpServlet {
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
 		Product testProduct;
 		try {
-			testProduct = productDao.getProduct(Integer.parseInt(productId));
+			testProduct = productDao.getProductById(Integer.parseInt(productId));
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			System.err.println(e);
@@ -108,7 +108,7 @@ public class UpdateProductServlet extends HttpServlet {
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
 		Product product;
 		try {
-			product = productDao.getProduct(productId);
+			product = productDao.getProductById(productId);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			System.err.println("Get Product: " + e1);

@@ -14,32 +14,32 @@ import javax.sql.DataSource;
 import db.dao.OrderViewDao;
 import db.entity.OrderView;
 import db.entity.Product;
+import exception.DBException;
 import util.Status;
 
 public class MySqlOrderView implements OrderViewDao {
-	private static final String GET_ALL_ORDERS = "SELECT * FROM orderView WHERE state IN ('NEW', 'COOKED', 'DELIVERED_AND_PAID', 'PERFORMED', 'REJECTED') ORDER BY id DESC";
-	private static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ? ORDER BY id DESC";
-	private static final String GET_ORDERS_BY_STATUS = "SELECT * FROM orderView WHERE state = ? ORDER BY id DESC";
-	private static final String SET_NEW_ORDER = "INSERT INTO orders(id, order_date, state, address, user_id, sum) VALUES(DEFAULT, current_timestamp(), ?, ?, ?, ?)";
-	private static final String SET_PRODUCT_FOR_ORDER = "INSERT INTO order_has_product(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
-	private static final String GET_STATUS_BY_ORDER_ID = "SELECT state FROM orders WHERE id = ?";
-
+	private static final String SELECT_ORDER_VIEWS_FOR_MANAGER = "SELECT * FROM orderView WHERE state IN ('NEW', 'COOKED', 'DELIVERED_AND_PAID', 'PERFORMED', 'REJECTED') ORDER BY id DESC";
+	private static final String SELECT_ORDER_VIEWS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ? ORDER BY id DESC";
+	private static final String SELECT_ORDER_VIEWS_BY_STATUS = "SELECT * FROM orderView WHERE state = ? ORDER BY id DESC";
+	private static final String SELECT_STATUS_BY_ORDER_ID = "SELECT state FROM orders WHERE id = ?";
+	private static final String INSERT_ORDER = "INSERT INTO orders(id, order_date, state, address, user_id, sum) VALUES(DEFAULT, current_timestamp(), ?, ?, ?, ?)";
+	private static final String INSERT_PRODUCT_FOR_ORDER = "INSERT INTO order_has_product(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
 
 	private final DataSource dataSource;
 
 	public MySqlOrderView(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-	
+
 	@Override
-	public String getStateByOrderId(int orderId) throws Exception {
+	public String getStatusByOrderId(int orderId) throws DBException {
 		String state = null;
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
 		try {
 			con = dataSource.getConnection();
-			prep = con.prepareStatement(GET_STATUS_BY_ORDER_ID);
+			prep = con.prepareStatement(SELECT_STATUS_BY_ORDER_ID);
 			prep.setInt(1, orderId);
 			rs = prep.executeQuery();
 			if (rs.next()) {
@@ -49,18 +49,16 @@ public class MySqlOrderView implements OrderViewDao {
 		} catch (SQLException e) {
 			// TODO some logger
 			System.err.println("GET order:" + e);
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
 
 		return state;
 	}
-	
-	
 
 	@Override
-	public List<OrderView> getAllOrders() throws Exception {
+	public List<OrderView> getAllOrderViews() throws DBException {
 		List<OrderView> allOrders = new ArrayList<>();
 		Connection con = null;
 		Statement stat = null;
@@ -68,7 +66,7 @@ public class MySqlOrderView implements OrderViewDao {
 		try {
 			con = dataSource.getConnection();
 			stat = con.createStatement();
-			rs = stat.executeQuery(GET_ALL_ORDERS);
+			rs = stat.executeQuery(SELECT_ORDER_VIEWS_FOR_MANAGER);
 			while (rs.next()) {
 				allOrders.add(extractionOrder(rs));
 			}
@@ -76,7 +74,7 @@ public class MySqlOrderView implements OrderViewDao {
 		} catch (SQLException e) {
 			// TODO some logger
 			System.err.println(e.getMessage());
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, stat, rs);
 		}
@@ -85,14 +83,14 @@ public class MySqlOrderView implements OrderViewDao {
 	}
 
 	@Override
-	public List<OrderView> getOrdersByUserId(int userId) throws Exception {
+	public List<OrderView> getOrderViewsByUserId(int userId) throws DBException {
 		List<OrderView> allOrders = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
 		try {
 			con = dataSource.getConnection();
-			prep = con.prepareStatement(GET_ORDERS_BY_USER_ID);
+			prep = con.prepareStatement(SELECT_ORDER_VIEWS_BY_USER_ID);
 			prep.setInt(1, userId);
 			rs = prep.executeQuery();
 			while (rs.next()) {
@@ -102,7 +100,7 @@ public class MySqlOrderView implements OrderViewDao {
 		} catch (SQLException e) {
 			// TODO some logger
 			System.err.println(e.getMessage());
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
@@ -111,14 +109,14 @@ public class MySqlOrderView implements OrderViewDao {
 	}
 
 	@Override
-	public List<OrderView> getOrdersByStatus(String status) throws Exception {
+	public List<OrderView> getOrdersByStatus(String status) throws DBException {
 		List<OrderView> allOrders = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
 		try {
 			con = dataSource.getConnection();
-			prep = con.prepareStatement(GET_ORDERS_BY_STATUS);
+			prep = con.prepareStatement(SELECT_ORDER_VIEWS_BY_STATUS);
 			prep.setString(1, status);
 			rs = prep.executeQuery();
 			while (rs.next()) {
@@ -128,7 +126,7 @@ public class MySqlOrderView implements OrderViewDao {
 		} catch (SQLException e) {
 			// TODO some logger
 			System.err.println(e.getMessage());
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
@@ -137,7 +135,7 @@ public class MySqlOrderView implements OrderViewDao {
 	}
 
 	@Override
-	public int insertOrder(OrderView model, List<Product> products, Map<Integer, Integer> count) throws Exception {
+	public int insertOrder(OrderView model, List<Product> products, Map<Integer, Integer> count) throws DBException {
 		Connection con = null;
 
 		PreparedStatement prep = null;
@@ -148,7 +146,7 @@ public class MySqlOrderView implements OrderViewDao {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
 			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-			prep = con.prepareStatement(SET_NEW_ORDER, Statement.RETURN_GENERATED_KEYS);
+			prep = con.prepareStatement(INSERT_ORDER, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
 			prep.setString(k++, model.getStatus().name());
 			prep.setString(k++, model.getAddress());
@@ -163,7 +161,7 @@ public class MySqlOrderView implements OrderViewDao {
 				}
 			}
 			for (Product p : products) {
-				try (PreparedStatement setProdPrepSt = con.prepareStatement(SET_PRODUCT_FOR_ORDER)) {
+				try (PreparedStatement setProdPrepSt = con.prepareStatement(INSERT_PRODUCT_FOR_ORDER)) {
 					k = 1;
 					setProdPrepSt.setInt(k++, orderId);
 					setProdPrepSt.setInt(k++, p.getId());
@@ -178,7 +176,7 @@ public class MySqlOrderView implements OrderViewDao {
 			System.err.println(e.getMessage());
 			rollback(con);
 			// TODO some logger
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
@@ -186,7 +184,7 @@ public class MySqlOrderView implements OrderViewDao {
 	}
 
 	@Override
-	public boolean updateOrderState(int id, String status) throws Exception {
+	public boolean updateStatusById(int id, String status) throws DBException {
 		String setState = "UPDATE orders SET state=? WHERE id = ?";
 		boolean result = false;
 		Connection con = null;
@@ -198,7 +196,7 @@ public class MySqlOrderView implements OrderViewDao {
 			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			if ("REJECTED".equals(status) || "PERFORMED".equals(status)) {
 				setState = "UPDATE orders SET state=?, closing_date = current_timestamp() WHERE id = ? ";
-			} 
+			}
 			prep = con.prepareStatement(setState);
 			prep.setString(1, status);
 			prep.setInt(2, id);
@@ -210,7 +208,7 @@ public class MySqlOrderView implements OrderViewDao {
 			rollback(con);
 			System.err.println(e.getMessage());
 			// TODO add some logger 03.02.2021
-			throw new SQLException();
+			throw new DBException(e);
 		} finally {
 			close(con, prep);
 		}
@@ -232,32 +230,30 @@ public class MySqlOrderView implements OrderViewDao {
 		order.setOrderId(rs.getInt(k++));
 		order.setProductId(rs.getInt(k++));
 		order.setCount(rs.getInt(k++));
-		order.setPrice(rs.getInt(k++));
+		order.setPrice(rs.getInt(k));
 
 		return order;
 	}
 
-	private void close(AutoCloseable... autoCloseables) throws Exception {
+	private void close(AutoCloseable... autoCloseables) throws DBException {
 		for (AutoCloseable ac : autoCloseables) {
 			if (ac != null) {
 				try {
 					ac.close();
 				} catch (Exception e) {
-					System.err.println(e.getMessage());
 					// TODO add some logger 03.02.2021
-					throw new Exception();
+					throw new DBException(e);
 				}
 			}
 		}
 	}
 
-	private void rollback(Connection connect) throws SQLException {
+	private void rollback(Connection connect) throws DBException {
 		try {
 			connect.rollback();
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
 			// TODO add some logger 03.02.2021
-			throw new SQLException();
+			throw new DBException(e);
 		}
 	}
 

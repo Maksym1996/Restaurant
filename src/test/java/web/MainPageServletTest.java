@@ -93,7 +93,7 @@ public class MainPageServletTest {
 		when(session.getAttribute(Params.CART)).thenReturn(cart);
 		when(request.getParameter(Params.PRODUCT_ID)).thenReturn("1");
 
-		when(productDao.getProduct(1)).thenThrow(new SQLException());
+		when(productDao.getProductById(1)).thenThrow(new SQLException());
 
 		servlet.doGet(request, response);
 

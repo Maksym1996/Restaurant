@@ -80,7 +80,7 @@ public class MainPageServlet extends HttpServlet {
 			}
 			if (!contain) {
 				try {
-					cartProducts.add(productDao.getProduct(productId));
+					cartProducts.add(productDao.getProductById(productId));
 				} catch (Exception e) {
 					response.sendError(500);
 					return;

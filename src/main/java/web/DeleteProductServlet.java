@@ -48,7 +48,7 @@ public class DeleteProductServlet extends HttpServlet {
 		int productId; 
 		try {
 			productId = Integer.parseInt(stringProductId);
-			testProduct = productDao.getProduct(productId);
+			testProduct = productDao.getProductById(productId);
 		} catch (NumberFormatException e) {
 			// TODO logger 14.02.2021
 			throw new IOException();
@@ -62,7 +62,7 @@ public class DeleteProductServlet extends HttpServlet {
 		}
 		boolean test = false;
 		try {
-			test = productDao.deleteProduct(productId);
+			test = productDao.deleteProductById(productId);
 		} catch (Exception e) {
 			// TODO logger 14.02.2021
 			throw new IOException();

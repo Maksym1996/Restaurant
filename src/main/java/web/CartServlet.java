@@ -165,7 +165,7 @@ public class CartServlet extends HttpServlet {
 		} else {
 			UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
 			try {
-				for (User u : userDao.getAllUsers()) {
+				for (User u : userDao.getUsersForManager()) {
 					if (u.getPhoneNumber().equals(phoneNumber)) {
 						userId = u.getId();
 					}

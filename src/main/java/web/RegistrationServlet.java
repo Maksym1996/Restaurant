@@ -53,7 +53,7 @@ public class RegistrationServlet extends HttpServlet {
 
 		List<User> allRegistredUsers = null;
 		try {
-			allRegistredUsers = userDao.getRegisteredUsers("true");
+			allRegistredUsers = userDao.getUsersByRegistered("true");
 		} catch (Exception e1) {
 			// TODO add some logger 03.02.2021
 			throw new IOException();
@@ -111,9 +111,9 @@ public class RegistrationServlet extends HttpServlet {
 		User model = Util.createUser(firstName, lastName, email, phoneNumber, password);
 		User user = null;
 		try {
-			user = userDao.getUser(phoneNumber);
+			user = userDao.getUserByNumber(phoneNumber);
 			if (user == null) {
-				user = userDao.getUser(userDao.insertUser(model));
+				user = userDao.getUserById(userDao.insertUser(model));
 			} else {
 				userDao.updateUser(model);
 			}

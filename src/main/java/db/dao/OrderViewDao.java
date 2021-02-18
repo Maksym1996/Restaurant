@@ -5,18 +5,19 @@ import java.util.Map;
 
 import db.entity.OrderView;
 import db.entity.Product;
+import exception.DBException;
 
 public interface OrderViewDao {
 	
-	String getStateByOrderId(int orderId) throws Exception;
+	String getStatusByOrderId(int orderId) throws DBException;
 	
-	List<OrderView> getAllOrders() throws Exception;
+	List<OrderView> getAllOrderViews() throws DBException;
 	
-	List<OrderView> getOrdersByUserId(int userId) throws Exception;
+	List<OrderView> getOrderViewsByUserId(int userId) throws DBException;
 	
-	List<OrderView> getOrdersByStatus(String status) throws Exception;
+	List<OrderView> getOrdersByStatus(String status) throws DBException;
 	
-	int insertOrder(OrderView model, List<Product> products, Map<Integer, Integer> count) throws Exception;
+	int insertOrder(OrderView model, List<Product> products, Map<Integer, Integer> count) throws DBException;
 
-	boolean updateOrderState(int id, String status) throws Exception;
+	boolean updateStatusById(int id, String status) throws DBException;
 }

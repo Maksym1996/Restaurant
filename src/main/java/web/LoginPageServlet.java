@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import consts.Dao;
+import consts.Params;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
@@ -46,18 +48,18 @@ public class LoginPageServlet extends HttpServlet {
 			forwardPage = "Login page.jsp";
 		} else {
 			User user = (User) session.getAttribute("user");
-			session.setAttribute("role", user.getRole());
-			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
-			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute("orderDao");
+			session.setAttribute(Params.ROLE, user.getRole());
+			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
+			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
 			Set<Product> productList = new HashSet<>();
 			Set<OrderView> orders = new LinkedHashSet<>();
 			List<OrderView> orderViewList = new ArrayList<>();
 			try {
-				orderViewList = orderDao.getOrdersByUserId(user.getId());
+				orderViewList = orderDao.getOrderViewsByUserId(user.getId());
 				for (OrderView o : orderViewList) {
-					orders.add(o);
+				 	orders.add(o);
 					
-					productList.add(productDao.getProduct(o.getProductId()));
+					productList.add(productDao.getProductById(o.getProductId()));
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -85,7 +87,7 @@ public class LoginPageServlet extends HttpServlet {
 		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
 		User user = null;
 		try {
-			user = userDao.getUser(phoneNumber, password);
+			user = userDao.getUserByEmailAndPass(phoneNumber, password);
 		} catch (Exception e) {
 			// TODO add some logger 03.02.2021
 			throw new IOException();
