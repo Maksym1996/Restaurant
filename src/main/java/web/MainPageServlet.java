@@ -2,6 +2,7 @@ package web;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,10 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import consts.Dao;
+import consts.ForwardPages;
+import consts.Params;
 import db.dao.ProductDao;
 import db.entity.Product;
 import util.Cart;
 import util.Util;
+import util.Validator;
 
 /**
  * Servlet implementation class BeforeMain
@@ -23,23 +28,22 @@ import util.Util;
 @WebServlet("/Pizza Preferita")
 public class MainPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String CATEGORIES = "categories";
-	private static final String SORT_VALUE = "sortValue";
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
+		Map<String, String> params = Validator.mainPageValidator(request.getParameter(Params.PAGE),
+				request.getParameter(Params.PRODUCT_ID), request.getParameter(Params.SORT_VALUE));
 
-		int currentPage = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
-		String[] categories = request.getParameterValues(CATEGORIES) != null ? request.getParameterValues(CATEGORIES)
+		int currentPage = Integer.parseInt(params.get(Params.PAGE));
+		int productId = Integer.parseInt(params.get(Params.PRODUCT_ID));
+		String[] categories = request.getParameterValues(Params.CATEGORIES) != null
+				? request.getParameterValues(Params.CATEGORIES)
 				: new String[] {};
-		String sortValue = request.getParameter(SORT_VALUE) != null ? request.getParameter(SORT_VALUE).toLowerCase()
-				: "id";
-		String asc = request.getParameter("asc");
-		int productId = request.getParameter("productId") != null ? Integer.parseInt(request.getParameter("productId"))
-				: 0;
+		String sortValue = request.getParameter(Params.SORT_VALUE);
+		String asc = request.getParameter(Params.ASC);
 
 		int limitProductOnPage = 2;
 		List<Product> partListProducts = null;
@@ -49,27 +53,20 @@ public class MainPageServlet extends HttpServlet {
 
 		try {
 			productsCount = productDao.getProductCount(categories);
-		} catch (Exception e) {
-			// TODO add some logger 03.02.2021
-			System.err.println(e);
-			response.sendError(500);
-			return;
-		}
-		try {
 			partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, asc, skip,
 					limitProductOnPage);
 		} catch (Exception e) {
 			System.err.println(e);
 			// TODO add some logger 03.02.2021
-			throw new IOException();
+			response.sendError(500);return;
 		}
 
 		HttpSession session = request.getSession(true);
-		Cart cart = (Cart) session.getAttribute("cart");
+		Cart cart = (Cart) session.getAttribute(Params.CART);
 
 		if (cart == null) {
 			cart = new Cart();
-			session.setAttribute("cart", cart);
+			session.setAttribute(Params.CART, cart);
 		}
 
 		List<Product> cartProducts = cart.getProducts();
@@ -85,19 +82,19 @@ public class MainPageServlet extends HttpServlet {
 				try {
 					cartProducts.add(productDao.getProduct(productId));
 				} catch (Exception e) {
-					// TODO add some logger 04.02.2021
-					throw new IOException();
+					response.sendError(500);
+					return;
 				}
 			}
 		}
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Pizza Preferita.jsp");
-		request.setAttribute("productsList", partListProducts);
-		request.setAttribute("maxPages", Util.getMaxPages(productsCount, limitProductOnPage));
-		request.setAttribute("currentPage", currentPage);
-		request.setAttribute(CATEGORIES, categories);
-		request.setAttribute(SORT_VALUE, sortValue);
-		request.setAttribute("asc", asc);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(ForwardPages.PIZZA_PREFERITA);
+		request.setAttribute(Params.PRODUCTS_LIST, partListProducts);
+		request.setAttribute(Params.MAX_PAGES, Util.getMaxPages(productsCount, limitProductOnPage));
+		request.setAttribute(Params.CURRENT_PAGE, currentPage);
+		request.setAttribute(Params.CATEGORIES, categories);
+		request.setAttribute(Params.SORT_VALUE, sortValue);
+		request.setAttribute(Params.ASC, asc);
 
 		dispatcher.forward(request, response);
 
