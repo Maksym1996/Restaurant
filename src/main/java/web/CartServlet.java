@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import consts.ForwardPages;
-import consts.Params;
+import consts.Page;
+import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.UserDao;
 import db.entity.Product;
@@ -37,29 +37,29 @@ public class CartServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		RequestDispatcher dispatcher;
 
-		Cart cart = (Cart) session.getAttribute(Params.CART);
+		Cart cart = (Cart) session.getAttribute(Param.CART);
 
 		if (cart == null) {
-			dispatcher = request.getRequestDispatcher(ForwardPages.EMPTY_CART);
+			dispatcher = request.getRequestDispatcher(Page.EMPTY_CART);
 			dispatcher.forward(request, response);
 			return;
 		}
 		List<Product> products = cart.getProducts();
 		if (products.isEmpty()) {
-			dispatcher = request.getRequestDispatcher(ForwardPages.EMPTY_CART);
+			dispatcher = request.getRequestDispatcher(Page.EMPTY_CART);
 			dispatcher.forward(request, response);
 			return;
 		}
 
-		String changeId = request.getParameter(Params.ID);
-		int change = Params.INC.equals(request.getParameter(Params.CHANGE)) ? 1
-				: Params.DEC.equals(request.getParameter(Params.CHANGE)) ? -1 : 0;
+		String changeId = request.getParameter(Param.ID);
+		int change = Param.INC.equals(request.getParameter(Param.CHANGE)) ? 1
+				: Param.DEC.equals(request.getParameter(Param.CHANGE)) ? -1 : 0;
 
-		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute(Params.COUNT);
+		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute(Param.COUNT);
 
 		if (count == null) {
 			count = new HashMap<>();
-			session.setAttribute(Params.COUNT, count);
+			session.setAttribute(Param.COUNT, count);
 			for (Product p : products) {
 				count.put(p.getId(), 1);
 			}
@@ -78,7 +78,7 @@ public class CartServlet extends HttpServlet {
 		}
 
 		// realize delete product from cart
-		String deleteId = request.getParameter(Params.DELETE_ID);
+		String deleteId = request.getParameter(Param.DELETE_ID);
 		if (deleteId != null) {
 			for (Product p : products) {
 				if (p.getId() == Integer.parseInt(deleteId)) {
@@ -89,8 +89,8 @@ public class CartServlet extends HttpServlet {
 				}
 			}
 			if (products.isEmpty()) {
-				session.removeAttribute(Params.COUNT);
-				dispatcher = request.getRequestDispatcher(ForwardPages.EMPTY_CART);
+				session.removeAttribute(Param.COUNT);
+				dispatcher = request.getRequestDispatcher(Page.EMPTY_CART);
 				dispatcher.forward(request, response);
 				return;
 			}
@@ -105,9 +105,9 @@ public class CartServlet extends HttpServlet {
 			orderSumm += p.getPrice() * count.get(p.getId());
 		}
 
-		dispatcher = request.getRequestDispatcher(ForwardPages.CART_JSP);
-		request.setAttribute(Params.PRODUCTS_LIST, products);
-		request.setAttribute(Params.ORDER_SUMM, orderSumm);
+		dispatcher = request.getRequestDispatcher(Page.CART_JSP);
+		request.setAttribute(Param.PRODUCTS_LIST, products);
+		request.setAttribute(Param.ORDER_SUMM, orderSumm);
 		dispatcher.forward(request, response);
 
 	}

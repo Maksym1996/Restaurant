@@ -2,7 +2,7 @@ package provider;
 
 import java.util.List;
 
-import consts.ForwardPages;
+import consts.Page;
 import db.dao.OrderViewDao;
 import db.entity.OrderView;
 import exception.ProviderException;
@@ -25,7 +25,7 @@ public class CookOrderPageProvider implements OrderPageProvider {
 			// TODO Auto-generated catch block
 			throw new ProviderException(e);
 		}
-		return new OrderPage(orderViewList, ForwardPages.COOK_JSP);
+		return new OrderPage(orderViewList, Page.COOK_JSP);
 	}
 
 }
