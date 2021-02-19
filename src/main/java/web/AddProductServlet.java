@@ -1,9 +1,7 @@
 package web;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,9 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import consts.Dao;
+import consts.Page;
+import consts.Param;
 import db.dao.ProductDao;
+import db.entity.Product;
+import exception.DBException;
 import util.Category;
 import util.Util;
+import util.Validator;
 
 /**
  * Servlet implementation class AddProductServlet
@@ -26,65 +30,45 @@ public class AddProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("AddProduct.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.ADD_PRODUCT_JSP);
 		dispatcher.forward(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String pricePattern = "[1-9]{1}[0-9]*";
 
-		String name = request.getParameter("name");
-		String price = request.getParameter("price");
-		String description = request.getParameter("description");
-		String imageLink = request.getParameter("imageLink");
-		String category = request.getParameter("category");
+		String name = request.getParameter(Param.NAME);
+		String price = request.getParameter(Param.PRICE);
+		String description = request.getParameter(Param.DESCRIPTION);
+		String imageLink = request.getParameter(Param.IMAGE_LINK);
+		String category = request.getParameter(Param.CATEGORY);
 
-		Map<String, String> errors = new HashMap<>();
-		
-		if (name == null || name.isEmpty()) {
-			errors.put("name", "Enter product name");
-		}
+		Map<String, String> errors = Validator.productValidator(name, price, description, imageLink, category);
 
-		if (price == null || price.isEmpty()) {
-			errors.put("price", "Enter product price");
-		}else if(!Pattern.matches(pricePattern, price)) {
-			errors.put("pricePattern", "The price must be an integer and not start from zero");
-		}
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 
-		if (description == null || description.isEmpty()) {
-			errors.put("description", "Enter product description");
+		try {
+			Product testProductByName = productDao.getProductByName(name);
+
+			if (testProductByName != null) {
+				errors.put(Param.NAME, "The name '" + name + "' is taken");
+			}
+		} catch (DBException e) {
+			response.sendError(500);
+			return;
 		}
 
-		if (imageLink == null || imageLink.isEmpty()) {
-			errors.put("imageLink", "Enter product imageLink");
-		}
-		
-		if (category == null || category.isEmpty()) {
-			errors.put("category", "Enter product category");
-		}
-		Category categoryObject = Category.byTitle(category);
-		if(categoryObject == null) {
-			errors.put("category", "The '"+ category + "' is not a valid category");
-		}
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("AddProduct.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.ADD_PRODUCT_JSP);
 			request.setAttribute("errors", errors);
 			dispatcher.forward(request, response);
 			return;
 		}
-		
-		
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute("productDao");
-		
+
 		try {
-			productDao.insertProduct(Util.createProduct(name, Integer.parseInt(price), description, imageLink, categoryObject, 0));
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			System.err.println(e);
-			response.sendError(500);
-			return;
+			productDao.insertProduct(Util.createProduct(name, Integer.parseInt(price), description, imageLink,
+					Category.valueOf(category), 0));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.err.println(e);
@@ -92,7 +76,6 @@ public class AddProductServlet extends HttpServlet {
 			return;
 		}
 
-		response.sendRedirect("Pizza Preferita");
+		response.sendRedirect(Page.PIZZA_PREFERITA);
 	}
-
 }

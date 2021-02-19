@@ -1,10 +1,8 @@
 package web;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,9 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import consts.Dao;
+import consts.Page;
+import consts.Param;
 import db.dao.UserDao;
 import db.entity.User;
 import util.Util;
+import util.Validator;
 
 /**
  * Servlet implementation class Registrarion
@@ -28,7 +30,7 @@ public class RegistrationServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Registration.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.REGISTRATION_JSP);
 		dispatcher.forward(request, response);
 
 	}
@@ -36,74 +38,40 @@ public class RegistrationServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String emailRegex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
-		String phoneNumberRegex = "[0][0-9]{9}";
-		String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\\w\\s]).{8,}";
 
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
-		String email = request.getParameter("email");
-		String phoneNumber = request.getParameter("phoneNumber");
-		String password = request.getParameter("password");
-		String confirmPassword = request.getParameter("confirmPassword");
+		String firstName = request.getParameter(Param.FIRST_NAME);
+		String lastName = request.getParameter(Param.LAST_NAME);
+		String email = request.getParameter(Param.EMAIL);
+		String phoneNumber = request.getParameter(Param.PHONE_NUMBER);
+		String password = request.getParameter(Param.PASSWORD);
+		String confirmPassword = request.getParameter(Param.CONFIRM_PASSWORD);
 
-		Map<String, String> errors = new HashMap<>();
+		Map<String, String> errors = Validator.registrationValidator(firstName, lastName, email, phoneNumber, password,
+				confirmPassword);
 
-		UserDao userDao = (UserDao) request.getServletContext().getAttribute("userDao");
+		UserDao userDao = (UserDao) request.getServletContext().getAttribute(Dao.USER);
 
 		List<User> allRegistredUsers = null;
 		try {
 			allRegistredUsers = userDao.getUsersByRegistered("true");
 		} catch (Exception e1) {
 			// TODO add some logger 03.02.2021
-			throw new IOException();
+			response.sendError(500);
+			return;
 		}
 
 		for (User user : allRegistredUsers) {
 			if (user.getEmail().equals(email)) {
-				errors.put("emailOrigin", "An account with such email already exists!");
+				errors.put(Param.EMAIL, "An account with such email already exists!");
 			}
 			if (user.getPhoneNumber().equals(phoneNumber)) {
-				errors.put("phoneNumberOrigin", "An account with such phone number already exist!");
+				errors.put(Param.PHONE_NUMBER, "An account with such phone number already exist!");
 			}
-		}
-
-		if (firstName == null || firstName.isEmpty()) {
-			errors.put("firstName", "Provide your first name");
-		}
-		if (lastName == null || lastName.isEmpty()) {
-			errors.put("lastName", "Provide your last name");
-		}
-		if (email == null || email.isEmpty()) {
-			errors.put("email", "Provide your email");
-		}
-
-		if (phoneNumber == null || phoneNumber.isEmpty()) {
-			errors.put("phoneNumber", "Provide your first name");
-		}
-		if (password == null || password.isEmpty()) {
-			errors.put("password", "Provide your password");
-		} else if (!password.equals(confirmPassword)) {
-			errors.put("confirmPasswordSame", "The passwords you entered are different");
-		}
-		if (confirmPassword == null || confirmPassword.isEmpty()) {
-			errors.put("confirmPassword", "Confirm password");
-		}
-
-		if (!Pattern.matches(emailRegex, email)) {
-			errors.put("emailPattern", "The entered email is incorrect");
-		}
-		if (!Pattern.matches(phoneNumberRegex, phoneNumber)) {
-			errors.put("phoneNumberPattern", "The entered phone number is incorrect");
-		}
-		if (!Pattern.matches(passwordRegex, password)) {
-			errors.put("passwordPattern",
-					"The password must consist of at least 8 characters, at least one digit, one uppercase and lowercase letters of the Latin alphabet and one special character");
 		}
 
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Registration.jsp");
-			request.setAttribute("errors", errors);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.REGISTRATION_JSP);
+			request.setAttribute(Param.ERRORS, errors);
 			dispatcher.forward(request, response);
 			return;
 		}
@@ -117,9 +85,6 @@ public class RegistrationServlet extends HttpServlet {
 			} else {
 				userDao.updateUser(model);
 			}
-			
-			
-
 		} catch (Exception e) {
 			// TODO add some logger 03.02.2021
 			System.err.println(e);
@@ -128,9 +93,7 @@ public class RegistrationServlet extends HttpServlet {
 		}
 
 		HttpSession session = request.getSession(true);
-		session.setAttribute("user", user);
-		response.sendRedirect("Pizza Preferita");
-
+		session.setAttribute(Param.USER, user);
+		response.sendRedirect(Page.PIZZA_PREFERITA);
 	}
-
 }

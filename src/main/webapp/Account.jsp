@@ -105,7 +105,7 @@
 					<c:if test="${orderView.id == order.id }">
 
 						<div class="row productList">
-							<c:forEach var="product" items="${productList}">
+							<c:forEach var="product" items="${productsList}">
 								<c:if test="${product.id == orderView.productId}">
 									<div class="col-sm-4">
 										<c:out value="${product.name}" />

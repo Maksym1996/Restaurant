@@ -34,18 +34,10 @@ public class NoJSPFilter implements Filter {
 			if (!(request instanceof HttpServletRequest && response instanceof HttpServletResponse)) {
 				throw new ServletException("non-HTTP request or response");
 			}
-			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-			HttpSession session = httpServletRequest.getSession(true);
-			if (session == null || session.getAttribute("user") == null) {
-				httpServletResponse.sendError(401);
-				return;
-			} else {
-				httpServletResponse.sendError(403);
-				return;
-			}
-
+			httpServletResponse.sendError(404);
+			return;
 		}
 		chain.doFilter(request, response);
 	}

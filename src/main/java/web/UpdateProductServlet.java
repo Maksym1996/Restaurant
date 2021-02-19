@@ -39,22 +39,18 @@ public class UpdateProductServlet extends HttpServlet {
 		}
 
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
-		Product testProduct;
+		Product product;
 		try {
-			testProduct = productDao.getProductById(Integer.parseInt(productId));
+			product = productDao.getProductById(Integer.parseInt(productId));
 		} catch (DBException e) {
 			// TODO Auto-generated catch block
 			System.err.println(e);
 			response.sendError(500);
 			return;
 		}
-		if (testProduct == null) {
-			response.sendError(416);
-			return;
-		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP);
-		request.setAttribute(Param.PRODUCT, testProduct);
+		request.setAttribute(Param.PRODUCT, product);
 		dispatcher.forward(request, response);
 
 	}
@@ -72,13 +68,18 @@ public class UpdateProductServlet extends HttpServlet {
 
 		Map<String, String> errors = Validator.productValidator(name, price, description, imageLink, category);
 
+		if (!Validator.intValidator(id)) {
+			response.sendError(415);
+			return;
+		}
+
 		int productId = Integer.parseInt(id);
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 		try {
 			Product testProductById = productDao.getProductById(productId);
 			Product testProductByName = productDao.getProductByName(name);
 
-			if (testProductById == null || !Validator.intValidator(id)) {
+			if (testProductById == null) {
 				response.sendError(416);
 				return;
 			} else if (testProductByName != null) {
@@ -91,7 +92,7 @@ public class UpdateProductServlet extends HttpServlet {
 		}
 
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.ADD_PRODUCT_JSP);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP);
 			request.setAttribute(Param.ERRORS, errors);
 			dispatcher.forward(request, response);
 			return;

@@ -10,7 +10,7 @@
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><f:message key="registration"/></title>
+<title><f:message key="registration" /></title>
 <!--    Bootstap START-->
 
 <link
@@ -47,14 +47,15 @@
 	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<main>
-	<!-- Registration form -->
+		<!-- Registration form -->
 		<form class="form" action="Registration" method="post"
 			style="margin-left: 3rem">
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputFirstName" class="form-label"><f:message key="firstName"/><span
-						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputFirstName" name="firstName" required>
+					<label for="inputFirstName" class="form-label"><f:message
+							key="firstName" /><span style="color: red">*</span></label> <input
+						type="text" class="form-control" id="inputFirstName"
+						name="firstName" required>
 					<c:if
 						test="${not empty errors and errors.containsKey('firstName')}">
 						<p style="color: red">
@@ -71,9 +72,10 @@
 			</div>
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputLastName" class="form-label"><f:message key="lastName"/><span
-						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputLastName" name="lastName" required>
+					<label for="inputLastName" class="form-label"><f:message
+							key="lastName" /><span style="color: red">*</span></label> <input
+						type="text" class="form-control" id="inputLastName"
+						name="lastName" required>
 					<c:if test="${not empty errors and errors.containsKey('lastName')}">
 						<p style="color: red">
 							<c:out value="${errors.lastName}" />
@@ -89,25 +91,12 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputEmail" class="form-label"><f:message key="email"/>
-						<span style="color: red">*</span>
-					</label> <input type="email" class="form-control" id="inputEmail"
-						name="email">
+					<label for="inputEmail" class="form-label"><f:message
+							key="email" /> <span style="color: red">*</span> </label> <input
+						type="email" class="form-control" id="inputEmail" name="email">
 					<c:if test="${not empty errors and errors.containsKey('email')}">
 						<p style="color: red">
 							<c:out value="${errors.email}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('emailOrigin')}">
-						<p style="color: red">
-							<c:out value="${errors.emailOrigin}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('emailPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.emailPattern}" />
 						</p>
 					</c:if>
 				</div>
@@ -122,29 +111,16 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputPhone" class="form-label"><f:message key="number"/><span style="color: red">*</span>
-					</label> <input type="tel" class="form-control" id="inputPhone"
-						name="phoneNumber" required>
+					<label for="inputPhone" class="form-label"><f:message
+							key="number" /><span style="color: red">*</span> </label> <input
+						type="tel" class="form-control" id="inputPhone" name="phoneNumber"
+						required>
 					<c:if
 						test="${not empty errors and errors.containsKey('phoneNumber')}">
 						<p style="color: red">
 							<c:out value="${errors.phoneNumber}" />
 						</p>
 					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('phoneNumberOrigin')}">
-						<p style="color: red">
-							<c:out value="${errors.phoneNumberOrigin}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('phoneNumberPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.phoneNumberPattern}" />
-						</p>
-					</c:if>
-
-
 				</div>
 				<button type="button" style="color: red" class="btn btn-link "
 					onclick="document.getElementById('inputPhone').value = ''">
@@ -155,18 +131,13 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputPassword" class="form-label"><f:message key="password"/><span
-						style="color: red">*</span></label> <input type="password"
-						class="form-control" id="inputPassword" name="password" required>
+					<label for="inputPassword" class="form-label"><f:message
+							key="password" /><span style="color: red">*</span></label> <input
+						type="password" class="form-control" id="inputPassword"
+						name="password" required>
 					<c:if test="${not empty errors and errors.containsKey('password')}">
 						<p style="color: red">
 							<c:out value="${errors.password}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('passwordPattern')}">
-						<p style="color: red">
-							<c:out value="${errors.passwordPattern}" />
 						</p>
 					</c:if>
 				</div>
@@ -178,19 +149,14 @@
 			<div class="row row-cols-auto">
 
 				<div class="col-md-6">
-					<label for="inputConfirm" class="form-label"><f:message key="repeatePassword"/><span style="color: red">*</span>
-					</label> <input type="password" class="form-control" id="inputConfirm"
+					<label for="inputConfirm" class="form-label"><f:message
+							key="repeatePassword" /><span style="color: red">*</span> </label> <input
+						type="password" class="form-control" id="inputConfirm"
 						name="confirmPassword" required>
 					<c:if
 						test="${not empty errors and errors.containsKey('confirmPassword')}">
 						<p style="color: red">
 							<c:out value="${errors.confirmPassword}" />
-						</p>
-					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('confirmPasswordSame')}">
-						<p style="color: red">
-							<c:out value="${errors.confirmPasswordSame}" />
 						</p>
 					</c:if>
 				</div>
@@ -202,7 +168,9 @@
 
 
 			<br>
-			<button type="submit" class="btn btn-light"><f:message key="registered"/></button>
+			<button type="submit" class="btn btn-light">
+				<f:message key="registered" />
+			</button>
 		</form>
 
 	</main>

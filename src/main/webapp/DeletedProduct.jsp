@@ -48,7 +48,7 @@
 	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<div class="errorBody">
-		<f:message key="Delelted.body"/>
+		<f:message key="Deleted.body"/>
 	</div>
 	
 	<c:import url="/WEB-INF/resources/footer.jspf" />

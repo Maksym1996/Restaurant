@@ -10,7 +10,7 @@
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><f:message key="LoginPage.title"/></title>
+<title><f:message key="LoginPage.title" /></title>
 <!--    Bootstap START-->
 
 <link
@@ -50,25 +50,48 @@
 			<span class="col-sm-4"></span>
 			<div class="col-sm-4">
 				<form action="Login page" method="post">
-					<p class="formLabel"><f:message key="autorize"/></p>
+					<p class="formLabel">
+						<f:message key="autorize" />
+					</p>
 					<!-- Email input -->
 					<div class="form-floating">
 						<input type="tel" class="form-control" id="inputTel"
-							 name="phoneNumber" required> <label
-							for="inputTel"><f:message key="number"/></label>
+							name="phoneNumber" required> <label for="inputTel"><f:message
+								key="number" /></label>
+						<c:if
+							test="${not empty errors and errors.containsKey('phoneNumber')}">
+							<p style="color: red">
+								<c:out value="${errors.phoneNumber}" />
+							</p>
+						</c:if>
 					</div>
 
 					<!-- Password input -->
 					<div class="form-floating">
 						<input type="password" class="form-control" id="inputPassword"
 							name="password" placeholder="" required> <label
-							for="inputPassword"><f:message key="password"/></label>
+							for="inputPassword"><f:message key="password" /></label>
+						<c:if
+							test="${not empty errors and errors.containsKey('password')}">
+							<p style="color: red">
+								<c:out value="${errors.password}" />
+							</p>
+						</c:if>
 					</div>
-					<div class="d-grid gap-2"></div>
+					<div class="d-grid gap-2">
+						<c:if
+							test="${not empty errors and errors.containsKey('noUser')}">
+							<p style="color: red">
+								<c:out value="${errors.noUser}" />
+							</p>
+						</c:if>
+					</div>
 					<br>
 					<!-- Submit button -->
 					<div class="d-grid gap-2">
-						<button type="submit" class="btn btn-light btn-block"><f:message key="logIn"/></button>
+						<button type="submit" class="btn btn-light btn-block">
+							<f:message key="logIn" />
+						</button>
 					</div>
 				</form>
 				<br>
@@ -76,8 +99,11 @@
 				<!-- Form for registration -->
 				<form class="d-grid gap-2 d-md-flex justify-content-md-end"
 					action="Registration" method="get">
-					<span class="formLabel" style="font-size: 1.5em"><f:message key="LoginPage.field"/></span>
-					<button type="submit" class="btn btn-success btn-block"><f:message key="registered"/></button>
+					<span class="formLabel" style="font-size: 1.5em"><f:message
+							key="LoginPage.field" /></span>
+					<button type="submit" class="btn btn-success btn-block">
+						<f:message key="registered" />
+					</button>
 				</form>
 			</div>
 			<span class="col-sm-0"></span>

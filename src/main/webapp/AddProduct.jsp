@@ -78,12 +78,6 @@
 							<c:out value="${errors.price}" />
 						</p>
 					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('pricePattern')}">
-						<p style="color: red">
-							<c:out value="${errors.pricePattern}" />
-						</p>
-					</c:if>
 				</div>
 
 				<button type="button" style="color: red" class="btn btn-link "
