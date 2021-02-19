@@ -13,15 +13,16 @@ import javax.sql.DataSource;
 import db.dao.UserDao;
 import db.entity.User;
 import exception.DBException;
+import util.UserRole;
 import util.Util;
 
 public class MySqlUser implements UserDao {
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
 	private static final String SELECT_USERS_FOR_REGISTERED = "SELECT * FROM user WHERE registered = ?";
-	private static final String INSERT_USER = "INSERT INTO user VALUES (DEFAULT,?,?,?,?,?, DEFAULT, ?)";
 	private static final String SELECT_USER_BY_NUMBER_AND_PASS = "SELECT * FROM user WHERE phone_number = ? AND password = ?";
 	private static final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
 	private static final String SELECT_USER_BY_NUMBER = "SELECT * FROM user WHERE phone_number = ?";
+	private static final String INSERT_USER = "INSERT INTO user VALUES (DEFAULT,?,?,?,?,?, DEFAULT, ?)";
 	private static final String UPDATE_USER_BY_NUMBER = "UPDATE user SET first_name=?, last_name=?, password = ?, registered=?, email = ? WHERE phone_number = ?";
 
 	private final DataSource dataSource;
@@ -70,7 +71,7 @@ public class MySqlUser implements UserDao {
 				registredUser.add(extraction(rs));
 			}
 
-		} catch (SQLException e) { 
+		} catch (SQLException e) {
 			// TODO some logger
 
 			throw new DBException(e);
@@ -215,7 +216,7 @@ public class MySqlUser implements UserDao {
 		user.setLastName(rs.getString(k++));
 		user.setPassword(rs.getString(k++));
 		user.setPhoneNumber(rs.getString(k++));
-		user.setRole(rs.getString(k++));
+		user.setRole(UserRole.valueOf(rs.getString(k++)));
 		user.setRegistered(rs.getString(k));
 
 		return user;
@@ -234,7 +235,7 @@ public class MySqlUser implements UserDao {
 		}
 	}
 
-	private void rollback(Connection connect) throws DBException{
+	private void rollback(Connection connect) throws DBException {
 		try {
 			connect.rollback();
 		} catch (SQLException e) {
