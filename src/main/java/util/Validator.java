@@ -153,7 +153,7 @@ public class Validator {
 	}
 
 	public static int intValidatorReturnInt(String id) {
-		if (null == id || id.isEmpty() || Pattern.matches(INTEGER_PATTERN, id)) {
+		if (null == id || id.isEmpty() || !Pattern.matches(INTEGER_PATTERN, id)) {
 			return 0;
 		}
 		return Integer.parseInt(id);
