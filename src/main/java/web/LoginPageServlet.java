@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import consts.Dao;
-import consts.Params;
+import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
@@ -48,7 +48,7 @@ public class LoginPageServlet extends HttpServlet {
 			forwardPage = "Login page.jsp";
 		} else {
 			User user = (User) session.getAttribute("user");
-			session.setAttribute(Params.ROLE, user.getRole());
+			session.setAttribute(Param.ROLE, user.getRole());
 			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
 			Set<Product> productList = new HashSet<>();

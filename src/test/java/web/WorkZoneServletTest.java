@@ -12,8 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import consts.Dao;
-import consts.ForwardPages;
-import consts.Params;
+import consts.Page;
+import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
@@ -23,7 +23,7 @@ import util.UserRole;
 
 public class WorkZoneServletTest {
 
-	private static final String path = ForwardPages.WORK_ZONE;
+	private static final String path = Page.WORK_ZONE;
 
 	private WorkZoneServlet servlet;
 	private HttpServletRequest request;
@@ -55,7 +55,7 @@ public class WorkZoneServletTest {
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Params.ROLE)).thenReturn(UserRole.ADMIN.name());
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.ADMIN.name());
 
 		servlet.doGet(request, response);
 
@@ -65,48 +65,48 @@ public class WorkZoneServletTest {
 	@Test
 	public void callDoGetThenReturnManagerPage() throws Exception {
 
-		when(request.getRequestDispatcher(ForwardPages.MANAGER_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Page.MANAGER_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Params.ROLE)).thenReturn(UserRole.MANAGER.name());
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.MANAGER.name());
 
 		servlet.doGet(request, response);
-		verify(request, times(1)).getRequestDispatcher(ForwardPages.MANAGER_JSP);
+		verify(request, times(1)).getRequestDispatcher(Page.MANAGER_JSP);
 		verify(dispatcher).forward(request, response);
 	}
 
 	@Test
 	public void callDoGetThenReturnDeliveryPage() throws Exception {
 
-		when(request.getRequestDispatcher(ForwardPages.DELIVERY_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Page.DELIVERY_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Params.ROLE)).thenReturn(UserRole.DELIVERY.name());
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.DELIVERY.name());
 
 		servlet.doGet(request, response);
-		verify(request, times(1)).getRequestDispatcher(ForwardPages.DELIVERY_JSP);
+		verify(request, times(1)).getRequestDispatcher(Page.DELIVERY_JSP);
 		verify(dispatcher).forward(request, response);
 	}
 
 	@Test
 	public void callDoGetThenReturnCookPage() throws Exception {
 
-		when(request.getRequestDispatcher(ForwardPages.COOK_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Page.COOK_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Params.ROLE)).thenReturn(UserRole.COOK.name());
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.COOK.name());
 
 		servlet.doGet(request, response);
-		verify(request, times(1)).getRequestDispatcher(ForwardPages.COOK_JSP);
+		verify(request, times(1)).getRequestDispatcher(Page.COOK_JSP);
 		verify(dispatcher).forward(request, response);	
 	}
 	

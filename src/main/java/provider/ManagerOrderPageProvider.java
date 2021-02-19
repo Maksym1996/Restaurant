@@ -2,7 +2,7 @@ package provider;
 
 import java.util.List;
 
-import consts.ForwardPages;
+import consts.Page;
 import db.dao.OrderViewDao;
 import db.entity.OrderView;
 import exception.ProviderException;
@@ -24,7 +24,7 @@ public class ManagerOrderPageProvider implements OrderPageProvider {
 			// TODO Auto-generated catch block
 			throw new ProviderException(e);
 		}
-		return new OrderPage(orderViewList, ForwardPages.MANAGER_JSP);
+		return new OrderPage(orderViewList, Page.MANAGER_JSP);
 	}
 
 }

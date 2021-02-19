@@ -1,6 +1,6 @@
 package consts;
 
-public class Params {
+public class Param {
 	
 	public static final String PAGE = "page";
 	public static final String CATEGORIES = "categories";
@@ -17,12 +17,23 @@ public class Params {
 	public static final String ORDER_SUMM = "orderSumm";
 	public static final String USER_LIST = "userList";
 	public static final String STATUS = "status";
-	public static final String ID = "id";
 	public static final String COUNT = "count";
 	public static final String CHANGE = "change";
 	public static final String INC = "inc";
 	public static final String DEC = "dec";
 	public static final String DELETE_ID = "deleteId";
+	
+	public static final String ID = "id";
+	public static final String NAME = "name";
+	public static final String PRICE = "price";
+	public static final String DESCRIPTION = "description";
+	public static final String IMAGE_LINK = "imageLink";
+	public static final String CATEGORY = "category";
+	
+	public static final String ERRORS = "errors";
+	
+	public static final String PRODUCT = "product";
+	
 	
 	
 
@@ -30,7 +41,7 @@ public class Params {
 	
 	
 	
-	private Params() {
+	private Param() {
 	    throw new IllegalStateException("Utility class");
 	  }
 

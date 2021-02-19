@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import consts.Dao;
-import consts.ForwardPages;
-import consts.Params;
+import consts.Page;
+import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
@@ -42,7 +42,7 @@ public class WorkZoneServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession(true);
-		String role = (String) session.getAttribute(Params.ROLE);
+		String role = (String) session.getAttribute(Param.ROLE);
 
 		OrderViewDao orderViewDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
 		OrderPageProviderContainer pageProvidersContainer = new OrderPageProviderContainer(orderViewDao);
@@ -76,10 +76,10 @@ public class WorkZoneServlet extends HttpServlet {
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
-		request.setAttribute(Params.ORDER_VIEW_LIST, orderViewList);
-		request.setAttribute(Params.PRODUCTS_LIST, productList);
-		request.setAttribute(Params.USER_LIST, userList);
-		request.setAttribute(Params.ORDERS, orders);
+		request.setAttribute(Param.ORDER_VIEW_LIST, orderViewList);
+		request.setAttribute(Param.PRODUCTS_LIST, productList);
+		request.setAttribute(Param.USER_LIST, userList);
+		request.setAttribute(Param.ORDERS, orders);
 		dispatcher.forward(request, response);
 
 	}
@@ -90,8 +90,8 @@ public class WorkZoneServlet extends HttpServlet {
 
 		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
 
-		String status = request.getParameter(Params.STATUS);
-		String id = request.getParameter(Params.ID);
+		String status = request.getParameter(Param.STATUS);
+		String id = request.getParameter(Param.ID);
 		if (!Validator.workZoneValidator(status, id)) {
 			response.sendError(400);
 			return;
@@ -114,6 +114,6 @@ public class WorkZoneServlet extends HttpServlet {
 			response.sendError(500);
 			return;
 		}
-		response.sendRedirect(ForwardPages.WORK_ZONE);
+		response.sendRedirect(Page.WORK_ZONE);
 	}
 }

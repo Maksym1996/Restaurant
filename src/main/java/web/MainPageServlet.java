@@ -13,10 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import consts.Dao;
-import consts.ForwardPages;
-import consts.Params;
+import consts.Page;
+import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
+import exception.DBException;
 import util.Cart;
 import util.Util;
 import util.Validator;
@@ -34,16 +35,16 @@ public class MainPageServlet extends HttpServlet {
 			throws IOException, ServletException {
 
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
-		Map<String, String> params = Validator.mainPageValidator(request.getParameter(Params.PAGE),
-				request.getParameter(Params.PRODUCT_ID), request.getParameter(Params.SORT_VALUE));
+		Map<String, String> params = Validator.mainPageValidator(request.getParameter(Param.PAGE),
+				request.getParameter(Param.PRODUCT_ID), request.getParameter(Param.SORT_VALUE));
 
-		int currentPage = Integer.parseInt(params.get(Params.PAGE));
-		int productId = Integer.parseInt(params.get(Params.PRODUCT_ID));
-		String[] categories = request.getParameterValues(Params.CATEGORIES) != null
-				? request.getParameterValues(Params.CATEGORIES)
+		int currentPage = Integer.parseInt(params.get(Param.PAGE));
+		int productId = Integer.parseInt(params.get(Param.PRODUCT_ID));
+		String[] categories = request.getParameterValues(Param.CATEGORIES) != null
+				? request.getParameterValues(Param.CATEGORIES)
 				: new String[] {};
-		String sortValue = request.getParameter(Params.SORT_VALUE);
-		String asc = request.getParameter(Params.ASC);
+		String sortValue = params.get(Param.SORT_VALUE);
+		String asc = request.getParameter(Param.ASC);
 
 		int limitProductOnPage = 2;
 		List<Product> partListProducts = null;
@@ -55,18 +56,19 @@ public class MainPageServlet extends HttpServlet {
 			productsCount = productDao.getProductCount(categories);
 			partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, asc, skip,
 					limitProductOnPage);
-		} catch (Exception e) {
+		} catch (DBException e) {
 			System.err.println(e);
 			// TODO add some logger 03.02.2021
-			response.sendError(500);return;
+			response.sendError(500);
+			return;
 		}
 
 		HttpSession session = request.getSession(true);
-		Cart cart = (Cart) session.getAttribute(Params.CART);
+		Cart cart = (Cart) session.getAttribute(Param.CART);
 
 		if (cart == null) {
 			cart = new Cart();
-			session.setAttribute(Params.CART, cart);
+			session.setAttribute(Param.CART, cart);
 		}
 
 		List<Product> cartProducts = cart.getProducts();
@@ -77,7 +79,7 @@ public class MainPageServlet extends HttpServlet {
 					contain = true;
 					break;
 				}
-			}
+			} 
 			if (!contain) {
 				try {
 					cartProducts.add(productDao.getProductById(productId));
@@ -88,13 +90,13 @@ public class MainPageServlet extends HttpServlet {
 			}
 		}
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(ForwardPages.PIZZA_PREFERITA);
-		request.setAttribute(Params.PRODUCTS_LIST, partListProducts);
-		request.setAttribute(Params.MAX_PAGES, Util.getMaxPages(productsCount, limitProductOnPage));
-		request.setAttribute(Params.CURRENT_PAGE, currentPage);
-		request.setAttribute(Params.CATEGORIES, categories);
-		request.setAttribute(Params.SORT_VALUE, sortValue);
-		request.setAttribute(Params.ASC, asc);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.PIZZA_PREFERITA_JSP);
+		request.setAttribute(Param.PRODUCTS_LIST, partListProducts);
+		request.setAttribute(Param.MAX_PAGES, Util.getMaxPages(productsCount, limitProductOnPage));
+		request.setAttribute(Param.CURRENT_PAGE, currentPage);
+		request.setAttribute(Param.CATEGORIES, categories);
+		request.setAttribute(Param.SORT_VALUE, sortValue);
+		request.setAttribute(Param.ASC, asc);
 
 		dispatcher.forward(request, response);
 
