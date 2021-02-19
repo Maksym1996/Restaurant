@@ -10,7 +10,7 @@
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><f:message key="EditionProduct"/></title>
+<title><f:message key="EditionProduct" /></title>
 <!--    Bootstap START-->
 
 <link
@@ -52,16 +52,15 @@
 			style="margin-left: 3rem">
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputName" class="form-label"><f:message key="name"/><span
-						style="color: red">*</span></label> <input type="text"
-						class="form-control" id="inputName" name="name"
+					<label for="inputName" class="form-label"><f:message
+							key="name" /><span style="color: red">*</span></label> <input
+						type="text" class="form-control" id="inputName" name="name"
 						value="${product.name}" required>
 					<c:if test="${not empty errors and errors.containsKey('name')}">
 						<p style="color: red">
 							<c:out value="${errors.name}" />
 						</p>
 					</c:if>
-
 				</div>
 
 				<button type="button" style="color: red" class="btn btn-link "
@@ -71,21 +70,16 @@
 			</div>
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputPrice" class="form-label"><f:message key="price"/><span
-						style="color: red">*</span></label> <input type="number"
-						class="form-control" id="inputPrice" name="price"
+					<label for="inputPrice" class="form-label"><f:message
+							key="price" /><span style="color: red">*</span></label> <input
+						type="number" class="form-control" id="inputPrice" name="price"
 						value="${product.price}" required>
 					<c:if test="${not empty errors and errors.containsKey('price')}">
 						<p style="color: red">
 							<c:out value="${errors.price}" />
 						</p>
 					</c:if>
-					<c:if
-						test="${not empty errors and errors.containsKey('pricePattern')}">
-						<p style="color: red">
-							<c:out value="${errors.pricePattern}" />
-						</p>
-					</c:if>
+
 				</div>
 
 				<button type="button" style="color: red" class="btn btn-link "
@@ -96,9 +90,9 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputDescription" class="form-label"><f:message key="description"/><span
-						style="color: red">*</span>
-					</label> <input type="text" class="form-control" id="inputDescription"
+					<label for="inputDescription" class="form-label"><f:message
+							key="description" /><span style="color: red">*</span> </label> <input
+						type="text" class="form-control" id="inputDescription"
 						name="description" value="${product.description}" required>
 					<c:if
 						test="${not empty errors and errors.containsKey('description')}">
@@ -118,8 +112,9 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputImageLink" class="form-label"><f:message key="imageLink"/><span style="color: red">*</span>
-					</label> <input type="text" class="form-control" id="inputImageLink"
+					<label for="inputImageLink" class="form-label"><f:message
+							key="imageLink" /><span style="color: red">*</span> </label> <input
+						type="text" class="form-control" id="inputImageLink"
 						name="imageLink" value="${product.imageLink}" required>
 					<c:if
 						test="${not empty errors and errors.containsKey('imageLink')}">
@@ -137,8 +132,8 @@
 
 			<div class="row row-cols-auto">
 				<div class="col-md-6">
-					<label for="inputCategory1" class="form-label"><f:message key="category"/>:<span
-						style="color: red">*</span></label>
+					<label for="inputCategory1" class="form-label"><f:message
+							key="category" />:<span style="color: red">*</span></label>
 					<p>
 						<c:if test="${product.category.toString() == 'Pizza'}">
 							<input type="radio" id="inputCategory1" name="category"
@@ -148,7 +143,7 @@
 							<input type="radio" id="inputCategory1" name="category"
 								value="Pizza">
 						</c:if>
-						<label for="inputCategory1"><f:message key="pizza"/></label>
+						<label for="inputCategory1"><f:message key="pizza" /></label>
 					</p>
 					<p>
 						<c:if test="${product.category.toString() == 'Burger'}">
@@ -159,7 +154,7 @@
 							<input type="radio" id="inputCategory2" name="category"
 								value="Burger">
 						</c:if>
-						<label for="inputCategory2"><f:message key="burger"/></label>
+						<label for="inputCategory2"><f:message key="burger" /></label>
 					</p>
 					<p>
 
@@ -171,7 +166,7 @@
 							<input type="radio" id="inputCategory3" name="category"
 								value="Drinks">
 						</c:if>
-						<label for="inputCategory3"><f:message key="drinks"/></label>
+						<label for="inputCategory3"><f:message key="drinks" /></label>
 					</p>
 					<c:if test="${not empty errors and errors.containsKey('category')}">
 						<p style="color: red">
@@ -181,24 +176,10 @@
 				</div>
 
 			</div>
-			<br>
-			<c:if test="${not empty errors and errors.containsKey('id')}">
-				<p style="color: red">
-					<c:out value="${errors.id}" />
-				</p>
-			</c:if>
-			<c:if test="${not empty errors and errors.containsKey('idPattern')}">
-				<p style="color: red">
-					<c:out value="${errors.idPattern}" />
-				</p>
-			</c:if>
-			<c:if test="${not empty errors and errors.containsKey('idNone')}">
-				<p style="color: red">
-					<c:out value="${errors.idNone}" />
-				</p>
-			</c:if>
-			<input type="hidden" name="id" value="${product.id}">
-			<button type="submit" class="btn btn-light"><f:message key="EditProduct"/></button>
+			<br> <input type="hidden" name="id" value="${product.id}">
+			<button type="submit" class="btn btn-light">
+				<f:message key="EditProduct" />
+			</button>
 		</form>
 
 	</main>
