@@ -77,7 +77,7 @@ INSERT INTO product VALUES (6, 'Gamburger', 26, 'Булка, котлета', 'h
 	
 INSERT INTO user VALUES (1, 'kordonets1996@ukr.net', 'Максим', 'Кордонец', '36d2e385ff8453a66347bf048f11668c', '0969055386', 'MANAGER', 'true');
 INSERT INTO user VALUES (2, 'Povar@ukr.net', 'Повар', 'Куховаров', '6bb19089370f5bb5478f7ec1b337f255', '0969055385', 'COOK', 'true');
-INSERT INTO user VALUES (3, 'Courier@ukr.net', 'Курьер', 'Доставщиков', '6bb19089370f5bb5478f7ec1b337f255', '0969055384', 'COURIER', 'true');
+INSERT INTO user VALUES (3, 'Courier@ukr.net', 'Курьер', 'Доставщиков', '6bb19089370f5bb5478f7ec1b337f255', '0969055384', 'DELIVERY', 'true');
 INSERT INTO user VALUES (4, 'kordonetsmax@gmail.com', 'Клиент', 'Посетитович', '6bb19089370f5bb5478f7ec1b337f255', '0969055383', 'CLIENT', 'true');
 INSERT INTO user VALUES (5, 'maxkorodnets@gmail.com', 'Админ', 'Распорядитович', '6bb19089370f5bb5478f7ec1b337f255', '0969055382', 'ADMIN', 'true');		
 
