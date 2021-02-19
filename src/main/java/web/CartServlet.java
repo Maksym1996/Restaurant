@@ -57,6 +57,7 @@ public class CartServlet extends HttpServlet {
 		int id = params.get(Param.ID);
 		int change = params.get(Param.CHANGE);
 
+		@SuppressWarnings("unchecked")
 		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute(Param.COUNT);
 
 		if (null == count) {
@@ -83,12 +84,13 @@ public class CartServlet extends HttpServlet {
 				count.remove(p.getId());
 				break;
 			}
-			if (products.isEmpty()) {
-				session.removeAttribute(Param.COUNT);
-				dispatcher = request.getRequestDispatcher(Page.EMPTY_CART);
-				dispatcher.forward(request, response);
-				return;
-			}
+
+		}
+		if (products.isEmpty()) {
+			session.removeAttribute(Param.COUNT);
+			dispatcher = request.getRequestDispatcher(Page.EMPTY_CART);
+			dispatcher.forward(request, response);
+			return;
 		}
 
 		int orderSumm = 0;
@@ -182,7 +184,10 @@ public class CartServlet extends HttpServlet {
 		// create order
 		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
 		List<Product> products = cart.getProducts();
+
+		@SuppressWarnings("unchecked")
 		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute(Param.COUNT);
+
 		try {
 			orderDao.insertOrder(Util.createOrder(Status.NEW, address, userId, summ), products, count);
 		} catch (Exception e) {
