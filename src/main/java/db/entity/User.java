@@ -2,6 +2,8 @@ package db.entity;
 
 import java.io.Serializable;
 
+import util.UserRole;
+
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -625918953319408835L;
@@ -12,7 +14,7 @@ public class User implements Serializable {
 	String lastName;
 	String password;
 	String phoneNumber;
-	String role;
+	UserRole role;
 	String registered;
 
 	public int getId() {
@@ -63,11 +65,11 @@ public class User implements Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getRole() {
+	public UserRole getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(UserRole role) {
 		this.role = role;
 	}
 
@@ -82,7 +84,7 @@ public class User implements Serializable {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", password=" + password + ", phoneNumber=" + phoneNumber + ", role=" + role + "]";
+				+ ", password=" + password + ", phoneNumber=" + phoneNumber + ", role=" + role.name() + "]";
 	}
 
 	@Override
