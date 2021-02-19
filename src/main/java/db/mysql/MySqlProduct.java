@@ -19,6 +19,7 @@ import util.Category;
 public class MySqlProduct implements ProductDao {
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUES (DEFAULT, ?, ?, ?, ?, ?)";
 	private static final String SELECT_PRODUCT_BY_ID = "SELECT * FROM product WHERE id = ?";
+	private static final String SELECT_PRODUCT_BY_NAME = "SELECT * FROM product WHERE name = ?";
 	private static final String UPDATE_PRODUCT_BY_ID = "UPDATE product SET name=?,"
 			+ "price=?, description=?, image_link=?, category=?  WHERE id = ?";
 	private static final String DELETE_PRODUCT_BY_ID = "DELETE FROM product WHERE id = ?";
@@ -143,6 +144,32 @@ public class MySqlProduct implements ProductDao {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_PRODUCT_BY_ID);
 			prep.setInt(1, id);
+			rs = prep.executeQuery();
+
+			if (rs.next()) {
+				model = extractionProduct(rs);
+			}
+		} catch (SQLException e) {
+			System.err.println(e);
+			// TODO add some logger 03.02.2021
+			throw new DBException(e);
+		} finally {
+			close(con, prep, rs);
+		}
+
+		return model;
+	}
+
+	@Override
+	public Product getProductByName(String name) throws DBException {
+		Product model = new Product();
+		Connection con = null;
+		PreparedStatement prep = null;
+		ResultSet rs = null;
+		try {
+			con = dataSource.getConnection();
+			prep = con.prepareStatement(SELECT_PRODUCT_BY_NAME);
+			prep.setString(1, name);
 			rs = prep.executeQuery();
 
 			if (rs.next()) {
