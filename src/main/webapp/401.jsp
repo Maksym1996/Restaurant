@@ -48,7 +48,7 @@
 	<c:import url="/WEB-INF/resources/header.jsp" />
 
 	<div class="errorBody">
-		401<br><f:message key="401.body.1"/><br><f:message key="401.body.1"/>
+		401<br><f:message key="401.body.1"/><br><f:message key="401.body.2"/>
 	</div>
 
 	<c:import url="/WEB-INF/resources/footer.jspf" />
