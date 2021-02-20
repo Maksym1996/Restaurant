@@ -49,7 +49,7 @@ public class LoginPageServlet extends HttpServlet {
 			forwardPage = Page.LOGIN_PAGE_JSP;
 		} else {
 			User user = (User) session.getAttribute(Param.USER);
-			session.setAttribute(Param.ROLE, user.getRole());
+			session.setAttribute(Param.ROLE, user.getRole().name());
 			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
 			Set<Product> productList = new HashSet<>();
@@ -91,7 +91,7 @@ public class LoginPageServlet extends HttpServlet {
 		User user = null;
 		try {
 			user = userDao.getUserByNumberAndPass(phoneNumber, password);
-			if (user == null || user.getId() == 0) {
+			if (user == null || (user.getId() == 0 && user.getRole() == null)) {
 				errors.put(Param.NO_USER, "User with such data does not exist");
 			}
 		} catch (Exception e) {
@@ -109,7 +109,7 @@ public class LoginPageServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(true);
 		session.setAttribute(Param.USER, user);
-		session.setAttribute(Param.ROLE, user.getRole());
+		session.setAttribute(Param.ROLE, user.getRole().name());
 		response.sendRedirect(Page.LOGIN_PAGE);
 	}
 

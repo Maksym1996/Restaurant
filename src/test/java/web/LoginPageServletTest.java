@@ -25,6 +25,7 @@ import db.dao.UserDao;
 import db.entity.OrderView;
 import db.entity.User;
 import exception.DBException;
+import util.UserRole;
 
 public class LoginPageServletTest {
 	private LoginPageServlet servlet;
@@ -82,6 +83,7 @@ public class LoginPageServletTest {
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
+		when(user.getRole()).thenReturn(UserRole.CLIENT);
 
 		servlet.doGet(request, response);
 
@@ -96,6 +98,7 @@ public class LoginPageServletTest {
 
 		when(request.getSession()).thenReturn(session);
 		when(session.getAttribute(Param.USER)).thenReturn(user);
+		when(user.getRole()).thenReturn(UserRole.CLIENT);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
@@ -147,6 +150,7 @@ public class LoginPageServletTest {
 	private User getUser() {
 		User user = new User();
 		user.setId(1);
+		user.setRole(UserRole.CLIENT);
 		return user;
 	}
 }
