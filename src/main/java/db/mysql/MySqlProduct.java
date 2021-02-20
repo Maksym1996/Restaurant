@@ -11,6 +11,12 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
+
+import consts.Comment;
+import consts.Page;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -26,21 +32,28 @@ public class MySqlProduct implements ProductDao {
 
 	private DataSource dataSource;
 
+	static Logger log = LogManager.getLogger(MySqlProduct.class);
+
 	public MySqlProduct(DataSource dataSource) {
 		this.dataSource = dataSource;
+		DOMConfigurator.configure(Page.LOG4J);
 	}
 
 	@Override
 	public List<Product> getProductByCategoriesOnPage(String[] categories, String sortValue, String desc, int skip,
 			int limit) throws DBException {
+		log.info(Comment.BEGIN);
 		List<Product> productByCategories = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
-
+		log.debug("categories = " + categories.length);
+		log.debug("sortValue = " + sortValue);
+		log.debug("desc = " + desc);
+		log.debug("skip = " + skip);
+		log.debug("limit = " + limit);
 		try {
 			con = dataSource.getConnection();
-
 			prep = con.prepareStatement(protectSqlInjection(sortValue, categories, desc));
 
 			int k = 1;
@@ -57,23 +70,24 @@ public class MySqlProduct implements ProductDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO add some logger 03.02.2021
-			System.err.println(e);
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
-
+		log.debug(Comment.RETURN + productByCategories.size());
 		return productByCategories;
 	}
 
 	@Override
 	public long getProductCount(String[] categories) throws DBException {
+		log.info(Comment.BEGIN);
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
 
 		int res = 0;
+		log.debug("categories = " + categories.length);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(countQuery(categories));
@@ -88,21 +102,23 @@ public class MySqlProduct implements ProductDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO add some logger 03.02.2021
-			System.err.println("Get Count: " + e);
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
+		log.debug(Comment.RETURN + res);
 		return res;
 	}
 
 	@Override
 	public int insertProduct(Product model) throws DBException {
+		log.info(Comment.BEGIN);
 		int productId = 0;
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("product = " + model.toString());
 		try {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
@@ -123,23 +139,26 @@ public class MySqlProduct implements ProductDao {
 				}
 			}
 			con.commit();
+			log.debug(Comment.COMMIT);
 		} catch (SQLException e) {
+			log.error(Comment.COMMIT + e.getMessage());
 			rollback(con);
-			System.err.println(e);
-			// TODO add some logger 03.02.2021
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
+		log.debug(Comment.RETURN + productId);
 		return productId;
 	}
 
 	@Override
 	public Product getProductById(int id) throws DBException {
+		log.info(Comment.BEGIN);
 		Product model = new Product();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("id = " + id);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_PRODUCT_BY_ID);
@@ -150,22 +169,23 @@ public class MySqlProduct implements ProductDao {
 				model = extractionProduct(rs);
 			}
 		} catch (SQLException e) {
-			System.err.println(e);
-			// TODO add some logger 03.02.2021
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
-
+		log.debug(Comment.RETURN + model.toString());
 		return model;
 	}
 
 	@Override
 	public Product getProductByName(String name) throws DBException {
+		log.info(Comment.BEGIN);
 		Product model = new Product();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("name " + name);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_PRODUCT_BY_NAME);
@@ -176,22 +196,22 @@ public class MySqlProduct implements ProductDao {
 				model = extractionProduct(rs);
 			}
 		} catch (SQLException e) {
-			System.err.println(e);
-			// TODO add some logger 03.02.2021
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
-
+		log.debug(Comment.RETURN + model.toString());
 		return model;
 	}
 
 	@Override
 	public boolean updateProduct(Product model) throws DBException {
+		log.info(Comment.BEGIN);
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement prep = null;
-
+		log.debug("Product = " + model.toString());
 		try {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
@@ -209,15 +229,15 @@ public class MySqlProduct implements ProductDao {
 				result = true;
 			}
 			con.commit();
+			log.debug(Comment.COMMIT);
 		} catch (SQLException e) {
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			rollback(con);
-			System.err.println(e);
-			// TODO add some logger 03.02.2021
 			throw new DBException(e);
 		} finally {
 			close(con, prep);
 		}
-
+		log.debug(Comment.RETURN + result);
 		return result;
 
 	}
@@ -232,6 +252,7 @@ public class MySqlProduct implements ProductDao {
 		product.setImageLink(rs.getString(k++));
 		product.setCategory(Category.byTitle(rs.getString(k)));
 
+		log.debug(Comment.EXTRACTION + product.toString());
 		return product;
 	}
 
@@ -241,8 +262,7 @@ public class MySqlProduct implements ProductDao {
 				try {
 					ac.close();
 				} catch (Exception e) {
-					System.err.println(e);
-					// TODO add some logger 03.02.2021
+					log.error(Comment.EXCEPTION + e.getMessage());
 					throw new DBException(e);
 				}
 			}
@@ -253,8 +273,7 @@ public class MySqlProduct implements ProductDao {
 		try {
 			connect.rollback();
 		} catch (SQLException e) {
-			// TODO add some logger 03.02.2021
-			System.err.println(e);
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		}
 	}
@@ -305,6 +324,8 @@ public class MySqlProduct implements ProductDao {
 
 	@Override
 	public boolean deleteProductById(int id) throws DBException {
+		log.info(Comment.BEGIN);
+		log.debug("id = " + id);
 		boolean result = false;
 
 		Connection con = null;
@@ -322,15 +343,15 @@ public class MySqlProduct implements ProductDao {
 				result = true;
 			}
 			con.commit();
+			log.debug(Comment.COMMIT);
 		} catch (SQLException e) {
-			// TODO add some logger 14.02.2021
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			rollback(con);
-			System.err.println(e);
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
-
+		log.debug(Comment.RETURN + result);
 		return result;
 
 	}

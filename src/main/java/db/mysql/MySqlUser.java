@@ -10,6 +10,12 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
+
+import consts.Comment;
+import consts.Page;
 import db.dao.UserDao;
 import db.entity.User;
 import exception.DBException;
@@ -27,12 +33,16 @@ public class MySqlUser implements UserDao {
 
 	private final DataSource dataSource;
 
+	static Logger log = LogManager.getLogger(MySqlUser.class);
+
 	public MySqlUser(DataSource dataSource) {
 		this.dataSource = dataSource;
+		DOMConfigurator.configure(Page.LOG4J);
 	}
 
 	@Override
 	public List<User> getUsersForManager() throws DBException {
+		log.info(Comment.BEGIN);
 		List<User> allUser = new ArrayList<>();
 		Connection con = null;
 		Statement stat = null;
@@ -46,48 +56,50 @@ public class MySqlUser implements UserDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO some logger
-
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, stat, rs);
 		}
-
+		log.debug(Comment.RETURN + allUser.size());
 		return allUser;
 	}
 
 	@Override
 	public List<User> getUsersByRegistered(String registered) throws DBException {
-		List<User> registredUser = new ArrayList<>();
+		log.info(Comment.BEGIN);
+		List<User> registeredUser = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("registered = " + registered);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_USERS_FOR_REGISTERED);
 			prep.setString(1, registered);
 			rs = prep.executeQuery();
 			while (rs.next()) {
-				registredUser.add(extraction(rs));
+				registeredUser.add(extraction(rs));
 			}
 
 		} catch (SQLException e) {
-			// TODO some logger
-
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
-
-		return registredUser;
+		log.debug(Comment.RETURN + registeredUser.size());
+		return registeredUser;
 	}
 
 	@Override
 	public int insertUser(User model) throws DBException {
+		log.info(Comment.BEGIN);
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
 		int userId = 0;
+		log.debug("User = " + model.toString());
 		try {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
@@ -109,23 +121,27 @@ public class MySqlUser implements UserDao {
 				}
 			}
 			con.commit();
+			log.debug(Comment.COMMIT);
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			rollback(con);
-			// TODO some logger
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
+		log.debug(Comment.RETURN + userId);
 		return userId;
 	}
 
 	@Override
 	public User getUserByNumberAndPass(String phoneNumber, String password) throws DBException {
+		log.info(Comment.BEGIN);
 		User model = new User();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("Phone Numeber = " + phoneNumber);
+		log.debug("Password = " + password);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_USER_BY_NUMBER_AND_PASS);
@@ -137,21 +153,23 @@ public class MySqlUser implements UserDao {
 				model = extraction(rs);
 			}
 		} catch (SQLException e) {
-			// TODO LOGGER
-			System.err.println(e);
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
+		log.debug(Comment.RETURN + model.toString());
 		return model;
 	}
 
 	@Override
 	public User getUserByNumber(String phoneNumber) throws DBException {
+		log.info(Comment.BEGIN);
 		User model = new User();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("Phone Number = " + phoneNumber);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_USER_BY_NUMBER);
@@ -162,17 +180,18 @@ public class MySqlUser implements UserDao {
 				model = extraction(rs);
 			}
 		} catch (SQLException e) {
-			// TODO LOGGER
-			System.err.println(e);
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
+		log.debug(Comment.RETURN + model.toString());
 		return model;
 	}
 
 	@Override
 	public boolean updateUser(User model) throws DBException {
+		log.info(Comment.BEGIN);
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement prep = null;
@@ -194,20 +213,21 @@ public class MySqlUser implements UserDao {
 				result = true;
 			}
 			con.commit();
+			log.debug(Comment.COMMIT);
 		} catch (SQLException e) {
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			rollback(con);
-			// TODO logger
-			System.err.println(e);
 			throw new DBException(e);
 		} finally {
 			close(con, prep);
 		}
-
+		log.debug(Comment.RETURN + result);
 		return result;
 
 	}
 
 	private User extraction(ResultSet rs) throws SQLException {
+		log.info(Comment.BEGIN);
 		User user = new User();
 		int k = 1;
 		user.setId(rs.getInt(k++));
@@ -228,7 +248,7 @@ public class MySqlUser implements UserDao {
 				try {
 					a.close();
 				} catch (Exception e) {
-					// TODO some logger
+					log.error(Comment.EXCEPTION + e.getMessage());
 					throw new DBException(e);
 				}
 			}
@@ -239,17 +259,19 @@ public class MySqlUser implements UserDao {
 		try {
 			connect.rollback();
 		} catch (SQLException e) {
-			// TODO add some logger 03.02.2021
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		}
 	}
 
 	@Override
 	public User getUserById(int userId) throws DBException {
+		log.info(Comment.BEGIN);
 		User model = new User();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("UserID = " + userId);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_USER_BY_ID);
@@ -260,11 +282,12 @@ public class MySqlUser implements UserDao {
 				model = extraction(rs);
 			}
 		} catch (SQLException e) {
-			// TODO LOGGER
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
+		log.debug(Comment.RETURN + model.toString());
 		return model;
 	}
 

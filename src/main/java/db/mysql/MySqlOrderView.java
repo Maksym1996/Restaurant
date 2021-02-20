@@ -11,6 +11,12 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
+
+import consts.Comment;
+import consts.Page;
 import db.dao.OrderViewDao;
 import db.entity.OrderView;
 import db.entity.Product;
@@ -27,16 +33,21 @@ public class MySqlOrderView implements OrderViewDao {
 
 	private final DataSource dataSource;
 
+	static Logger log = LogManager.getLogger(MySqlOrderView.class);
+
 	public MySqlOrderView(DataSource dataSource) {
 		this.dataSource = dataSource;
+		DOMConfigurator.configure(Page.LOG4J);
 	}
 
 	@Override
 	public String getStatusByOrderId(int orderId) throws DBException {
+		log.info(Comment.BEGIN);
 		String state = null;
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("orderId = " + orderId);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_STATUS_BY_ORDER_ID);
@@ -45,20 +56,19 @@ public class MySqlOrderView implements OrderViewDao {
 			if (rs.next()) {
 				state = rs.getString(1);
 			}
-
 		} catch (SQLException e) {
-			// TODO some logger
-			System.err.println("GET order:" + e);
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
-
+		log.debug(Comment.RETURN + state);
 		return state;
 	}
 
 	@Override
 	public List<OrderView> getAllOrderViews() throws DBException {
+		log.info(Comment.BEGIN);
 		List<OrderView> allOrders = new ArrayList<>();
 		Connection con = null;
 		Statement stat = null;
@@ -72,22 +82,23 @@ public class MySqlOrderView implements OrderViewDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO some logger
-			System.err.println(e.getMessage());
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, stat, rs);
 		}
-
+		log.debug(Comment.RETURN + allOrders.size());
 		return allOrders;
 	}
 
 	@Override
 	public List<OrderView> getOrderViewsByUserId(int userId) throws DBException {
+		log.info(Comment.BEGIN);
 		List<OrderView> allOrders = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("userId = " + userId);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_ORDER_VIEWS_BY_USER_ID);
@@ -98,22 +109,23 @@ public class MySqlOrderView implements OrderViewDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO some logger
-			System.err.println(e.getMessage());
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
-
+		log.debug(Comment.RETURN + allOrders.size());
 		return allOrders;
 	}
 
 	@Override
 	public List<OrderView> getOrdersByStatus(String status) throws DBException {
+		log.info(Comment.BEGIN);
 		List<OrderView> allOrders = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
+		log.debug("status = " + status);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(SELECT_ORDER_VIEWS_BY_STATUS);
@@ -124,23 +136,25 @@ public class MySqlOrderView implements OrderViewDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO some logger
-			System.err.println(e.getMessage());
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
-
+		log.debug(Comment.RETURN + allOrders.size());
 		return allOrders;
 	}
 
 	@Override
 	public int insertOrder(OrderView model, List<Product> products, Map<Integer, Integer> count) throws DBException {
+		log.info(Comment.BEGIN);
 		Connection con = null;
-
 		PreparedStatement prep = null;
 		ResultSet rs = null;
 		int orderId = 0;
+		log.debug("model = " + model.toString());
+		log.debug("products = " + products.toArray());
+		log.debug("count = " + count.size());
 		try {
 
 			con = dataSource.getConnection();
@@ -173,28 +187,30 @@ public class MySqlOrderView implements OrderViewDao {
 			}
 			con.commit();
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			rollback(con);
-			// TODO some logger
 			throw new DBException(e);
 		} finally {
 			close(con, prep, rs);
 		}
+		log.debug(Comment.RETURN + orderId);
 		return orderId;
 	}
 
 	@Override
 	public boolean updateStatusById(int id, String status) throws DBException {
+		log.info(Comment.BEGIN);
 		String setState = "UPDATE orders SET state=? WHERE id = ?";
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement prep = null;
-
+		log.debug("id = " + id);
+		log.debug("status = " + status);
 		try {
 			con = dataSource.getConnection();
 			con.setAutoCommit(false);
 			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-			if ("REJECTED".equals(status) || "PERFORMED".equals(status)) {
+			if (Status.REJECTED.name().equals(status) || Status.PERFORMED.name().equals(status)) {
 				setState = "UPDATE orders SET state=?, closing_date = current_timestamp() WHERE id = ? ";
 			}
 			prep = con.prepareStatement(setState);
@@ -204,15 +220,15 @@ public class MySqlOrderView implements OrderViewDao {
 				result = true;
 			}
 			con.commit();
+			log.debug(Comment.COMMIT);
 		} catch (SQLException e) {
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			rollback(con);
-			System.err.println(e.getMessage());
-			// TODO add some logger 03.02.2021
 			throw new DBException(e);
 		} finally {
 			close(con, prep);
 		}
-
+		log.debug(Comment.RETURN + result);
 		return result;
 
 	}
@@ -231,7 +247,7 @@ public class MySqlOrderView implements OrderViewDao {
 		order.setProductId(rs.getInt(k++));
 		order.setCount(rs.getInt(k++));
 		order.setPrice(rs.getInt(k));
-
+		log.debug(Comment.EXTRACTION + order.toString());
 		return order;
 	}
 
@@ -241,7 +257,7 @@ public class MySqlOrderView implements OrderViewDao {
 				try {
 					ac.close();
 				} catch (Exception e) {
-					// TODO add some logger 03.02.2021
+					log.error(Comment.EXCEPTION + e.getMessage());
 					throw new DBException(e);
 				}
 			}
@@ -251,8 +267,9 @@ public class MySqlOrderView implements OrderViewDao {
 	private void rollback(Connection connect) throws DBException {
 		try {
 			connect.rollback();
+			log.debug(Comment.ROLLBACK);
 		} catch (SQLException e) {
-			// TODO add some logger 03.02.2021
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		}
 	}
