@@ -51,7 +51,7 @@ public class AddProductServlet extends HttpServlet {
 		try {
 			Product testProductByName = productDao.getProductByName(name);
 
-			if (testProductByName != null) {
+			if (testProductByName.getId() != 0) {
 				errors.put(Param.NAME, "The name '" + name + "' is taken");
 			}
 		} catch (DBException e) {
@@ -68,7 +68,7 @@ public class AddProductServlet extends HttpServlet {
 
 		try {
 			productDao.insertProduct(Util.createProduct(name, Integer.parseInt(price), description, imageLink,
-					Category.valueOf(category), 0));
+					Category.byTitle(category), 0));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.err.println(e);

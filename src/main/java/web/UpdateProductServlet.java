@@ -76,13 +76,10 @@ public class UpdateProductServlet extends HttpServlet {
 		int productId = Integer.parseInt(id);
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 		try {
-			Product testProductById = productDao.getProductById(productId);
-			Product testProductByName = productDao.getProductByName(name);
-
-			if (testProductById == null) {
+			if (0 == productDao.getProductById(productId).getId()) {
 				response.sendError(416);
 				return;
-			} else if (testProductByName != null) {
+			} else if (0 != productDao.getProductByName(name).getId()) {
 				errors.put(Param.NAME, "The name '" + name + "' is taken");
 			}
 

@@ -44,7 +44,7 @@ public class DeleteProductServlet extends HttpServlet {
 		int productId = Integer.parseInt(stringProductId);
 
 		try {
-			if (null == productDao.getProductById(productId)) {
+			if (0 == productDao.getProductById(productId).getId()) {
 				response.sendError(416);
 				return;
 			}
