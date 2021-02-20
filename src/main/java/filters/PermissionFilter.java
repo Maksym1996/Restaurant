@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import util.UserRole;
+
 /**
  * Servlet Filter implementation class NoUserFilter
  */
@@ -41,7 +43,7 @@ public class PermissionFilter implements Filter {
 			if (session == null || session.getAttribute("role") == null) {
 				httpServletResponse.sendError(401);
 				return;
-			} else if(!session.getAttribute("role").equals("ADMIN")) {
+			} else if(!session.getAttribute("role").equals(UserRole.ADMIN)) {
 				httpServletResponse.sendError(403);
 				return;
 			}
