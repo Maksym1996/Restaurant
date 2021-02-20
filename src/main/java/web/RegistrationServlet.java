@@ -19,6 +19,7 @@ import db.dao.UserDao;
 import db.entity.User;
 import util.Util;
 import util.Validator;
+import util.VerifyCaptcha;
 
 /**
  * Servlet implementation class Registrarion
@@ -45,6 +46,7 @@ public class RegistrationServlet extends HttpServlet {
 		String phoneNumber = request.getParameter(Param.PHONE_NUMBER);
 		String password = request.getParameter(Param.PASSWORD);
 		String confirmPassword = request.getParameter(Param.CONFIRM_PASSWORD);
+		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
 		Map<String, String> errors = Validator.registrationValidator(firstName, lastName, email, phoneNumber, password,
 				confirmPassword);
@@ -68,7 +70,13 @@ public class RegistrationServlet extends HttpServlet {
 				errors.put(Param.PHONE_NUMBER, "An account with such phone number already exist!");
 			}
 		}
+		
 
+        // Verify CAPTCHA.
+       if(!VerifyCaptcha.verify(gRecaptchaResponse)) {
+
+            errors.put("captchaResponse", "Captcha invalid!");
+        }
 		if (!errors.isEmpty()) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.REGISTRATION_JSP);
 			request.setAttribute(Param.ERRORS, errors);
@@ -80,7 +88,7 @@ public class RegistrationServlet extends HttpServlet {
 		User user = null;
 		try {
 			user = userDao.getUserByNumber(phoneNumber);
-			if (user == null) {
+			if (user.getId() == 0) {
 				user = userDao.getUserById(userDao.insertUser(model));
 			} else {
 				userDao.updateUser(model);

@@ -39,6 +39,8 @@
 
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 
+<!-- reCAPTCHA Libary -->
+<script src='https://www.google.com/recaptcha/api.js?hl=en'></script>
 
 <link rel="stylesheet" href="main.css">
 </head>
@@ -166,7 +168,16 @@
 				</button>
 			</div>
 
-
+			<!-- reCAPTCHA -->
+			<div class="g-recaptcha"
+				data-sitekey="6LeiQmAaAAAAAPFAZ1Un_eRExtvlXR0K4eP6Z8vb"></div>
+				<c:if
+					test="${not empty errors and errors.containsKey('captchaResponse')}">
+					<p style="color: red">
+						<c:out value="${errors.captchaResponse}" />
+					</p>
+				</c:if>
+			
 			<br>
 			<button type="submit" class="btn btn-light">
 				<f:message key="registered" />
