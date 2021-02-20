@@ -48,21 +48,13 @@ public class DeleteProductServlet extends HttpServlet {
 				response.sendError(416);
 				return;
 			}
+			productDao.deleteProductById(productId);
 		} catch (Exception e) {
 			// TODO logger 14.02.2021
 			response.sendError(500);
 			return;
 		}
 
-		try {
-			if (!productDao.deleteProductById(productId)) {
-				throw new Exception();
-			}
-		} catch (Exception e) {
-			// TODO logger 14.02.2021
-			response.sendError(500);
-		}
-
-		response.sendRedirect(Page.DELETED_PRODUCT);
+		response.sendRedirect(Page.DELETE_PRODUCT);
 	}
 }
