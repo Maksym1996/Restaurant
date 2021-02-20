@@ -61,7 +61,7 @@ public class Param {
 	public static final String ERRORS = "errors";
 
 	private Param() {
-		throw new IllegalStateException("Utility class");
+		throw new IllegalStateException(Comment.ILLEGAL_STATE);
 	}
 
 }

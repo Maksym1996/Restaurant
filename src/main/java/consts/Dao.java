@@ -8,7 +8,7 @@ public class Dao {
 	
 	
 	private Dao() {
-	    throw new IllegalStateException("Utility class");
+	    throw new IllegalStateException(Comment.ILLEGAL_STATE);
 	  }
 
 }
