@@ -53,16 +53,6 @@ public class DeleteProductServletTest {
 		;
 	}
 
-	@Test
-	public void callDoPostValidIDThenRetrunError416() throws Exception {
-		when(request.getParameter(Param.ID)).thenReturn("1");
-		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
-
-		servlet.doPost(request, response);
-
-		verify(response).sendError(416);
-	}
 
 	@Test
 	public void callDoPostValidIDThenRetrunError500() throws Exception {
@@ -83,10 +73,40 @@ public class DeleteProductServletTest {
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenReturn(product);
+		when(product.getId()).thenReturn(1);
 
 		servlet.doPost(request, response);
 
 		verify(response).sendRedirect(Page.DELETE_PRODUCT);
 	}
+	
+	@Test
+	public void callDoPostThenRetrunDeleteProduct() throws Exception {
+		Product product = mock(Product.class);
+		when(request.getParameter(Param.ID)).thenReturn("20");
+		when(request.getServletContext()).thenReturn(context);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(productDao.getProductById(20)).thenReturn(product);
+		when(product.getId()).thenReturn(20);
+
+		servlet.doPost(request, response);
+
+		verify(response).sendRedirect(Page.DELETE_PRODUCT);
+	}
+	
+	@Test
+	public void callDoPostThenRetrunError416() throws Exception {
+		Product product = mock(Product.class);
+		when(request.getParameter(Param.ID)).thenReturn("20");
+		when(request.getServletContext()).thenReturn(context);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(productDao.getProductById(20)).thenReturn(product);
+		when(product.getId()).thenReturn(0);
+
+		servlet.doPost(request, response);
+
+		verify(response).sendError(416);;
+	}
+	
 
 }
