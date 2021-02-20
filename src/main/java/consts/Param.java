@@ -47,6 +47,10 @@ public class Param {
 	public static final String ORDER_SUMM = "orderSumm";
 	public static final String CART = "cart";
 	public static final String COUNT = "count";
+	
+	//LanguageServlet
+	public static final String LANG = "lang";
+	public static final String REFERER = "referer";
 
 	// other
 	public static final String PRODUCTS_LIST = "productsList";

@@ -17,7 +17,7 @@ public class Page {
 
 	public static final String PIZZA_PREFERITA = "Pizza Preferita";
 	public static final String WORK_ZONE = "WorkZone";
-	public static final String DELETED_PRODUCT = "DeleteProduct";
+	public static final String DELETE_PRODUCT = "DeleteProduct";
 	public static final String LOGIN_PAGE = "Login page";
 
 	private Page() {
