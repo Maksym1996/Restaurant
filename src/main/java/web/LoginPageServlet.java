@@ -59,12 +59,12 @@ public class LoginPageServlet extends HttpServlet {
 				orderViewList = orderDao.getOrderViewsByUserId(user.getId());
 				for (OrderView o : orderViewList) {
 					orders.add(o);
-
 					productList.add(productDao.getProductById(o.getProductId()));
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				throw new IOException();
+				response.sendError(500);
+				return;
 			}
 			request.setAttribute(Param.ORDER_VIEW_LIST, orderViewList);
 			request.setAttribute(Param.PRODUCTS_LIST, productList);
