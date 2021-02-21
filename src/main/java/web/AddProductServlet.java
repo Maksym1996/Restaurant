@@ -30,7 +30,7 @@ import util.Validator;
 @WebServlet("/AddProduct")
 public class AddProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+ 
 	private static final Logger log = LogManager.getLogger(AddProductServlet.class);
 
 	@Override
