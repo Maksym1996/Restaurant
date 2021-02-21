@@ -1,4 +1,8 @@
 package consts;
+/**
+ * The class for storing page consts
+ *
+ */
 
 public class Page {
 

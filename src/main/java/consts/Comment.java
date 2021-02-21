@@ -1,5 +1,8 @@
 package consts;
-
+/**
+ * The сlass for storing text constants for general situations
+ *
+ */
 public class Comment {
 	public static final String SQL_EXCEPTION = "SQLException: ";
 	public static final String DB_EXCEPTION = "DBException: ";

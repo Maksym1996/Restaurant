@@ -1,5 +1,8 @@
 package web.tag;
 
+/**
+ * Сustom request transfer tag for correct reading and transfer of arrays
+ */
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
@@ -12,8 +15,8 @@ public class PageLinkTag extends SimpleTagSupport {
 	private String[] categories;
 	private String sortValue;
 	private String asc;
-    private String productId;
-	
+	private String productId;
+
 	public void setPageNumber(int pageNumber) {
 		this.pageNumber = pageNumber;
 	}
@@ -29,7 +32,7 @@ public class PageLinkTag extends SimpleTagSupport {
 	public void setAsc(String asc) {
 		this.asc = asc;
 	}
-	
+
 	public void setProductId(String productId) {
 		this.productId = productId;
 	}
@@ -50,7 +53,7 @@ public class PageLinkTag extends SimpleTagSupport {
 		if (asc != null) {
 			link.append("&asc=").append(asc);
 		}
-		if(productId != null) {
+		if (productId != null) {
 			link.append("&productId=").append(productId);
 		}
 		out.print(link.toString());
