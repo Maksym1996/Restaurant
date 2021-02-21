@@ -39,7 +39,7 @@ public class CartServletTest {
 	private HttpSession session;
 	private Cart cart;
 
-	List<Product> prods = new ArrayList<>();
+	private List<Product> prods = new ArrayList<>();
 
 	@Before
 	public void setUp() {
@@ -58,7 +58,6 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCartNullThenReturnEmptyCartJSP() throws Exception {
-
 		when(request.getRequestDispatcher(Page.EMPTY_CART)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(null);
@@ -70,7 +69,6 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCartEmptyThenReturnEmptyCartJSP() throws Exception {
-
 		when(request.getRequestDispatcher(Page.EMPTY_CART)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(cart);
@@ -82,11 +80,10 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetNotEmptyCartThenReturnEmptyCartJSP() throws Exception {
-
 		when(request.getRequestDispatcher(Page.EMPTY_CART)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(cart);
-		when(cart.getProducts()).thenReturn(getList());
+		when(cart.getProducts()).thenReturn(prods);
 
 		servlet.doGet(request, response);
 
@@ -95,7 +92,6 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCartWithNotNullProductThenReturnCartJSP() throws Exception {
-
 		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(cart);
@@ -108,7 +104,6 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetNotNullListThenReturnCartJSP() throws Exception {
-
 		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(cart);
@@ -122,7 +117,6 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCountZeroThenReturnCartJSP() throws Exception {
-
 		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(cart);
@@ -138,7 +132,6 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCountTwentyThenReturnCartJSP() throws Exception {
-
 		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(cart);
@@ -153,19 +146,16 @@ public class CartServletTest {
 	}
 
 	@Test
-	public void callDoPostThenReturnError416() throws Exception {
-
+	public void callDoPostThenReturnError400() throws Exception {
 		when(request.getSession(true)).thenReturn(session);
 
 		servlet.doPost(request, response);
 
-		verify(response).sendError(416);
-		;
+		verify(response).sendError(400);
 	}
 
 	@Test
 	public void callDoPostWithParamThenReturnCartJSP() throws Exception {
-
 		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(new Cart());
@@ -175,12 +165,10 @@ public class CartServletTest {
 		servlet.doPost(request, response);
 
 		verify(dispatcher).forward(request, response);
-		;
 	}
 
 	@Test
 	public void callDoPostWithValidParamThenReturn500() throws Exception {
-
 		when(request.getSession(true)).thenReturn(session);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
@@ -196,12 +184,10 @@ public class CartServletTest {
 		servlet.doPost(request, response);
 
 		verify(response).sendError(500);
-		;
 	}
 
 	@Test
 	public void callDoPostWithValidParamThenReturnLoginPage() throws Exception {
-
 		when(request.getSession(true)).thenReturn(session);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
@@ -220,7 +206,6 @@ public class CartServletTest {
 
 	@Test
 	public void callDoPostExceptionUserDaoThenReturn500() throws Exception {
-
 		when(request.getSession(true)).thenReturn(session);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
@@ -234,12 +219,7 @@ public class CartServletTest {
 
 		servlet.doPost(request, response);
 
-		verify(response).sendError(500);;
-	}
-
-	private List<Product> getList() {
-		prods.add(new Product());
-		return prods;
+		verify(response).sendError(500);
 	}
 
 	private List<Product> getListNotNull() {

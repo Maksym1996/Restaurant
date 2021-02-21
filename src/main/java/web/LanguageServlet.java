@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import consts.Param;
 
 import java.io.IOException;
@@ -15,6 +18,8 @@ import java.io.IOException;
 public class LanguageServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 2689567392392305656L;
+	
+	private static final Logger log = LogManager.getLogger(AddProductServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

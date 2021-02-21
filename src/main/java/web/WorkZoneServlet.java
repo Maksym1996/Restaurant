@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import consts.Comment;
 import consts.Dao;
 import consts.Page;
 import consts.Param;
@@ -28,6 +32,7 @@ import provider.OrderPage;
 import provider.OrderPageProvider;
 import provider.OrderPageProviderContainer;
 import util.Status;
+import util.UserRole;
 import util.Validator;
 
 /**
@@ -37,29 +42,40 @@ import util.Validator;
 public class WorkZoneServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	private static final Logger log = LogManager.getLogger(WorkZoneServlet.class);
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		log.info(Comment.BEGIN);
 		HttpSession session = request.getSession(true);
-		String role = (String) session.getAttribute(Param.ROLE);
+		UserRole role = (UserRole) session.getAttribute(Param.ROLE);
+		log.debug("Role from session" + role);
 
 		OrderViewDao orderViewDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
+		log.debug("orderViewDao");
 		OrderPageProviderContainer pageProvidersContainer = new OrderPageProviderContainer(orderViewDao);
+		log.debug("pageProvidersContainer");
 		OrderPageProvider pageProvider = pageProvidersContainer.getProvider(role);
+		log.debug("pageProvider");
 		if (pageProvider == null) {
+			log.info(Comment.REDIRECT + 403);
 			response.sendError(403);
 			return;
 		}
 
 		OrderPage orderPage = pageProvider.getOrderPage();
+		log.debug("orderPage" + orderPage);
 
 		List<OrderView> orderViewList = orderPage.getOrderViewList();
 		String forwardPage = orderPage.getForwardPage();
 
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
-		UserDao userDao = (UserDao) request.getServletContext().getAttribute(Dao.USER);
+		log.debug("forwardPage: " + forwardPage);
 
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
+		log.debug(Dao.PRODUCT);
+		UserDao userDao = (UserDao) request.getServletContext().getAttribute(Dao.USER);
+		log.debug(Dao.USER);
 		Set<Product> productList = new HashSet<>();
 		Set<User> userList = new HashSet<>();
 		Set<OrderView> orders = new LinkedHashSet<>();
@@ -70,8 +86,10 @@ public class WorkZoneServlet extends HttpServlet {
 				userList.add(userDao.getUserById(o.getUserId()));
 
 			} catch (DBException e) {
-				// TODO Auto-generated catch block
-				throw new IOException();
+				log.error(Comment.DB_EXCEPTION + e.getMessage());
+				log.info(Comment.REDIRECT + 500);
+				response.sendError(500);
+				return;
 			}
 		}
 
@@ -80,6 +98,11 @@ public class WorkZoneServlet extends HttpServlet {
 		request.setAttribute(Param.PRODUCTS_LIST, productList);
 		request.setAttribute(Param.USER_LIST, userList);
 		request.setAttribute(Param.ORDERS, orders);
+		log.info(Comment.FORWARD + forwardPage);
+		log.debug("Order list: " + orderViewList);
+		log.debug("Product list" + productList);
+		log.debug("User list: " + userList);
+		log.debug("Orders: " + orders);
 		dispatcher.forward(request, response);
 
 	}
@@ -87,12 +110,18 @@ public class WorkZoneServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		log.info(Comment.BEGIN);
 		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
+		log.debug(Dao.ORDER_VIEW);
 
 		String status = request.getParameter(Param.STATUS);
 		String id = request.getParameter(Param.ID);
+		log.debug("Status: " + status);
+		log.debug("Id " + id);
+
 		if (!Validator.workZoneValidator(status, id)) {
+			log.debug("Request paraments is invalid");
+			log.info(Comment.REDIRECT + 400);
 			response.sendError(400);
 			return;
 		}
@@ -103,17 +132,23 @@ public class WorkZoneServlet extends HttpServlet {
 		Status resultStatus;
 		try {
 			Status currentStatus = Status.valueOf(orderDao.getStatusByOrderId(orderId));
+			log.debug("Current status " + currentStatus);
 			if (!requestStatus.equals(Status.REJECTED) && requestStatus.equals(currentStatus)) {
 				resultStatus = currentStatus.getNextStatuses().get(0);
+				log.debug("Result status " + resultStatus);
 			} else {
 				resultStatus = currentStatus.getNextStatuses().get(1);
+				log.debug("Result status " + resultStatus);
 			}
 			orderDao.updateStatusById(orderId, resultStatus.name());
+			log.debug("Update status by id: " + orderId + " " + resultStatus.name());
 		} catch (DBException e) {
-			System.err.println("GetState:" + e);
+			log.error(Comment.DB_EXCEPTION + e.getMessage());
+			log.info(Comment.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
+		log.info(Comment.REDIRECT + Page.WORK_ZONE);
 		response.sendRedirect(Page.WORK_ZONE);
 	}
 }

@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import consts.Dao;
 import consts.Page;
 import consts.Param;
@@ -29,6 +32,8 @@ import util.Validator;
 @WebServlet("/Pizza Preferita")
 public class MainPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger log = LogManager.getLogger(AddProductServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

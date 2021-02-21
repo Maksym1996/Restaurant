@@ -55,7 +55,7 @@ public class LoginPageServletTest {
 	public void callDoGetWithLogoutThenReturnLoginPageJSP() throws Exception {
 
 		when(request.getRequestDispatcher(Page.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
-		when(request.getSession()).thenReturn(session);
+		when(request.getSession(true)).thenReturn(session);
 		when(request.getParameter(Param.LOG_OUT)).thenReturn(Param.LOG_OUT);
 		servlet.doGet(request, response);
 
@@ -78,7 +78,7 @@ public class LoginPageServletTest {
 		User user = mock(User.class);
 
 		when(request.getRequestDispatcher(Page.ACCOUNT_JSP)).thenReturn(dispatcher);
-		when(request.getSession()).thenReturn(session);
+		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.USER)).thenReturn(user);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
@@ -94,9 +94,10 @@ public class LoginPageServletTest {
 	public void callDoGetWithNullOrderListThenReturnError500() throws Exception {
 
 		User user = mock(User.class);
-		List<OrderView> orderViewList = mock(new ArrayList<OrderView>().getClass());
+		@SuppressWarnings("unchecked")
+		List<OrderView> orderViewList = mock(List.class);
 
-		when(request.getSession()).thenReturn(session);
+		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.USER)).thenReturn(user);
 		when(user.getRole()).thenReturn(UserRole.CLIENT);
 		when(request.getServletContext()).thenReturn(context);

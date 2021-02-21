@@ -41,13 +41,13 @@ public class Util {
 
 	}
 
-	public static OrderView createOrder(Status status, String address, int userId, String sum) {
+	public static OrderView createOrder(Status status, String address, int userId, int sum) {
 		OrderView order = new OrderView();
 
 		order.setStatus(status);
 		order.setAddress(address);
 		order.setUserId(userId);
-		order.setSum(sum);
+		order.setSum(String.valueOf(sum));
 
 		return order;
 

@@ -56,7 +56,7 @@ public class MySqlOrderViewTest {
 		Map<Integer, Integer> count = new HashMap<>();
 		count.put(1, 2);
 		count.put(2, 1);
-		orderViewDao.insertOrder(Util.createOrder(Status.NEW, "Плеханово", 2, "500"), products, count);
+		orderViewDao.insertOrder(Util.createOrder(Status.NEW, "Плеханово", 2, 500), products, count);
 		assertEquals(6, orderViewDao.getAllOrderViews().size());
 	}
 
@@ -68,7 +68,7 @@ public class MySqlOrderViewTest {
 		products.add(productDao.getProductById(2));
 		Map<Integer, Integer> count = new HashMap<>();
 		count.put(1, 2);
-		orderViewDao.insertOrder(Util.createOrder(Status.NEW, "Плеханово", 2, "500"), products, count);
+		orderViewDao.insertOrder(Util.createOrder(Status.NEW, "Плеханово", 2, 500), products, count);
 	}
 
 	@Test(expected = DBException.class)
@@ -80,7 +80,7 @@ public class MySqlOrderViewTest {
 		Map<Integer, Integer> count = new HashMap<>();
 		count.put(3, 2);
 		count.put(4, 1);
-		orderViewDao.insertOrder(Util.createOrder(Status.NEW, "Плеханово", 9, "500"), products, count);
+		orderViewDao.insertOrder(Util.createOrder(Status.NEW, "Плеханово", 9, 500), products, count);
 	}
 
 	@Test

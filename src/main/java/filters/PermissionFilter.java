@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import consts.Param;
 import util.UserRole;
 
 /**
@@ -40,15 +41,16 @@ public class PermissionFilter implements Filter {
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
 			HttpSession session = httpServletRequest.getSession(true);
-			if (session == null || session.getAttribute("role") == null) {
+			if (session == null || session.getAttribute(Param.ROLE) == null) {
 				httpServletResponse.sendError(401);
 				return;
-			} else if(!session.getAttribute("role").equals(UserRole.ADMIN)) {
+			} else if (session.getAttribute(Param.ROLE) != UserRole.ADMIN) {
 				httpServletResponse.sendError(403);
 				return;
 			}
-
 		}
+	
+		
 		chain.doFilter(request, response);
 	}
 

@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import consts.Dao;
 import consts.Page;
 import consts.Param;
@@ -33,11 +36,13 @@ import util.Validator;
 @WebServlet("/Login page")
 public class LoginPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger log = LogManager.getLogger(AddProductServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(true);
 		String forwardPage;
 		String logout = request.getParameter(Param.LOG_OUT);
 
@@ -49,7 +54,7 @@ public class LoginPageServlet extends HttpServlet {
 			forwardPage = Page.LOGIN_PAGE_JSP;
 		} else {
 			User user = (User) session.getAttribute(Param.USER);
-			session.setAttribute(Param.ROLE, user.getRole().name());
+			session.setAttribute(Param.ROLE, user.getRole());
 			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
 			Set<Product> productList = new HashSet<>();
@@ -81,6 +86,7 @@ public class LoginPageServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession(true);
 
 		String phoneNumber = request.getParameter(Param.PHONE_NUMBER);
 		String password = request.getParameter(Param.PASSWORD);
@@ -91,8 +97,11 @@ public class LoginPageServlet extends HttpServlet {
 		User user = null;
 		try {
 			user = userDao.getUserByNumberAndPass(phoneNumber, password);
-			if (user == null || (user.getId() == 0 && user.getRole() == null)) {
+			if (user == null) {
 				errors.put(Param.NO_USER, "User with such data does not exist");
+			} else {
+				session.setAttribute(Param.USER, user);
+				session.setAttribute(Param.ROLE, user.getRole());
 			}
 		} catch (Exception e) {
 			// TODO add some logger 03.02.2021
@@ -107,9 +116,6 @@ public class LoginPageServlet extends HttpServlet {
 			return;
 		}
 
-		HttpSession session = request.getSession(true);
-		session.setAttribute(Param.USER, user);
-		session.setAttribute(Param.ROLE, user.getRole().name());
 		response.sendRedirect(Page.LOGIN_PAGE);
 	}
 

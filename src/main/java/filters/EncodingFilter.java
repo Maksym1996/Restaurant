@@ -16,22 +16,24 @@ import javax.servlet.annotation.WebFilter;
 public class EncodingFilter implements Filter {
 
 	private String encoding = "utf-8";
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		  request.setCharacterEncoding(encoding);
-	        chain.doFilter(request, response);
+
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		request.setCharacterEncoding(encoding);
+		chain.doFilter(request, response);
 	}
 
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
 		String encodingParam = fConfig.getInitParameter("encoding");
-        if (encodingParam != null) {
-            encoding = encodingParam;
-        }
+		if (encodingParam != null) {
+			encoding = encodingParam;
+		}
 	}
-	
+
 	@Override
-	 public void destroy() {
-	        // nothing todo
-	    }
+	public void destroy() {
+		// nothing todo
+	}
 
 }

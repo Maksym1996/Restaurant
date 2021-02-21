@@ -12,6 +12,10 @@ public class Comment {
 	public static final String EXTRACTION = "Extraction model: ";
 	public static final String BEGIN = "!Begin!";
 	public static final String CLOSED = "Closed : ";
+	
+	public static final String FORWARD = "Forward on: ";
+	public static final String FORWARD_WITH_PARAMETR = "With parametr: ";
+	public static final String REDIRECT = "Redirect on: ";
 
 	private Comment() {
 		throw new IllegalStateException(ILLEGAL_STATE);

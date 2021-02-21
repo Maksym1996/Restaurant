@@ -37,10 +37,10 @@ public class DeleteProductServletTest {
 	}
 
 	@Test
-	public void callDoPostInvalidIDThenRetrunError415() throws Exception {
+	public void callDoPostInvalidIDThenRetrunError400() throws Exception {
 		servlet.doPost(request, response);
 
-		verify(response).sendError(415);
+		verify(response).sendError(400);
 	}
 
 	@Test
@@ -95,17 +95,15 @@ public class DeleteProductServletTest {
 	}
 	
 	@Test
-	public void callDoPostThenRetrunError416() throws Exception {
-		Product product = mock(Product.class);
+	public void callDoPostThenRetrunError404() throws Exception {
 		when(request.getParameter(Param.ID)).thenReturn("20");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
-		when(productDao.getProductById(20)).thenReturn(product);
-		when(product.getId()).thenReturn(0);
+		when(productDao.getProductById(20)).thenReturn(null);
 
 		servlet.doPost(request, response);
 
-		verify(response).sendError(416);;
+		verify(response).sendError(404);
 	}
 	
 

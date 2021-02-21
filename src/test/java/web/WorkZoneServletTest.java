@@ -55,7 +55,7 @@ public class WorkZoneServletTest {
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.ADMIN.name());
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.ADMIN);
 
 		servlet.doGet(request, response);
 
@@ -71,7 +71,7 @@ public class WorkZoneServletTest {
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.MANAGER.name());
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.MANAGER);
 
 		servlet.doGet(request, response);
 		verify(request, times(1)).getRequestDispatcher(Page.MANAGER_JSP);
@@ -87,7 +87,7 @@ public class WorkZoneServletTest {
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.DELIVERY.name());
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.DELIVERY);
 
 		servlet.doGet(request, response);
 		verify(request, times(1)).getRequestDispatcher(Page.DELIVERY_JSP);
@@ -103,7 +103,7 @@ public class WorkZoneServletTest {
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.COOK.name());
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.COOK);
 
 		servlet.doGet(request, response);
 		verify(request, times(1)).getRequestDispatcher(Page.COOK_JSP);

@@ -9,10 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import consts.Dao;
 import consts.Page;
 import consts.Param;
 import db.dao.ProductDao;
+import db.entity.Product;
 import util.Validator;
 
 /**
@@ -21,6 +25,8 @@ import util.Validator;
 @WebServlet("/DeleteProduct")
 public class DeleteProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger log = LogManager.getLogger(AddProductServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -36,7 +42,7 @@ public class DeleteProductServlet extends HttpServlet {
 		String stringProductId = request.getParameter(Param.ID);
 
 		if (!Validator.intValidator(stringProductId)) {
-			response.sendError(415);
+			response.sendError(400);
 			return;
 		}
 
@@ -44,8 +50,9 @@ public class DeleteProductServlet extends HttpServlet {
 		int productId = Integer.parseInt(stringProductId);
 
 		try {
-			if (0 == productDao.getProductById(productId).getId()) {
-				response.sendError(416);
+			Product testProduct = productDao.getProductById(productId);
+			if (testProduct == null) {
+				response.sendError(404);
 				return;
 			}
 			productDao.deleteProductById(productId);

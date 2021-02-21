@@ -8,16 +8,16 @@ import util.UserRole;
 
 public class OrderPageProviderContainer {
 
-	private Map<String, OrderPageProvider> pageProviders;
+	private Map<UserRole, OrderPageProvider> pageProviders;
 
 	public OrderPageProviderContainer(OrderViewDao orderViewDao) {
 		pageProviders = new HashMap<>();
-		pageProviders.put(UserRole.MANAGER.name(), new ManagerOrderPageProvider(orderViewDao));
-		pageProviders.put(UserRole.COOK.name(), new CookOrderPageProvider(orderViewDao));
-		pageProviders.put(UserRole.DELIVERY.name(), new DeliveryOrderPageProvider(orderViewDao));
+		pageProviders.put(UserRole.MANAGER, new ManagerOrderPageProvider(orderViewDao));
+		pageProviders.put(UserRole.COOK, new CookOrderPageProvider(orderViewDao));
+		pageProviders.put(UserRole.DELIVERY, new DeliveryOrderPageProvider(orderViewDao));
 	}
 
-	public OrderPageProvider getProvider(String role) {
+	public OrderPageProvider getProvider(UserRole role) {
 		return pageProviders.get(role);
 	}
 

@@ -10,21 +10,16 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
-
 import consts.Comment;
-import consts.Page;
 import db.dao.UserDao;
 import db.entity.User;
 import exception.DBException;
 import util.UserRole;
 import util.Util;
 
-public class MySqlUser implements UserDao {
+public class MySqlUser extends AbstractMySqlDao implements UserDao {
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
-	private static final String SELECT_USERS_FOR_REGISTERED = "SELECT * FROM user WHERE registered = ?";
+	private static final String SELECT_USERS_BY_REGISTERED = "SELECT * FROM user WHERE registered = ?";
 	private static final String SELECT_USER_BY_NUMBER_AND_PASS = "SELECT * FROM user WHERE phone_number = ? AND password = ?";
 	private static final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
 	private static final String SELECT_USER_BY_NUMBER = "SELECT * FROM user WHERE phone_number = ?";
@@ -33,11 +28,8 @@ public class MySqlUser implements UserDao {
 
 	private final DataSource dataSource;
 
-	static Logger log = LogManager.getLogger(MySqlUser.class);
-
 	public MySqlUser(DataSource dataSource) {
 		this.dataSource = dataSource;
-		DOMConfigurator.configure(Page.LOG4J);
 	}
 
 	@Override
@@ -75,7 +67,7 @@ public class MySqlUser implements UserDao {
 		log.debug("registered = " + registered);
 		try {
 			con = dataSource.getConnection();
-			prep = con.prepareStatement(SELECT_USERS_FOR_REGISTERED);
+			prep = con.prepareStatement(SELECT_USERS_BY_REGISTERED);
 			prep.setString(1, registered);
 			rs = prep.executeQuery();
 			while (rs.next()) {
@@ -136,7 +128,7 @@ public class MySqlUser implements UserDao {
 	@Override
 	public User getUserByNumberAndPass(String phoneNumber, String password) throws DBException {
 		log.info(Comment.BEGIN);
-		User model = new User();
+		User model = null;
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -158,14 +150,14 @@ public class MySqlUser implements UserDao {
 		} finally {
 			close(con, prep, rs);
 		}
-		log.debug(Comment.RETURN + model.toString());
+		log.debug(Comment.RETURN + model);
 		return model;
 	}
 
 	@Override
 	public User getUserByNumber(String phoneNumber) throws DBException {
 		log.info(Comment.BEGIN);
-		User model = new User();
+		User model = null;
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -185,7 +177,7 @@ public class MySqlUser implements UserDao {
 		} finally {
 			close(con, prep, rs);
 		}
-		log.debug(Comment.RETURN + model.toString());
+		log.debug(Comment.RETURN + model);
 		return model;
 	}
 
@@ -226,48 +218,10 @@ public class MySqlUser implements UserDao {
 
 	}
 
-	private User extraction(ResultSet rs) throws SQLException {
-		log.info(Comment.BEGIN);
-		User user = new User();
-		int k = 1;
-		user.setId(rs.getInt(k++));
-		user.setEmail(rs.getString(k++));
-		user.setFirstName(rs.getString(k++));
-		user.setLastName(rs.getString(k++));
-		user.setPassword(rs.getString(k++));
-		user.setPhoneNumber(rs.getString(k++));
-		user.setRole(UserRole.valueOf(rs.getString(k++)));
-		user.setRegistered(rs.getString(k));
-
-		return user;
-	}
-
-	private void close(AutoCloseable... ac) throws DBException {
-		for (AutoCloseable a : ac) {
-			if (a != null) {
-				try {
-					a.close();
-				} catch (Exception e) {
-					log.error(Comment.EXCEPTION + e.getMessage());
-					throw new DBException(e);
-				}
-			}
-		}
-	}
-
-	private void rollback(Connection connect) throws DBException {
-		try {
-			connect.rollback();
-		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
-			throw new DBException(e);
-		}
-	}
-
 	@Override
 	public User getUserById(int userId) throws DBException {
 		log.info(Comment.BEGIN);
-		User model = new User();
+		User model = null;
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -287,8 +241,24 @@ public class MySqlUser implements UserDao {
 		} finally {
 			close(con, prep, rs);
 		}
-		log.debug(Comment.RETURN + model.toString());
+		log.debug(Comment.RETURN + model);
 		return model;
+	}
+
+	private User extraction(ResultSet rs) throws SQLException {
+		log.info(Comment.BEGIN);
+		User user = new User();
+		int k = 1;
+		user.setId(rs.getInt(k++));
+		user.setEmail(rs.getString(k++));
+		user.setFirstName(rs.getString(k++));
+		user.setLastName(rs.getString(k++));
+		user.setPassword(rs.getString(k++));
+		user.setPhoneNumber(rs.getString(k++));
+		user.setRole(UserRole.valueOf(rs.getString(k++)));
+		user.setRegistered(rs.getString(k));
+
+		return user;
 	}
 
 }

@@ -11,19 +11,14 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
-
 import consts.Comment;
-import consts.Page;
 import db.dao.OrderViewDao;
 import db.entity.OrderView;
 import db.entity.Product;
 import exception.DBException;
 import util.Status;
 
-public class MySqlOrderView implements OrderViewDao {
+public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 	private static final String SELECT_ORDER_VIEWS_FOR_MANAGER = "SELECT * FROM orderView WHERE state IN ('NEW', 'COOKED', 'DELIVERED_AND_PAID', 'PERFORMED', 'REJECTED') ORDER BY id DESC";
 	private static final String SELECT_ORDER_VIEWS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ? ORDER BY id DESC";
 	private static final String SELECT_ORDER_VIEWS_BY_STATUS = "SELECT * FROM orderView WHERE state = ? ORDER BY id DESC";
@@ -32,12 +27,9 @@ public class MySqlOrderView implements OrderViewDao {
 	private static final String INSERT_PRODUCT_FOR_ORDER = "INSERT INTO order_has_product(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
 
 	private final DataSource dataSource;
-
-	static Logger log = LogManager.getLogger(MySqlOrderView.class);
-
+	
 	public MySqlOrderView(DataSource dataSource) {
 		this.dataSource = dataSource;
-		DOMConfigurator.configure(Page.LOG4J);
 	}
 
 	@Override
@@ -249,29 +241,6 @@ public class MySqlOrderView implements OrderViewDao {
 		order.setPrice(rs.getInt(k));
 		log.debug(Comment.EXTRACTION + order.toString());
 		return order;
-	}
-
-	private void close(AutoCloseable... autoCloseables) throws DBException {
-		for (AutoCloseable ac : autoCloseables) {
-			if (ac != null) {
-				try {
-					ac.close();
-				} catch (Exception e) {
-					log.error(Comment.EXCEPTION + e.getMessage());
-					throw new DBException(e);
-				}
-			}
-		}
-	}
-
-	private void rollback(Connection connect) throws DBException {
-		try {
-			connect.rollback();
-			log.debug(Comment.ROLLBACK);
-		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
-			throw new DBException(e);
-		}
 	}
 
 }

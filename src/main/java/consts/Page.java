@@ -19,8 +19,6 @@ public class Page {
 	public static final String WORK_ZONE = "WorkZone";
 	public static final String DELETE_PRODUCT = "DeleteProduct";
 	public static final String LOGIN_PAGE = "Login page";
-	
-	public static final String LOG4J = "Log4j.xml";
 
 	private Page() {
 		throw new IllegalStateException(Comment.ILLEGAL_STATE);

@@ -8,14 +8,14 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = -625918953319408835L;
 
-	int id;
-	String email;
-	String firstName;
-	String lastName;
-	String password;
-	String phoneNumber;
-	UserRole role;
-	String registered;
+	private int id;
+	private String email;
+	private String firstName;
+	private String lastName;
+	private String password;
+	private String phoneNumber;
+	private UserRole role;
+	private String registered;
 
 	public int getId() {
 		return id;

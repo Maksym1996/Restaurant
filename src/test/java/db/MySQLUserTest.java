@@ -61,7 +61,7 @@ public class MySQLUserTest {
 		Connection con = dataSource.getConnection();
 		Statement statement = con.createStatement();
 		statement.executeUpdate(
-				"INSERT INTO user VALUES(6, 'maxkor@gmail.com', 'Админ', 'Распорядитович', '6bb19089370f5bb5478f7ec1b337f255', '0969055334', 'CLIENT', 'false')");
+				"INSERT INTO user VALUES(6, 'maxkor@gmail.com', 'Ð�Ð´Ð¼Ð¸Ð½', 'Ð Ð°Ñ�Ð¿Ð¾Ñ€Ñ�Ð´Ð¸Ñ‚Ð¾Ð²Ð¸Ñ‡', '6bb19089370f5bb5478f7ec1b337f255', '0969055334', 'CLIENT', 'false')");
 
 		int actual = userDao.getUsersByRegistered("false").size();
 		assertEquals(expected, actual);
@@ -83,7 +83,7 @@ public class MySQLUserTest {
 
 	@Test
 	public void getUserByInvalidNumber() throws Exception {
-		assertNull(userDao.getUserByNumber("096905538699").getPhoneNumber());
+		assertNull(userDao.getUserByNumber("096905538699"));
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class MySQLUserTest {
 	@Test
 	public void getUserByNumberAndInvalidPassword() throws Exception {
 		User user = userDao.getUserByNumberAndPass("0969055386", "client");
-		assertNull(user.getPhoneNumber());
+		assertNull(user);
 	}
 
 	@Test(expected = DBException.class)

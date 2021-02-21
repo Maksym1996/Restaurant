@@ -75,7 +75,7 @@ public class MySQLProductTest {
 	@Test
 	public void getNullProduct() throws DBException {
 		Product productFromDB = productDao.getProductById(0);
-		assertNull(productFromDB.getCategory());
+		assertNull(productFromDB);
 	}
 
 	@Test

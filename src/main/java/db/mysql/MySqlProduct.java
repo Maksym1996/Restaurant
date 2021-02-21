@@ -11,18 +11,13 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
-
 import consts.Comment;
-import consts.Page;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
 import util.Category;
 
-public class MySqlProduct implements ProductDao {
+public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUES (DEFAULT, ?, ?, ?, ?, ?)";
 	private static final String SELECT_PRODUCT_BY_ID = "SELECT * FROM product WHERE id = ?";
 	private static final String SELECT_PRODUCT_BY_NAME = "SELECT * FROM product WHERE name = ?";
@@ -32,11 +27,8 @@ public class MySqlProduct implements ProductDao {
 
 	private DataSource dataSource;
 
-	static Logger log = LogManager.getLogger(MySqlProduct.class);
-
 	public MySqlProduct(DataSource dataSource) {
 		this.dataSource = dataSource;
-		DOMConfigurator.configure(Page.LOG4J);
 	}
 
 	@Override
@@ -87,7 +79,7 @@ public class MySqlProduct implements ProductDao {
 		ResultSet rs = null;
 
 		int res = 0;
-		log.debug("categories = " + categories.length);
+		log.debug("categories = " + categories);
 		try {
 			con = dataSource.getConnection();
 			prep = con.prepareStatement(countQuery(categories));
@@ -154,7 +146,7 @@ public class MySqlProduct implements ProductDao {
 	@Override
 	public Product getProductById(int id) throws DBException {
 		log.info(Comment.BEGIN);
-		Product model = new Product();
+		Product model = null;
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -174,14 +166,14 @@ public class MySqlProduct implements ProductDao {
 		} finally {
 			close(con, prep, rs);
 		}
-		log.debug(Comment.RETURN + model.toString());
+		log.debug(Comment.RETURN + model);
 		return model;
 	}
 
 	@Override
 	public Product getProductByName(String name) throws DBException {
 		log.info(Comment.BEGIN);
-		Product model = new Product();
+		Product model = null;
 		Connection con = null;
 		PreparedStatement prep = null;
 		ResultSet rs = null;
@@ -201,7 +193,7 @@ public class MySqlProduct implements ProductDao {
 		} finally {
 			close(con, prep, rs);
 		}
-		log.debug(Comment.RETURN + model.toString());
+		log.debug(Comment.RETURN + model);
 		return model;
 	}
 
@@ -256,28 +248,6 @@ public class MySqlProduct implements ProductDao {
 		return product;
 	}
 
-	private void close(AutoCloseable... autoCloseables) throws DBException {
-		for (AutoCloseable ac : autoCloseables) {
-			if (ac != null) {
-				try {
-					ac.close();
-				} catch (Exception e) {
-					log.error(Comment.EXCEPTION + e.getMessage());
-					throw new DBException(e);
-				}
-			}
-		}
-	}
-
-	private void rollback(Connection connect) throws DBException {
-		try {
-			connect.rollback();
-		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
-			throw new DBException(e);
-		}
-	}
-
 	private String countQuery(String[] categories) {
 		StringBuilder result = new StringBuilder();
 		result.append("SELECT count(id) FROM product ");
@@ -288,7 +258,7 @@ public class MySqlProduct implements ProductDao {
 		return result.toString();
 
 	}
-
+	
 	private String protectSqlInjection(String value, String[] categories, String desc) {
 		StringBuilder result = new StringBuilder();
 		result.append("SELECT * FROM product ");
