@@ -20,7 +20,7 @@ import consts.Param;
 import util.UserRole;
 
 /**
- * Servlet Filter implementation class NoUserFilter
+ * Servlet Filter for differentiate access rights
  */
 @WebFilter("/PermissionFilter")
 public class PermissionFilter implements Filter {

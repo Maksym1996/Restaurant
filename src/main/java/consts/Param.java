@@ -1,7 +1,6 @@
 package consts;
 /**
  * The class for storing parametr consts
- * @author yzhym
  *
  */
 public class Param {

@@ -8,11 +8,15 @@ import org.apache.log4j.Logger;
 
 import consts.Comment;
 import exception.DBException;
- 
+
+/**
+ * Abstract class for general method and fields
+ *
+ */
 public abstract class AbstractMySqlDao {
-	
+
 	protected Logger log = LogManager.getLogger(this.getClass());
-	
+
 	protected void close(AutoCloseable... resourcesToClose) throws DBException {
 		for (AutoCloseable resourceToClose : resourcesToClose) {
 			if (resourceToClose == null) {

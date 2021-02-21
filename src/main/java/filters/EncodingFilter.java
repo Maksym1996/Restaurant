@@ -15,7 +15,8 @@ import org.apache.log4j.Logger;
 import consts.Comment;
 
 /**
- * Servlet Filter implementation class EncodingFilter
+ * 
+ * Servlet filter for setting the required encoding
  */
 @WebFilter("/EncodingFilter")
 public class EncodingFilter implements Filter {

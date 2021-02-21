@@ -24,7 +24,7 @@ import util.Category;
 import util.Validator;
 
 /**
- * Servlet implementation class UpdateProductServlet
+ * Servlet that implements the functionality of changing product parameters
  */
 @WebServlet("/UpdateProduct")
 public class UpdateProductServlet extends HttpServlet {

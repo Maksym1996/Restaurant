@@ -1,5 +1,8 @@
 package exception;
-
+/**
+ * THhe class for provider exceptions
+ *
+ */
 public class ProviderException extends RuntimeException {
 
 	private static final long serialVersionUID = -4858243871976691879L;

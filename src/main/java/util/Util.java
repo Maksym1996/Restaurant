@@ -1,7 +1,5 @@
 package util;
-/**
- * The class for implementing specific methods
- */
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,6 +12,9 @@ import db.entity.OrderView;
 import db.entity.Product;
 import db.entity.User;
 
+/**
+ * The class for implementing specific methods
+ */
 public class Util {
 
 	private Util() {

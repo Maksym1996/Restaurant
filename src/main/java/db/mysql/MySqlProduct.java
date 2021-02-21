@@ -16,7 +16,9 @@ import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
 import util.Category;
-
+/**
+ *The class implementing ProductDao for DBMS MySQL
+ */
 public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 	private static final String INSERT_PRODUCT = "INSERT INTO product VALUES (DEFAULT, ?, ?, ?, ?, ?)";
 	private static final String SELECT_PRODUCT_BY_ID = "SELECT * FROM product WHERE id = ?";

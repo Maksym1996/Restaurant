@@ -1,14 +1,14 @@
 package web.tag;
 
-/**
- * Сustom request transfer tag for correct reading and transfer of arrays
- */
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+/**
+ * Сustom request transfer tag for correct reading and transfer of arrays
+ */
 public class PageLinkTag extends SimpleTagSupport {
 
 	private int pageNumber;

@@ -18,6 +18,10 @@ import db.entity.Product;
 import exception.DBException;
 import util.Status;
 
+/**
+ * The class implementing OrderViewDao for DBMS MySQL
+ *
+ */
 public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 	private static final String SELECT_ORDER_VIEWS_FOR_MANAGER = "SELECT * FROM orderView WHERE state IN ('NEW', 'COOKED', 'DELIVERED_AND_PAID', 'PERFORMED', 'REJECTED') ORDER BY id DESC";
 	private static final String SELECT_ORDER_VIEWS_BY_USER_ID = "SELECT * FROM orderView WHERE user_id = ? ORDER BY id DESC";
@@ -27,7 +31,7 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 	private static final String INSERT_PRODUCT_FOR_ORDER = "INSERT INTO order_has_product(order_id, product_id, count, price) VALUES(?, ?, ?, ?)";
 
 	private final DataSource dataSource;
-	
+
 	public MySqlOrderView(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}

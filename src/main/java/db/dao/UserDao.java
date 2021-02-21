@@ -5,6 +5,11 @@ import java.util.List;
 import db.entity.User;
 import exception.DBException;
 
+/**
+ * The interface describing the general view of the data access methods for the
+ * user entity
+ *
+ */
 public interface UserDao {
 
 	List<User> getUsersForManager() throws DBException;

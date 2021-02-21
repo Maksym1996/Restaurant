@@ -5,6 +5,11 @@ import java.util.List;
 import db.entity.Product;
 import exception.DBException;
 
+/**
+ * The interface describing the general view of the data access methods for the
+ * product entity
+ *
+ */
 public interface ProductDao {
 
 	Product getProductById(int id) throws DBException;

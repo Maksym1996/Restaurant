@@ -22,7 +22,7 @@ import exception.DBException;
 import util.Validator;
 
 /**
- * Servlet implementation class DeleteProductServlet
+ * Servlet implementing product deleting
  */
 @WebServlet("/DeleteProduct")
 public class DeleteProductServlet extends HttpServlet {

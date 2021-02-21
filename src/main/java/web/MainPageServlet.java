@@ -27,7 +27,8 @@ import util.Util;
 import util.Validator;
 
 /**
- * Servlet implementation class BeforeMain
+ * Servlet that implements the main page of the application, including sorting,
+ * filtering, and paging
  */
 
 @WebServlet("/Pizza Preferita")

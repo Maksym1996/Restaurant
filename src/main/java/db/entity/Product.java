@@ -1,5 +1,7 @@
 package db.entity;
-
+/**
+ * The class to implement the entity product
+ */
 import java.io.Serializable;
 
 import util.Category;

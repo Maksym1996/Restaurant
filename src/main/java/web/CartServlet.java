@@ -31,7 +31,8 @@ import util.Util;
 import util.Validator;
 
 /**
- * Servlet implementation class CartServlet
+ * Servlet that implements the management of the grocery cart and customer
+ * orders
  */
 @WebServlet("/Cart")
 public class CartServlet extends HttpServlet {

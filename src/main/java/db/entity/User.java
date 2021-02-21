@@ -1,5 +1,7 @@
 package db.entity;
-
+/**
+ * The class to implement the entity user
+ */
 import java.io.Serializable;
 
 import util.UserRole;

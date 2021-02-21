@@ -1,7 +1,5 @@
 package util;
-/**
- * The class for verifying reCaptcha from Google
- */
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -18,6 +16,9 @@ import org.apache.log4j.Logger;
 import consts.Captcha;
 import consts.Comment;
 
+/**
+ * The class for verifying reCaptcha from Google
+ */
 public class VerifyCaptcha {
 	public static final String SITE_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
 

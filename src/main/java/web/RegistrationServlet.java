@@ -27,12 +27,12 @@ import util.Validator;
 import util.VerifyCaptcha;
 
 /**
- * Servlet implementation class Registrarion
+ * Servlet that implements the new user registration process
  */
 @WebServlet("/Registration")
 public class RegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger log = LogManager.getLogger(RegistrationServlet.class);
 
 	@Override
@@ -42,7 +42,7 @@ public class RegistrationServlet extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.REGISTRATION_JSP);
 		log.info(Comment.FORWARD + Page.REGISTRATION_JSP);
 		dispatcher.forward(request, response);
- 
+
 	}
 
 	@Override
@@ -56,14 +56,13 @@ public class RegistrationServlet extends HttpServlet {
 		String password = request.getParameter(Param.PASSWORD);
 		String confirmPassword = request.getParameter(Param.CONFIRM_PASSWORD);
 		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-		
+
 		log.debug("firstName" + firstName);
 		log.debug("lastName" + lastName);
 		log.debug("email" + email);
 		log.debug("phoneNumber" + phoneNumber);
 		log.debug("password" + password);
 		log.debug("confirmPassword" + confirmPassword);
-		
 
 		Map<String, String> errors = Validator.registrationValidator(firstName, lastName, email, phoneNumber, password,
 				confirmPassword);
@@ -91,13 +90,12 @@ public class RegistrationServlet extends HttpServlet {
 				log.debug("such phone number already exist");
 			}
 		}
-		
 
-        // Verify CAPTCHA.
-       if(!VerifyCaptcha.verify(gRecaptchaResponse, request)) {
-    	   log.debug("reCaptcha is not Valid");
-            errors.put("captchaResponse", "Captcha invalid!");
-        }
+		// Verify CAPTCHA.
+		if (!VerifyCaptcha.verify(gRecaptchaResponse, request)) {
+			log.debug("reCaptcha is not Valid");
+			errors.put("captchaResponse", "Captcha invalid!");
+		}
 		if (!errors.isEmpty()) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.REGISTRATION_JSP);
 			request.setAttribute(Param.ERRORS, errors);

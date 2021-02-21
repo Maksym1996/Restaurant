@@ -33,7 +33,7 @@ import exception.DBException;
 import util.Validator;
 
 /**
- * Servlet implementation class LoginPage
+ * Ыervlet that implements the functionality of authorizing and displaying a custom page
  */
 @WebServlet("/Login page")
 public class LoginPageServlet extends HttpServlet {

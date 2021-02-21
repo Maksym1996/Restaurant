@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import consts.Comment;
 
 /**
- * Servlet Filter implementation class NoUserFilter
+ * Servlet Filter to restrict access to *.jsp files
  */
 @WebFilter("/NoJSPFilter")
 public class NoJSPFilter implements Filter {

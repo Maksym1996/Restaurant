@@ -1,4 +1,5 @@
 package util;
+
 /**
  * The enum for categories(Product)
  *
@@ -26,6 +27,5 @@ public enum Category {
 	public String toString() {
 		return title;
 	}
-	
-	
+
 }

@@ -25,7 +25,7 @@ import util.Util;
 import util.Validator;
 
 /**
- * Servlet implementation class AddProductServlet
+ * Servlet implementing product and creating additions
  */
 @WebServlet("/AddProduct")
 public class AddProductServlet extends HttpServlet {
@@ -63,7 +63,7 @@ public class AddProductServlet extends HttpServlet {
 
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 		log.debug(Dao.PRODUCT + " " + productDao);
-		
+
 		try {
 			Product testProductByName = productDao.getProductByName(name);
 

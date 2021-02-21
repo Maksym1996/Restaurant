@@ -36,7 +36,7 @@ import util.UserRole;
 import util.Validator;
 
 /**
- * Servlet implementation class WorkZoneServlet
+ * Servlet that implements the functionality, display, and order tracking
  */
 @WebServlet("/WorkZone")
 public class WorkZoneServlet extends HttpServlet {

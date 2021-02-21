@@ -15,6 +15,10 @@ import consts.Param;
 
 import java.io.IOException;
 
+/**
+ * Servlet that implements interface language switching
+ *
+ */
 @WebServlet("/language")
 public class LanguageServlet extends HttpServlet {
 

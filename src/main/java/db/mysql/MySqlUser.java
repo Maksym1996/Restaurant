@@ -16,7 +16,10 @@ import db.entity.User;
 import exception.DBException;
 import util.UserRole;
 import util.Util;
-
+/**
+ * The class implementing UserDao for DBMS MySQL
+ *
+ */
 public class MySqlUser extends AbstractMySqlDao implements UserDao {
 	private static final String SELECT_ALL_USERS = "SELECT * FROM user";
 	private static final String SELECT_USERS_BY_REGISTERED = "SELECT * FROM user WHERE registered = ?";
