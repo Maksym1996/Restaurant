@@ -10,11 +10,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
+
 import consts.Dao;
 import consts.Page;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
+import db.mysql.MySqlOrderView;
 import exception.DBException;
 import util.Category;
 import util.Util;
@@ -26,6 +31,14 @@ import util.Validator;
 @WebServlet("/AddProduct")
 public class AddProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private static final Logger log = LogManager.getLogger(AddProductServlet.class);
+
+	@Override
+	public void init() throws ServletException{
+	
+	DOMConfigurator.configure(Page.LOG4J);
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -7,7 +7,7 @@
 		maxActive="50" 
 		maxIdle="30" 
 		maxWait="10000"
-		username="Maksym" 
+		username="root" 
 		password="aCx6V3@33m@iU@Y"
 		driverClassName="com.mysql.cj.jdbc.Driver"
 		url="jdbc:mysql://localhost:3306/restaurant?useUnicode=true&amp;serverTimezone=UTC" />

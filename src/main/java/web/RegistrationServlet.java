@@ -73,7 +73,7 @@ public class RegistrationServlet extends HttpServlet {
 		
 
         // Verify CAPTCHA.
-       if(!VerifyCaptcha.verify(gRecaptchaResponse)) {
+       if(!VerifyCaptcha.verify(gRecaptchaResponse, request)) {
 
             errors.put("captchaResponse", "Captcha invalid!");
         }

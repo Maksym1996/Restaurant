@@ -8,6 +8,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
 
 import consts.Captcha;
 
@@ -15,7 +16,7 @@ public class VerifyCaptcha {
 	 public static final String SITE_VERIFY_URL = //
 	            "https://www.google.com/recaptcha/api/siteverify";
 	 
-	    public static boolean verify(String gRecaptchaResponse) {
+	    public static boolean verify(String gRecaptchaResponse, HttpServletRequest request) {
 	        if (gRecaptchaResponse == null || gRecaptchaResponse.length() == 0) {
 	            return false;
 	        }
@@ -28,9 +29,9 @@ public class VerifyCaptcha {
 	 
 	            // Добавить информации Header в Request, чтобы приготовить отправку к server.
 	            conn.setRequestMethod("POST");
-	            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
-	            conn.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-	 
+	            conn.setRequestProperty("User-Agent",  request.getHeader("User-Agent"));
+	            conn.setRequestProperty("Accept-Language", request.getHeader("Accept-Language"));
+	           
 	            // Данные будут отправлены на Server.
 	            String postParams = "secret=" + Captcha.SECRET_KEY //
 	                    + "&response=" + gRecaptchaResponse;
