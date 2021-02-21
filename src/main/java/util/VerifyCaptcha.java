@@ -1,5 +1,7 @@
 package util;
-
+/**
+ * The class for verifying reCaptcha from Google
+ */
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;

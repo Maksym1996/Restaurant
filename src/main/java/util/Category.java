@@ -1,4 +1,8 @@
 package util;
+/**
+ * The enum for categories(Product)
+ *
+ */
 
 public enum Category {
 	PIZZA("Pizza"), BURGER("Burger"), DRINKS("Drinks");

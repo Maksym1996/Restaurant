@@ -1,5 +1,9 @@
 package util;
 
+/**
+ * General class for validating fields and forms received from a request
+ */
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
