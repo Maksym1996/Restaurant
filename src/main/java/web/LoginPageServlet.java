@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import consts.Comment;
 import consts.Dao;
 import consts.Page;
 import consts.Param;
@@ -28,6 +29,7 @@ import db.dao.UserDao;
 import db.entity.OrderView;
 import db.entity.Product;
 import db.entity.User;
+import exception.DBException;
 import util.Validator;
 
 /**
@@ -36,25 +38,29 @@ import util.Validator;
 @WebServlet("/Login page")
 public class LoginPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	private static final Logger log = LogManager.getLogger(AddProductServlet.class);
+
+	private static final Logger log = LogManager.getLogger(LoginPageServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		log.info(Comment.BEGIN);
 		HttpSession session = request.getSession(true);
 		String forwardPage;
 		String logout = request.getParameter(Param.LOG_OUT);
+		log.debug("logout " + logout);
 
 		if (Param.LOG_OUT.equals(logout)) {
 			session.invalidate();
-
+			log.debug("session invalidate");
 			forwardPage = Page.LOGIN_PAGE_JSP;
 		} else if (session == null || session.getAttribute(Param.USER) == null) {
+			log.debug("session is null or user from session is null");
 			forwardPage = Page.LOGIN_PAGE_JSP;
 		} else {
 			User user = (User) session.getAttribute(Param.USER);
 			session.setAttribute(Param.ROLE, user.getRole());
+			log.debug("Set role = " + user.getRole() + " to session");
 			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
 			Set<Product> productList = new HashSet<>();
@@ -67,7 +73,8 @@ public class LoginPageServlet extends HttpServlet {
 					productList.add(productDao.getProductById(o.getProductId()));
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				log.error(Comment.DB_EXCEPTION + e.getMessage());
+				log.info(Comment.REDIRECT + 500);
 				response.sendError(500);
 				return;
 			}
@@ -75,10 +82,15 @@ public class LoginPageServlet extends HttpServlet {
 			request.setAttribute(Param.PRODUCTS_LIST, productList);
 			request.setAttribute(Param.ORDERS, orders);
 
+			log.debug(Comment.FORWARD_WITH_PARAMETR + "orderViewList " + orderViewList);
+			log.debug(Comment.FORWARD_WITH_PARAMETR + "productList " + productList);
+			log.debug(Comment.FORWARD_WITH_PARAMETR + "orders " + orders);
+
 			forwardPage = Page.ACCOUNT_JSP;
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
+		log.info(Comment.FORWARD + forwardPage);
 		dispatcher.forward(request, response);
 
 	}
@@ -86,10 +98,13 @@ public class LoginPageServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		log.info(Comment.BEGIN);
 		HttpSession session = request.getSession(true);
 
 		String phoneNumber = request.getParameter(Param.PHONE_NUMBER);
+		log.debug("phoneNumber " + phoneNumber);
 		String password = request.getParameter(Param.PASSWORD);
+		log.debug("password " + password);
 
 		Map<String, String> errors = Validator.authorizationValidator(phoneNumber, password);
 
@@ -97,14 +112,18 @@ public class LoginPageServlet extends HttpServlet {
 		User user = null;
 		try {
 			user = userDao.getUserByNumberAndPass(phoneNumber, password);
+			log.debug("getUserByNumberAndPass: " + user);
 			if (user == null) {
 				errors.put(Param.NO_USER, "User with such data does not exist");
 			} else {
 				session.setAttribute(Param.USER, user);
+				log.debug("Set user to session");
 				session.setAttribute(Param.ROLE, user.getRole());
+				log.debug("Set role to session: " + user.getRole());
 			}
-		} catch (Exception e) {
-			// TODO add some logger 03.02.2021
+		} catch (DBException e) {
+			log.error(Comment.DB_EXCEPTION + e.getMessage());
+			log.info(Comment.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
@@ -113,9 +132,11 @@ public class LoginPageServlet extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.LOGIN_PAGE_JSP);
 			request.setAttribute(Param.ERRORS, errors);
 			dispatcher.forward(request, response);
+			log.info(Comment.FORWARD + Page.LOGIN_PAGE_JSP);
+			log.debug(Comment.FORWARD_WITH_PARAMETR + "errors " + errors);
 			return;
 		}
-
+		log.info(Comment.REDIRECT + Page.LOGIN_PAGE);
 		response.sendRedirect(Page.LOGIN_PAGE);
 	}
 
