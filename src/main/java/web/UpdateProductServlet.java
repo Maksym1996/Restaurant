@@ -136,7 +136,7 @@ public class UpdateProductServlet extends HttpServlet {
 			productToUpdate.setPrice(Integer.parseInt(price));
 			productToUpdate.setDescription(description);
 			productToUpdate.setImageLink(imageLink);
-			productToUpdate.setCategory(Category.valueOf(category));
+			productToUpdate.setCategory(Category.byTitle(category));
 
 			productDao.updateProduct(productToUpdate);
 			log.debug("UpdateProduct");
