@@ -11,8 +11,9 @@
 */target/**
 temp/**
 bin/
-.settings/
-.idea/
+.settings
+.idea
 .project
 .classpath
 /target/
+
