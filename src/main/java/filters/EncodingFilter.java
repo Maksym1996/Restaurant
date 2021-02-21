@@ -9,22 +9,30 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import consts.Comment;
+
 /**
  * Servlet Filter implementation class EncodingFilter
  */
 @WebFilter("/EncodingFilter")
 public class EncodingFilter implements Filter {
+	private static final Logger log = LogManager.getLogger(EncodingFilter.class);
 
 	private String encoding = "utf-8";
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		log.info(Comment.BEGIN);
 		request.setCharacterEncoding(encoding);
 		chain.doFilter(request, response);
 	}
 
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
+		log.info(Comment.BEGIN);
 		String encodingParam = fConfig.getInitParameter("encoding");
 		if (encodingParam != null) {
 			encoding = encodingParam;
@@ -33,7 +41,7 @@ public class EncodingFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		// nothing todo
+		// nothing do
 	}
 
 }

@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import consts.Comment;
 import consts.Param;
 import util.UserRole;
 
@@ -21,11 +25,13 @@ import util.UserRole;
 @WebFilter("/PermissionFilter")
 public class PermissionFilter implements Filter {
 
+	private static final Logger log = LogManager.getLogger(PermissionFilter.class);
+
 	private boolean active = false;
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
+		// nothing do
 	}
 
 	/**
@@ -33,6 +39,7 @@ public class PermissionFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		log.info(Comment.BEGIN);
 		if (active) {
 			if (!(request instanceof HttpServletRequest && response instanceof HttpServletResponse)) {
 				throw new ServletException("non-HTTP request or response");
@@ -42,20 +49,22 @@ public class PermissionFilter implements Filter {
 
 			HttpSession session = httpServletRequest.getSession(true);
 			if (session == null || session.getAttribute(Param.ROLE) == null) {
+				log.info(Comment.REDIRECT + 401);
 				httpServletResponse.sendError(401);
 				return;
 			} else if (session.getAttribute(Param.ROLE) != UserRole.ADMIN) {
+				log.info(Comment.REDIRECT + 403);
 				httpServletResponse.sendError(403);
 				return;
 			}
 		}
-	
-		
+
 		chain.doFilter(request, response);
 	}
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
+		log.info(Comment.BEGIN);
 		String act = config.getInitParameter("active");
 		if (act != null) {
 			active = (act.equalsIgnoreCase("TRUE"));

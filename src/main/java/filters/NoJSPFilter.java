@@ -11,17 +11,24 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import consts.Comment;
+
 /**
  * Servlet Filter implementation class NoUserFilter
  */
 @WebFilter("/NoJSPFilter")
 public class NoJSPFilter implements Filter {
 
+	private static final Logger log = LogManager.getLogger(NoJSPFilter.class);
+
 	private boolean active = false;
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
+		// nothing do
 	}
 
 	/**
@@ -29,12 +36,13 @@ public class NoJSPFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		log.info(Comment.BEGIN);
 		if (active) {
 			if (!(request instanceof HttpServletRequest && response instanceof HttpServletResponse)) {
 				throw new ServletException("non-HTTP request or response");
 			}
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-
+			log.info(Comment.REDIRECT + 404);
 			httpServletResponse.sendError(404);
 			return;
 		}
@@ -43,6 +51,7 @@ public class NoJSPFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
+		log.info(Comment.BEGIN);
 		String act = config.getInitParameter("active");
 		if (act != null) {
 			active = (act.equalsIgnoreCase("TRUE"));
