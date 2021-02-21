@@ -15,4 +15,4 @@ bin/
 .idea
 .classpath
 /target/
-
+.project
