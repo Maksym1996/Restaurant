@@ -10,7 +10,7 @@ public class Captcha {
 	public static final String SECRET_KEY = "6LeiQmAaAAAAAI6BJBvAdDxYoVgSgHfvAXTmdcWF";
 
 	private Captcha() {
-		throw new IllegalStateException(Comment.ILLEGAL_STATE);
+		//nothing
 	}
 
 }

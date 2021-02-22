@@ -25,7 +25,7 @@ public class Page {
 	public static final String LOGIN_PAGE = "Login page";
 
 	private Page() {
-		throw new IllegalStateException(Comment.ILLEGAL_STATE);
+		//nothing
 	}
 
 }
