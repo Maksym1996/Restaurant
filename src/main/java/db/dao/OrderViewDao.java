@@ -12,7 +12,7 @@ import exception.DBException;
  * orderView entity
  */
 public interface OrderViewDao {
-
+	
 	String getStatusByOrderId(int orderId) throws DBException;
 
 	List<OrderView> getAllOrderViews() throws DBException;
