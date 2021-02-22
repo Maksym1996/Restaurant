@@ -28,18 +28,6 @@ public class OrderView implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getOrderDate() {
-		return orderDate;
-	}
-	public void setOrderDate(String orderDate) {
-		this.orderDate = orderDate;
-	}
-	public String getClosingDate() {
-		return closingDate;
-	}
-	public void setClosingDate(String closingDate) {
-		this.closingDate = closingDate;
-	}
 	
 	public Status getStatus() {
 		return status;
@@ -107,9 +95,8 @@ public class OrderView implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		OrderView other = (OrderView) obj;
-		if (id != other.id)
-			return false;
-		return true;
+		return id == other.id;
+	
 	}
 	@Override
 	public String toString() {
