@@ -22,13 +22,13 @@ import consts.CommentConst;
 public class VerifyCaptcha {
 	public static final String SITE_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
 
-	private static final Logger log = LogManager.getLogger(VerifyCaptcha.class);
+	private static final Logger LOG = LogManager.getLogger(VerifyCaptcha.class);
 
 	public static boolean verify(String gRecaptchaResponse, HttpServletRequest request) {
-		log.info(CommentConst.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		if (gRecaptchaResponse == null || gRecaptchaResponse.length() == 0) {
-			log.debug("gRecaptchaResponse is emptu or null");
-			log.info(CommentConst.RETURN + false);
+			LOG.debug("gRecaptchaResponse is emptu or null");
+			LOG.info(CommentConst.RETURN + false);
 			return false;
 		}
 
@@ -36,16 +36,16 @@ public class VerifyCaptcha {
 			URL verifyUrl = new URL(SITE_VERIFY_URL);
 
 			HttpsURLConnection conn = (HttpsURLConnection) verifyUrl.openConnection();
-			log.debug("Connection to URL");
+			LOG.debug("Connection to URL");
 
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("User-Agent", request.getHeader("User-Agent"));
 			conn.setRequestProperty("Accept-Language", request.getHeader("Accept-Language"));
-			log.debug("Added header info to request");
+			LOG.debug("Added header info to request");
 
 			String postParams = "secret=" + CaptchaConst.SECRET_KEY //
 					+ "&response=" + gRecaptchaResponse;
-			log.debug("Data for send to server");
+			LOG.debug("Data for send to server");
 
 			conn.setDoOutput(true);
 
@@ -54,21 +54,21 @@ public class VerifyCaptcha {
 
 			outStream.flush();
 			outStream.close();
-			log.debug("Sended request to server");
+			LOG.debug("Sended request to server");
 
 			InputStream is = conn.getInputStream();
 
 			JsonReader jsonReader = Json.createReader(is);
 			JsonObject jsonObject = jsonReader.readObject();
 			jsonReader.close();
-			log.debug("Get reponse by server");
+			LOG.debug("Get reponse by server");
 
 			boolean success = jsonObject.getBoolean("success");
-			log.info(CommentConst.RETURN + success);
+			LOG.info(CommentConst.RETURN + success);
 			return success;
 		} catch (Exception e) {
-			log.error(CommentConst.EXCEPTION + e.getMessage());
-			log.info(CommentConst.RETURN + false);
+			LOG.error(CommentConst.EXCEPTION + e.getMessage());
+			LOG.info(CommentConst.RETURN + false);
 			return false;
 		}
 	}

@@ -25,15 +25,15 @@ public class Validator {
 	public static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\\w\\s]).{8,}";
 	public static final String EMAIL_PATTERN = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
 
-	private static final Logger log = LogManager.getLogger(Validator.class);
+	private static final Logger LOG = LogManager.getLogger(Validator.class);
 
 	public static Map<String, String> mainPageValidator(String page, String productId, String sortValue) {
-		log.info(CommentConst.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		Map<String, String> params = new HashMap<>();
 
-		log.debug("page " + page);
-		log.debug("productId " + productId);
-		log.debug("sortValue " + sortValue);
+		LOG.debug("page " + page);
+		LOG.debug("productId " + productId);
+		LOG.debug("sortValue " + sortValue);
 
 		if (page == null || !Pattern.matches(INTEGER_PATTERN, page)) {
 			params.put(ParamConst.PAGE, "1");
@@ -51,29 +51,29 @@ public class Validator {
 			params.put(ParamConst.SORT_VALUE, sortValue);
 		}
 
-		log.debug("After valid page " + page);
-		log.debug("After valid productId " + productId);
-		log.debug("After valid sortValue " + sortValue);
+		LOG.debug("After valid page " + page);
+		LOG.debug("After valid productId " + productId);
+		LOG.debug("After valid sortValue " + sortValue);
 
-		log.info(CommentConst.RETURN + params);
+		LOG.info(CommentConst.RETURN + params);
 		return params;
 	}
 
 	public static boolean workZoneValidator(String status, String id) {
-		log.info(CommentConst.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		return id != null && Pattern.matches(INTEGER_PATTERN, id) && status != null && Status.valueOf(status) != null;
 	}
 
 	public static Map<String, String> productValidator(String name, String price, String description, String imageLink,
 			String category) {
-		log.info(CommentConst.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		Map<String, String> errors = new HashMap<>();
 
-		log.debug("name " + name);
-		log.debug("price " + price);
-		log.debug("description " + description);
-		log.debug("imageLink " + imageLink);
-		log.debug("category " + category);
+		LOG.debug("name " + name);
+		LOG.debug("price " + price);
+		LOG.debug("description " + description);
+		LOG.debug("imageLink " + imageLink);
+		LOG.debug("category " + category);
 
 		if (name == null || name.isEmpty()) {
 			errors.put(ParamConst.NAME, "Enter product name");
@@ -99,20 +99,20 @@ public class Validator {
 			errors.put(ParamConst.CATEGORY, "The '" + category + "' is not a valid category");
 		}
 
-		log.info(CommentConst.RETURN + errors);
+		LOG.info(CommentConst.RETURN + errors);
 		return errors;
 	}
 
 	public static boolean intValidator(String num) {
-		log.info(CommentConst.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		return num != null && !num.isEmpty() && Pattern.matches(INTEGER_PATTERN, num);
 	}
 
 	public static Map<String, String> authorizationValidator(String phoneNumber, String password) {
-		log.info(CommentConst.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		Map<String, String> errors = new HashMap<>();
-		log.debug("phoneNumber " + phoneNumber);
-		log.debug("password " + password);
+		LOG.debug("phoneNumber " + phoneNumber);
+		LOG.debug("password " + password);
 
 		if (phoneNumber == null) {
 			errors.put(ParamConst.PHONE_NUMBER, "Please, enter your phone number");
@@ -127,21 +127,21 @@ public class Validator {
 //		else if(!Pattern.matches(INTEGER_PATTERN, password)) {
 //			errors.put(Param.PASSWORD, productId);
 //		}
-		log.info(CommentConst.RETURN + errors);
+		LOG.info(CommentConst.RETURN + errors);
 		return errors;
 	}
 
 	public static Map<String, String> registrationValidator(String firstName, String lastName, String email,
 			String phoneNumber, String password, String confirmPassword) {
-		log.info(CommentConst.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		Map<String, String> errors = new HashMap<>();
 
-		log.debug("firstName " + firstName);
-		log.debug("lastName " + lastName);
-		log.debug("email " + email);
-		log.debug("phoneNumber " + phoneNumber);
-		log.debug("password " + password);
-		log.debug("confirmPassword " + confirmPassword);
+		LOG.debug("firstName " + firstName);
+		LOG.debug("lastName " + lastName);
+		LOG.debug("email " + email);
+		LOG.debug("phoneNumber " + phoneNumber);
+		LOG.debug("password " + password);
+		LOG.debug("confirmPassword " + confirmPassword);
 
 		if (firstName == null || firstName.isEmpty()) {
 			errors.put(ParamConst.FIRST_NAME, "Provide your first name");
@@ -173,16 +173,16 @@ public class Validator {
 			errors.put(ParamConst.PASSWORD,
 					"The password must consist of at least 8 characters, at least one digit, one uppercase and lowercase letters of the Latin alphabet and one special character");
 		}
-		log.info(CommentConst.RETURN + errors);
+		LOG.info(CommentConst.RETURN + errors);
 		return errors;
 
 	}
 
 	public static Map<String, Integer> cartValidator(String plusOrMinus, String id) {
-		log.info(CommentConst.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		Map<String, Integer> params = new HashMap<>();
-		log.debug("plusOrMinus " + plusOrMinus);
-		log.debug("id " + id);
+		LOG.debug("plusOrMinus " + plusOrMinus);
+		LOG.debug("id " + id);
 		if (ParamConst.INC.equals(plusOrMinus)) {
 			params.put(ParamConst.CHANGE, 1);
 		} else if (ParamConst.DEC.equals(plusOrMinus)) {
@@ -193,20 +193,20 @@ public class Validator {
 
 		params.put(ParamConst.ID, Validator.intValidator(id) ? Integer.parseInt(id) : 0);
 
-		log.debug("After valid plusOrMinus " + plusOrMinus);
-		log.debug("After valid id " + id);
+		LOG.debug("After valid plusOrMinus " + plusOrMinus);
+		LOG.debug("After valid id " + id);
 
 		return params;
 
 	}
 
 	public static int intValidatorReturnInt(String id) {
-		log.info(CommentConst.BEGIN);
-		log.debug("id" + id);
+		LOG.info(CommentConst.BEGIN);
+		LOG.debug("id" + id);
 		if (null == id || id.isEmpty() || !Pattern.matches(INTEGER_PATTERN, id)) {
 			return 0;
 		}
-		log.info(CommentConst.RETURN + id);
+		LOG.info(CommentConst.RETURN + id);
 		return Integer.parseInt(id);
 	}
 

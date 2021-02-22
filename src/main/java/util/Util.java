@@ -21,25 +21,25 @@ public class Util {
 		//nothing
 	}
 
-	private static final Logger log = LogManager.getLogger(Util.class);
+	private static final Logger LOG = LogManager.getLogger(Util.class);
 
 	public static int getMaxPages(long itemsCount, long pageSize) {
-		log.info(CommentConst.BEGIN);
-		log.debug("itemsCount " + itemsCount);
-		log.debug("pageSize " + pageSize);
+		LOG.info(CommentConst.BEGIN);
+		LOG.debug("itemsCount " + itemsCount);
+		LOG.debug("pageSize " + pageSize);
 		int i = (int) (itemsCount / pageSize);
-		log.debug("count/size= " + i);
+		LOG.debug("count/size= " + i);
 		return (double) itemsCount / pageSize != (double) i ? i + 1 : i;
 	}
 
 	public static User createUser(String firstName, String lastName, String email, String phoneNumber,
 			String password) {
-		log.info(CommentConst.BEGIN);
-		log.debug("firstName " + firstName);
-		log.debug("lastName " + lastName);
-		log.debug("email " + email);
-		log.debug("phoneNumber " + phoneNumber);
-		log.debug("password " + password);
+		LOG.info(CommentConst.BEGIN);
+		LOG.debug("firstName " + firstName);
+		LOG.debug("lastName " + lastName);
+		LOG.debug("email " + email);
+		LOG.debug("phoneNumber " + phoneNumber);
+		LOG.debug("password " + password);
 
 		User user = new User();
 		user.setFirstName(firstName);
@@ -49,31 +49,31 @@ public class Util {
 		user.setPassword(password);
 		user.setRegistered("true");
 
-		log.info(CommentConst.RETURN + user);
+		LOG.info(CommentConst.RETURN + user);
 		return user;
 
 	}
 
 	public static User createUser(String firstName, String phoneNumber) {
-		log.info(CommentConst.BEGIN);
-		log.debug("firstName " + firstName);
-		log.debug("phoneNumber " + phoneNumber);
+		LOG.info(CommentConst.BEGIN);
+		LOG.debug("firstName " + firstName);
+		LOG.debug("phoneNumber " + phoneNumber);
 		User user = new User();
 		user.setFirstName(firstName);
 		user.setPhoneNumber(phoneNumber);
 		user.setRegistered("false");
 
-		log.info(CommentConst.RETURN + user);
+		LOG.info(CommentConst.RETURN + user);
 		return user;
 
 	}
 
 	public static OrderView createOrder(Status status, String address, int userId, int sum) {
-		log.info(CommentConst.BEGIN);
-		log.debug("status " + status);
-		log.debug("address " + address);
-		log.debug("userId " + userId);
-		log.debug("sum " + sum);
+		LOG.info(CommentConst.BEGIN);
+		LOG.debug("status " + status);
+		LOG.debug("address " + address);
+		LOG.debug("userId " + userId);
+		LOG.debug("sum " + sum);
 		OrderView order = new OrderView();
 
 		order.setStatus(status);
@@ -81,20 +81,20 @@ public class Util {
 		order.setUserId(userId);
 		order.setSum(String.valueOf(sum));
 
-		log.info(CommentConst.RETURN + order);
+		LOG.info(CommentConst.RETURN + order);
 		return order;
 
 	}
 
 	public static Product createProduct(String name, int price, String description, String imageLink, Category category,
 			int id) {
-		log.info(CommentConst.BEGIN);
-		log.debug("name " + name);
-		log.debug("price " + price);
-		log.debug("description " + description);
-		log.debug("imageLink " + imageLink);
-		log.debug("category " + category);
-		log.debug("id " + id);
+		LOG.info(CommentConst.BEGIN);
+		LOG.debug("name " + name);
+		LOG.debug("price " + price);
+		LOG.debug("description " + description);
+		LOG.debug("imageLink " + imageLink);
+		LOG.debug("category " + category);
+		LOG.debug("id " + id);
 		Product product = new Product();
 
 		product.setName(name);
@@ -104,7 +104,7 @@ public class Util {
 		product.setCategory(category);
 		product.setId(id);
 
-		log.info(CommentConst.RETURN + product);
+		LOG.info(CommentConst.RETURN + product);
 		return product;
 
 	}
@@ -112,10 +112,10 @@ public class Util {
 	private static final String SALT = "234jsdflakj";
 
 	public static String stringToMD5(String password) {
-		log.info(CommentConst.BEGIN);
-		log.debug("password: " + password);
+		LOG.info(CommentConst.BEGIN);
+		LOG.debug("password: " + password);
 		if (password == null) {
-			log.info(CommentConst.RETURN + null);
+			LOG.info(CommentConst.RETURN + null);
 			return null;
 		}
 		String saltedPassword = password.concat(SALT);
@@ -128,7 +128,7 @@ public class Util {
 			messageDigest.update(saltedPassword.getBytes());
 			digest = messageDigest.digest();
 		} catch (NoSuchAlgorithmException e) {
-			log.error("NoSuchAlgorithmException: " + e.getMessage());
+			LOG.error("NoSuchAlgorithmException: " + e.getMessage());
 		}
 
 		BigInteger bigInt = new BigInteger(1, digest);
@@ -137,7 +137,7 @@ public class Util {
 		while (md5Hex.length() < 32) {
 			md5Hex = "0" + md5Hex;
 		}
-		log.info("Return MD5 code");
+		LOG.info("Return MD5 code");
 		return md5Hex;
 	}
 
