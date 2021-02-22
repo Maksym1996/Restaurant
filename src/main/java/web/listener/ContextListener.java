@@ -9,8 +9,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
-import org.apache.log4j.xml.DOMConfigurator;
-
 import consts.DaoConst;
 import db.dao.UserDao;
 import db.mysql.MySqlOrderView;
@@ -23,11 +21,8 @@ import exception.ContextInitException;
 @WebListener
 public class ContextListener implements ServletContextListener {
 
-	public static final String LOG4J_CONFIG_FILE = "Log4j.xml";
-
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		initLog();
 		initDao(event);
 	}
 
@@ -42,10 +37,6 @@ public class ContextListener implements ServletContextListener {
 		servletContext.setAttribute(DaoConst.USER, userDao);
 		servletContext.setAttribute(DaoConst.PRODUCT, productDao);
 		servletContext.setAttribute(DaoConst.ORDER_VIEW, orderDao);
-	}
-
-	private void initLog() {
-		DOMConfigurator.configure(LOG4J_CONFIG_FILE);
 	}
 
 	private DataSource getDataSource() {
