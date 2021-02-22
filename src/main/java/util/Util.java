@@ -18,8 +18,8 @@ import db.entity.User;
 public class Util {
 
 	private Util() {
-		throw new IllegalStateException("Utility class");
-	};
+		//nothing
+	}
 
 	private static final Logger log = LogManager.getLogger(Util.class);
 
