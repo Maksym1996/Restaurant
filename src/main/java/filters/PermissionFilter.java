@@ -41,13 +41,10 @@ public class PermissionFilter implements Filter {
 			throws IOException, ServletException {
 		log.info(Comment.BEGIN);
 		if (active) {
-			if (!(request instanceof HttpServletRequest && response instanceof HttpServletResponse)) {
-				throw new ServletException("non-HTTP request or response");
-			}
 			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-			HttpSession session = httpServletRequest.getSession(true);
+			HttpSession session = httpServletRequest.getSession();
 			if (session == null || session.getAttribute(Param.ROLE) == null) {
 				log.info(Comment.REDIRECT + 401);
 				httpServletResponse.sendError(401);
