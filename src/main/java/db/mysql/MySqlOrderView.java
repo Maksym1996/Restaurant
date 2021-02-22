@@ -233,6 +233,8 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 		OrderView orderView = new OrderView();
 		int k = 1;
 		orderView.setId(resultSet.getInt(k++));
+		orderView.setOrderDate(resultSet.getString(k++));
+		orderView.setClosingDate(resultSet.getString(k++));
 		orderView.setStatus(Status.valueOf(resultSet.getString(k++)));
 		orderView.setAddress(resultSet.getString(k++));
 		orderView.setUserId(resultSet.getInt(k++));
