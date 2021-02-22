@@ -30,9 +30,17 @@ public class OrderView implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public String getOrderDate() {
+		return orderDate;
+	}
 
 	public void setOrderDate(String orderDate) {
 		this.orderDate = orderDate;
+	}
+	
+	public String getClosingDate() {
+		return closingDate;
 	}
 
 	public void setClosingDate(String closingDate) {
