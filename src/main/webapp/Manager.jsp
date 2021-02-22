@@ -46,6 +46,17 @@
 
 	<c:import url="/WEB-INF/resources/header.jsp" />
 	<main>
+	<c:forEach var="count" items="${Count}">
+	<div>
+	FirstName: <c:out value="${count.firstName }"/>
+	LastName: <c:out value="${count.lastName }"/>
+	Tel: <c:out value="${count.phoneNumber }"/>
+	CountOrders : <c:out value="${count.countOrders }"/>
+	
+	</div>
+	</c:forEach>
+	
+	
 		<c:forEach var="order" items="${orders}">
 
 			<div class="card w-50" style="margin-left:3em">
