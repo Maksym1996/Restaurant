@@ -118,21 +118,21 @@ public class MySQLProductTest {
 
 	@Test
 	public void getProductCountByCategory() throws DBException {
-		long actual = productDao.getProductCount(new String[] { Category.BURGER.toString() });
+		long actual = productDao.getProductsCount(new String[] { Category.BURGER.toString() });
 		long expected = 2;
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void getProductCountByInvalidCategory() throws DBException {
-		long actual = productDao.getProductCount(new String[] { "Milk" });
+		long actual = productDao.getProductsCount(new String[] { "Milk" });
 		long expected = 0;
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void getProductCountByEmptyCategory() throws DBException {
-		long actual = productDao.getProductCount(new String[] { "" });
+		long actual = productDao.getProductsCount(new String[] { "" });
 		long expected = 0;
 		assertEquals(expected, actual);
 	}
