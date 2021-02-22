@@ -10,7 +10,7 @@
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><f:message key="ManagePage.title"/></title>
+<title><f:message key="ManagePage.title" /></title>
 <!--    Bootstap START-->
 
 <link
@@ -46,20 +46,48 @@
 
 	<c:import url="/WEB-INF/resources/header.jsp" />
 	<main>
-	<c:forEach var="count" items="${Count}">
-	<div>
-	FirstName: <c:out value="${count.firstName }"/>
-	LastName: <c:out value="${count.lastName }"/>
-	Tel: <c:out value="${count.phoneNumber }"/>
-	CountOrders : <c:out value="${count.countOrders }"/>
-	
-	</div>
-	</c:forEach>
-	
-	
+		<div class="card w-50" style="margin-left: 3em">
+			<div class="card-body">
+				<h1 class="card-title">Найбольшее количество заказов:</h1>
+				<div class="row productList">
+					<div class="col-sm-3">
+						<f:message key="firstName" />
+					</div>
+					<div class="col-sm-4">
+						<f:message key="lastName" />
+					</div>
+					<div class="col-sm-3">
+						<f:message key="number" />
+					</div>
+					<div class="col-sm-2">
+						<f:message key="count" />
+					</div>
+				</div>
+				<c:forEach var="userWithPerformedOrders"
+					items="${usersWithPerformedOrders}">
+					<div class= "row productList">
+						<div class="col-sm-3">
+							<c:out value="${userWithPerformedOrders.firstName }" />
+						</div>
+						<div class="col-sm-4">
+							<c:out value="${userWithPerformedOrders.lastName }" />
+						</div>
+						<div class="col-sm-3">
+							<c:out value="${userWithPerformedOrders.phoneNumber }" />
+						</div>
+						<div class="col-sm-2">
+							<c:out value="${userWithPerformedOrders.countOrders }" />
+						</div>
+
+					</div>
+				</c:forEach>
+			</div>
+		</div>
+
+<h1 class="info">Текущие заказы</h1>
 		<c:forEach var="order" items="${orders}">
 
-			<div class="card w-50" style="margin-left:3em">
+			<div class="card w-50" style="margin-left: 3em">
 				<div class="card-body">
 					<h5 class="card-title">
 						№
@@ -73,7 +101,7 @@
 
 								<c:out value="${user.lastName}" />
 
-								тел. <c:out value="${user.phoneNumber}" />
+								<f:message key="tel" />. <c:out value="${user.phoneNumber}" />
 
 							</c:if>
 						</c:forEach>
@@ -86,15 +114,22 @@
 						<c:out value="${order.orderDate}" />
 					</h5>
 					<h5>
-						<span style="color: <c:out value="${order.status.getColor()}" /> ; font-weight: 900"><c:out
+						<span
+							style="color: <c:out value="${order.status.getColor()}" /> ; font-weight: 900"><c:out
 								value="${order.status}" /></span>
 						<c:out value="${order.closingDate}" />
 
 					</h5>
 					<div class="row productList">
-						<div class="col-sm-4"><f:message key="name"/></div>
-						<div class="col-sm-2"><f:message key="count"/></div>
-						<div class="col-sm-2"><f:message key="price"/></div>
+						<div class="col-sm-4">
+							<f:message key="name" />
+						</div>
+						<div class="col-sm-2">
+							<f:message key="count" />
+						</div>
+						<div class="col-sm-2">
+							<f:message key="price" />
+						</div>
 					</div>
 					<c:forEach var="orderView" items="${orderViewList}">
 						<c:if test="${orderView.id == order.id }">
@@ -118,30 +153,39 @@
 						</c:if>
 					</c:forEach>
 					<h5 style="margin-top: 1em">
-						<f:message key="sumOrder"/>: 
-						<c:out value="${order.sum}"/> <f:message key="grn"/>.</h5>
-					</div>
-					<c:if
-						test="${order.status.name() != 'REJECTED' and order.status.name() != 'PERFORMED'}">
-
-						<div class="row" style="margin-top: 1em">
-							<div class="col-sm-4">
-								<form action="WorkZone" method="post">
-									<input name="status" value="${order.status.name()}" type="hidden" />
-									<input name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-success"><f:message key="accept"/></button>
-								</form>
-							</div>
-							<div class="col-sm-2">
-								<form action="WorkZone" method="post">
-									<input name="status" value="REJECTED" type="hidden" /> <input
-										name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-danger"><f:message key="decline"/></button>
-								</form>
-							</div>
-						</div>
-					</c:if>
+						<f:message key="sumOrder" />
+						:
+						<c:out value="${order.sum}" />
+						<f:message key="grn" />
+						.
+					</h5>
 				</div>
+				<c:if
+					test="${order.status.name() != 'REJECTED' and order.status.name() != 'PERFORMED'}">
+
+					<div class="row" style="margin-top: 1em">
+						<div class="col-sm-4">
+							<form action="WorkZone" method="post">
+								<input name="status" value="${order.status.name()}"
+									type="hidden" /> <input name="id" value="${order.id}"
+									type="hidden" />
+								<button type="submit" class="btn btn-success">
+									<f:message key="accept" />
+								</button>
+							</form>
+						</div>
+						<div class="col-sm-2">
+							<form action="WorkZone" method="post">
+								<input name="status" value="REJECTED" type="hidden" /> <input
+									name="id" value="${order.id}" type="hidden" />
+								<button type="submit" class="btn btn-danger">
+									<f:message key="decline" />
+								</button>
+							</form>
+						</div>
+					</div>
+				</c:if>
+			</div>
 		</c:forEach>
 	</main>
 	<c:import url="/WEB-INF/resources/footer.jspf" />
