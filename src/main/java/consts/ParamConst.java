@@ -3,7 +3,7 @@ package consts;
  * The class for storing parametr consts
  *
  */
-public class Param {
+public class ParamConst {
 	// MainPageServlet
 	public static final String PAGE = "page";
 	public static final String CATEGORIES = "categories";
@@ -62,9 +62,10 @@ public class Param {
 	public static final String NO_USER = "noUser";
 	public static final String PRODUCT = "product";
 	public static final String ERRORS = "errors";
-
-	private Param() {
-		throw new IllegalStateException(Comment.ILLEGAL_STATE);
+	public static final String USERS_WITH_PERFORMED_ORDERS = "usersWithPerformedOrders";
+	
+	private ParamConst() {
+		//nothing
 	}
 
 }

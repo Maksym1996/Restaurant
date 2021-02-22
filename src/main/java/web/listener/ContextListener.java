@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.xml.DOMConfigurator;
 
-import consts.Dao;
+import consts.DaoConst;
 import db.dao.UserDao;
 import db.mysql.MySqlOrderView;
 import db.mysql.MySqlProduct;
@@ -39,9 +39,9 @@ public class ContextListener implements ServletContextListener {
 		OrderViewDao orderDao = new MySqlOrderView(dataSource);
 
 		ServletContext servletContext = event.getServletContext();
-		servletContext.setAttribute(Dao.USER, userDao);
-		servletContext.setAttribute(Dao.PRODUCT, productDao);
-		servletContext.setAttribute(Dao.ORDER_VIEW, orderDao);
+		servletContext.setAttribute(DaoConst.USER, userDao);
+		servletContext.setAttribute(DaoConst.PRODUCT, productDao);
+		servletContext.setAttribute(DaoConst.ORDER_VIEW, orderDao);
 	}
 
 	private void initLog() {

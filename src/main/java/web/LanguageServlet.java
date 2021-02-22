@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.Comment;
-import consts.Param;
+import consts.CommentConst;
+import consts.ParamConst;
 
 import java.io.IOException;
 
@@ -24,29 +24,29 @@ public class LanguageServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 2689567392392305656L;
 
-	private static final Logger log = LogManager.getLogger(LanguageServlet.class);
+	private static final Logger LOG = LogManager.getLogger(LanguageServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
-		String lang = request.getParameter(Param.LANG);
-		String path = request.getHeader(Param.REFERER);
-		log.debug("Lang " + lang);
-		log.debug("Path " + lang);
+		LOG.info(CommentConst.BEGIN);
+		String lang = request.getParameter(ParamConst.LANG);
+		String path = request.getHeader(ParamConst.REFERER);
+		LOG.debug("Lang " + lang);
+		LOG.debug("Path " + lang);
 
 		HttpSession session = request.getSession(true);
-		session.setAttribute(Param.LANG, lang);
-		log.debug("Set lang in session " + lang);
-		log.info(Comment.REDIRECT + path);
+		session.setAttribute(ParamConst.LANG, lang);
+		LOG.debug("Set lang in session " + lang);
+		LOG.info(CommentConst.REDIRECT + path);
 		response.sendRedirect(path);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
-		log.info("doGet()");
+		LOG.info(CommentConst.BEGIN);
+		LOG.info("doGet()");
 		doGet(request, response);
 	}
 

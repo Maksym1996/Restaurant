@@ -16,9 +16,9 @@ import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
 
-import consts.Dao;
-import consts.Page;
-import consts.Param;
+import consts.DaoConst;
+import consts.PageConst;
+import consts.ParamConst;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
@@ -58,9 +58,9 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCartNullThenReturnEmptyCartJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.EMPTY_CART)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.EMPTY_CART)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(null);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(null);
 
 		servlet.doGet(request, response);
 
@@ -69,9 +69,9 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCartEmptyThenReturnEmptyCartJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.EMPTY_CART)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.EMPTY_CART)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(cart);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(cart);
 
 		servlet.doGet(request, response);
 
@@ -80,9 +80,9 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetNotEmptyCartThenReturnEmptyCartJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.EMPTY_CART)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.EMPTY_CART)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(cart);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(cart);
 		when(cart.getProducts()).thenReturn(prods);
 
 		servlet.doGet(request, response);
@@ -92,9 +92,9 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCartWithNotNullProductThenReturnCartJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(cart);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(cart);
 		when(cart.getProducts()).thenReturn(getListNotNull());
 
 		servlet.doGet(request, response);
@@ -104,10 +104,10 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetNotNullListThenReturnCartJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(cart);
-		when(session.getAttribute(Param.COUNT)).thenReturn(getCount0());
+		when(session.getAttribute(ParamConst.CART)).thenReturn(cart);
+		when(session.getAttribute(ParamConst.COUNT)).thenReturn(getCount0());
 		when(cart.getProducts()).thenReturn(getListNotNull());
 
 		servlet.doGet(request, response);
@@ -117,12 +117,12 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCountZeroThenReturnCartJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(cart);
-		when(session.getAttribute(Param.COUNT)).thenReturn(getCount0());
-		when(request.getParameter(Param.ID)).thenReturn("1");
-		when(request.getParameter(Param.CHANGE)).thenReturn(Param.DEC);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(cart);
+		when(session.getAttribute(ParamConst.COUNT)).thenReturn(getCount0());
+		when(request.getParameter(ParamConst.ID)).thenReturn("1");
+		when(request.getParameter(ParamConst.CHANGE)).thenReturn(ParamConst.DEC);
 		when(cart.getProducts()).thenReturn(getListNotNull());
 
 		servlet.doGet(request, response);
@@ -132,12 +132,12 @@ public class CartServletTest {
 
 	@Test
 	public void callDoGetCountTwentyThenReturnCartJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(cart);
-		when(session.getAttribute(Param.COUNT)).thenReturn(getCount20());
-		when(request.getParameter(Param.ID)).thenReturn("1");
-		when(request.getParameter(Param.CHANGE)).thenReturn(Param.DEC);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(cart);
+		when(session.getAttribute(ParamConst.COUNT)).thenReturn(getCount20());
+		when(request.getParameter(ParamConst.ID)).thenReturn("1");
+		when(request.getParameter(ParamConst.CHANGE)).thenReturn(ParamConst.DEC);
 		when(cart.getProducts()).thenReturn(getListNotNull());
 
 		servlet.doGet(request, response);
@@ -156,11 +156,11 @@ public class CartServletTest {
 
 	@Test
 	public void callDoPostWithParamThenReturnCartJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.CART_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.CART_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(new Cart());
-		when(request.getParameter(Param.SUMM)).thenReturn("200");
-		when(request.getParameter(Param.PHONE_NUMBER)).thenReturn("0123");
+		when(session.getAttribute(ParamConst.CART)).thenReturn(new Cart());
+		when(request.getParameter(ParamConst.SUMM)).thenReturn("200");
+		when(request.getParameter(ParamConst.PHONE_NUMBER)).thenReturn("0123");
 
 		servlet.doPost(request, response);
 
@@ -171,14 +171,14 @@ public class CartServletTest {
 	public void callDoPostWithValidParamThenReturn500() throws Exception {
 		when(request.getSession(true)).thenReturn(session);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
-		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
-		when(session.getAttribute(Param.CART)).thenReturn(new Cart());
-		when(request.getParameter(Param.SUMM)).thenReturn("200");
-		when(request.getParameter(Param.PHONE_NUMBER)).thenReturn("0969055386");
-		when(request.getParameter(Param.FIRST_NAME)).thenReturn("Maksym");
-		when(request.getParameter(Param.ADDRESS)).thenReturn("Gagarina 6");
+		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
+		when(context.getAttribute(DaoConst.ORDER_VIEW)).thenReturn(orderViewDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(new Cart());
+		when(request.getParameter(ParamConst.SUMM)).thenReturn("200");
+		when(request.getParameter(ParamConst.PHONE_NUMBER)).thenReturn("0969055386");
+		when(request.getParameter(ParamConst.FIRST_NAME)).thenReturn("Maksym");
+		when(request.getParameter(ParamConst.ADDRESS)).thenReturn("Gagarina 6");
 		when(orderViewDao.insertOrder(any(), any(), any())).thenThrow(new DBException(null));
 
 		servlet.doPost(request, response);
@@ -190,31 +190,31 @@ public class CartServletTest {
 	public void callDoPostWithValidParamThenReturnLoginPage() throws Exception {
 		when(request.getSession(true)).thenReturn(session);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
-		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
-		when(session.getAttribute(Param.CART)).thenReturn(new Cart());
-		when(request.getParameter(Param.SUMM)).thenReturn("200");
-		when(request.getParameter(Param.PHONE_NUMBER)).thenReturn("0969055386");
-		when(request.getParameter(Param.FIRST_NAME)).thenReturn("Maksym");
-		when(request.getParameter(Param.ADDRESS)).thenReturn("Gagarina 6");
+		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
+		when(context.getAttribute(DaoConst.ORDER_VIEW)).thenReturn(orderViewDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(new Cart());
+		when(request.getParameter(ParamConst.SUMM)).thenReturn("200");
+		when(request.getParameter(ParamConst.PHONE_NUMBER)).thenReturn("0969055386");
+		when(request.getParameter(ParamConst.FIRST_NAME)).thenReturn("Maksym");
+		when(request.getParameter(ParamConst.ADDRESS)).thenReturn("Gagarina 6");
 
 		servlet.doPost(request, response);
 
-		verify(response).sendRedirect(Page.LOGIN_PAGE);
+		verify(response).sendRedirect(PageConst.LOGIN_PAGE);
 	}
 
 	@Test
 	public void callDoPostExceptionUserDaoThenReturn500() throws Exception {
 		when(request.getSession(true)).thenReturn(session);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
-		when(session.getAttribute(Param.CART)).thenReturn(new Cart());
-		when(request.getParameter(Param.SUMM)).thenReturn("200");
-		when(request.getParameter(Param.PHONE_NUMBER)).thenReturn("0969055386");
-		when(request.getParameter(Param.FIRST_NAME)).thenReturn("Maksym");
-		when(request.getParameter(Param.ADDRESS)).thenReturn("Gagarina 6");
+		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(new Cart());
+		when(request.getParameter(ParamConst.SUMM)).thenReturn("200");
+		when(request.getParameter(ParamConst.PHONE_NUMBER)).thenReturn("0969055386");
+		when(request.getParameter(ParamConst.FIRST_NAME)).thenReturn("Maksym");
+		when(request.getParameter(ParamConst.ADDRESS)).thenReturn("Gagarina 6");
 		when(userDao.insertUser(any())).thenThrow(new DBException(null));
 
 		servlet.doPost(request, response);

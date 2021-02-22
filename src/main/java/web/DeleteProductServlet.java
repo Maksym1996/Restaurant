@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.Comment;
-import consts.Dao;
-import consts.Page;
-import consts.Param;
+import consts.CommentConst;
+import consts.DaoConst;
+import consts.PageConst;
+import consts.ParamConst;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -28,51 +28,51 @@ import util.Validator;
 public class DeleteProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = LogManager.getLogger(DeleteProductServlet.class);
+	private static final Logger LOG = LogManager.getLogger(DeleteProductServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
-		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.DELETED_PRODUCT_JSP);
-		log.info(Comment.FORWARD + Page.DELETED_PRODUCT_JSP);
+		LOG.info(CommentConst.BEGIN);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.DELETED_PRODUCT_JSP);
+		LOG.info(CommentConst.FORWARD + PageConst.DELETED_PRODUCT_JSP);
 		dispatcher.forward(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
-		String stringProductId = request.getParameter(Param.ID);
-		log.debug("stringProductId " + stringProductId);
+		LOG.info(CommentConst.BEGIN);
+		String stringProductId = request.getParameter(ParamConst.ID);
+		LOG.debug("stringProductId " + stringProductId);
 
 		if (!Validator.intValidator(stringProductId)) {
-			log.debug("stringProductId is invalid");
-			log.info(Comment.REDIRECT + 400);
+			LOG.debug("stringProductId is invalid");
+			LOG.info(CommentConst.REDIRECT + 400);
 			response.sendError(400);
 			return;
 		}
 
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
 		int productId = Integer.parseInt(stringProductId);
 
 		try {
 			Product testProduct = productDao.getProductById(productId);
-			log.debug("getProductById(): " + testProduct);
+			LOG.debug("getProductById(): " + testProduct);
 			if (testProduct == null) {
-				log.info(Comment.REDIRECT + 404);
+				LOG.info(CommentConst.REDIRECT + 404);
 				response.sendError(404);
 				return;
 			}
 			productDao.deleteProductById(productId);
-			log.debug("deleteProductById");
+			LOG.debug("deleteProductById");
 		} catch (DBException e) {
-			log.error(Comment.DB_EXCEPTION + e.getMessage());
-			log.info(Comment.REDIRECT + 500);
+			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
+			LOG.info(CommentConst.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
-		log.info(Comment.REDIRECT + Page.DELETE_PRODUCT);
-		response.sendRedirect(Page.DELETE_PRODUCT);
+		LOG.info(CommentConst.REDIRECT + PageConst.DELETE_PRODUCT);
+		response.sendRedirect(PageConst.DELETE_PRODUCT);
 	}
 }

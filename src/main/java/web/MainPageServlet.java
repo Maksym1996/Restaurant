@@ -15,10 +15,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.Comment;
-import consts.Dao;
-import consts.Page;
-import consts.Param;
+import consts.CommentConst;
+import consts.DaoConst;
+import consts.PageConst;
+import consts.ParamConst;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -40,25 +40,25 @@ public class MainPageServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		log.info(Comment.BEGIN);
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
-		Map<String, String> params = Validator.mainPageValidator(request.getParameter(Param.PAGE),
-				request.getParameter(Param.PRODUCT_ID), request.getParameter(Param.SORT_VALUE));
+		log.info(CommentConst.BEGIN);
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
+		Map<String, String> params = Validator.mainPageValidator(request.getParameter(ParamConst.PAGE),
+				request.getParameter(ParamConst.PRODUCT_ID), request.getParameter(ParamConst.SORT_VALUE));
 
-		int currentPage = Integer.parseInt(params.get(Param.PAGE));
+		int currentPage = Integer.parseInt(params.get(ParamConst.PAGE));
 		log.debug("currentPage " + currentPage);
-		int productId = Integer.parseInt(params.get(Param.PRODUCT_ID));
+		int productId = Integer.parseInt(params.get(ParamConst.PRODUCT_ID));
 		log.debug("productId " + productId);
-		String[] categories = request.getParameterValues(Param.CATEGORIES) != null
-				? request.getParameterValues(Param.CATEGORIES)
+		String[] categories = request.getParameterValues(ParamConst.CATEGORIES) != null
+				? request.getParameterValues(ParamConst.CATEGORIES)
 				: new String[] {};
 		log.debug("categories " + categories);
-		String sortValue = params.get(Param.SORT_VALUE);
+		String sortValue = params.get(ParamConst.SORT_VALUE);
 		log.debug("sortValue " + sortValue);
-		String asc = request.getParameter(Param.ASC);
+		String asc = request.getParameter(ParamConst.ASC);
 		log.debug("asc " + asc);
 
-		int limitProductOnPage = 2;
+		int limitProductOnPage = 3;
 		log.debug("limitProductOnPage " + limitProductOnPage);
 		List<Product> partListProducts = null;
 		long productsCount = 0;
@@ -67,22 +67,22 @@ public class MainPageServlet extends HttpServlet {
 		log.debug("skip " + skip);
 
 		try {
-			productsCount = productDao.getProductCount(categories);
+			productsCount = productDao.getProductsCount(categories);
 			partListProducts = productDao.getProductByCategoriesOnPage(categories, sortValue, asc, skip,
 					limitProductOnPage);
 		} catch (DBException e) {
-			log.error(Comment.DB_EXCEPTION + e.getMessage());
-			log.info(Comment.REDIRECT + 500);
+			log.error(CommentConst.DB_EXCEPTION + e.getMessage());
+			log.info(CommentConst.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
 
 		HttpSession session = request.getSession(true);
-		Cart cart = (Cart) session.getAttribute(Param.CART);
+		Cart cart = (Cart) session.getAttribute(ParamConst.CART);
 		log.debug("Cart from session  " + cart);
 		if (cart == null) {
 			cart = new Cart();
-			session.setAttribute(Param.CART, cart);
+			session.setAttribute(ParamConst.CART, cart);
 		}
 
 		List<Product> cartProducts = cart.getProducts();
@@ -98,8 +98,8 @@ public class MainPageServlet extends HttpServlet {
 				try {
 					cartProducts.add(productDao.getProductById(productId));
 				} catch (DBException e) {
-					log.error(Comment.DB_EXCEPTION + e.getMessage());
-					log.info(Comment.REDIRECT + 500);
+					log.error(CommentConst.DB_EXCEPTION + e.getMessage());
+					log.info(CommentConst.REDIRECT + 500);
 					response.sendError(500);
 					return;
 				}
@@ -108,20 +108,20 @@ public class MainPageServlet extends HttpServlet {
 
 		int maxPages = Util.getMaxPages(productsCount, limitProductOnPage);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.PIZZA_PREFERITA_JSP);
-		request.setAttribute(Param.PRODUCTS_LIST, partListProducts);
-		request.setAttribute(Param.MAX_PAGES, maxPages);
-		request.setAttribute(Param.CURRENT_PAGE, currentPage);
-		request.setAttribute(Param.CATEGORIES, categories);
-		request.setAttribute(Param.SORT_VALUE, sortValue);
-		request.setAttribute(Param.ASC, asc);
-		log.info(Comment.FORWARD + Page.PIZZA_PREFERITA_JSP);
-		log.debug(Comment.FORWARD_WITH_PARAMETR + "partListProducts " + partListProducts);
-		log.debug(Comment.FORWARD_WITH_PARAMETR + "maxPages " + maxPages);
-		log.debug(Comment.FORWARD_WITH_PARAMETR + "currentPage " + currentPage);
-		log.debug(Comment.FORWARD_WITH_PARAMETR + "categories " + categories);
-		log.debug(Comment.FORWARD_WITH_PARAMETR + "sortValue " + sortValue);
-		log.debug(Comment.FORWARD_WITH_PARAMETR + "asc " + asc);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.PIZZA_PREFERITA_JSP);
+		request.setAttribute(ParamConst.PRODUCTS_LIST, partListProducts);
+		request.setAttribute(ParamConst.MAX_PAGES, maxPages);
+		request.setAttribute(ParamConst.CURRENT_PAGE, currentPage);
+		request.setAttribute(ParamConst.CATEGORIES, categories);
+		request.setAttribute(ParamConst.SORT_VALUE, sortValue);
+		request.setAttribute(ParamConst.ASC, asc);
+		log.info(CommentConst.FORWARD + PageConst.PIZZA_PREFERITA_JSP);
+		log.debug(CommentConst.FORWARD_WITH_PARAMETR + "partListProducts " + partListProducts);
+		log.debug(CommentConst.FORWARD_WITH_PARAMETR + "maxPages " + maxPages);
+		log.debug(CommentConst.FORWARD_WITH_PARAMETR + "currentPage " + currentPage);
+		log.debug(CommentConst.FORWARD_WITH_PARAMETR + "categories " + categories);
+		log.debug(CommentConst.FORWARD_WITH_PARAMETR + "sortValue " + sortValue);
+		log.debug(CommentConst.FORWARD_WITH_PARAMETR + "asc " + asc);
 		dispatcher.forward(request, response);
 
 	}
@@ -129,7 +129,7 @@ public class MainPageServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		log.info("doGet()");
 		doGet(request, response);
 	}

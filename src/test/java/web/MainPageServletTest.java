@@ -3,9 +3,9 @@ package web;
 import org.junit.Before;
 import org.junit.Test;
 
-import consts.Dao;
-import consts.Page;
-import consts.Param;
+import consts.DaoConst;
+import consts.PageConst;
+import consts.ParamConst;
 import db.dao.ProductDao;
 import exception.DBException;
 import util.Cart;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 
 public class MainPageServletTest {
 
-	private static final String path = Page.PIZZA_PREFERITA_JSP;
+	private static final String path = PageConst.PIZZA_PREFERITA_JSP;
 
 	private MainPageServlet servlet;
 	private HttpServletRequest request;
@@ -48,14 +48,14 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
 
 		servlet.doGet(request, response);
 
 		verify(request, times(1)).getRequestDispatcher(path);
 		verify(request, times(1)).getSession(true);
-		verify(request, never()).getAttribute(Param.PAGE);
+		verify(request, never()).getAttribute(ParamConst.PAGE);
 		verify(dispatcher).forward(request, response);
 	}
 
@@ -64,14 +64,14 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(cart);
-		when(request.getParameter(Param.PAGE)).thenReturn("2");
-		when(request.getParameter(Param.CATEGORIES)).thenReturn("Pizza");
-		when(request.getParameter(Param.SORT_VALUE)).thenReturn("price");
-		when(request.getParameter(Param.ASC)).thenReturn("true");
-		when(request.getParameter(Param.PRODUCT_ID)).thenReturn("1");
+		when(session.getAttribute(ParamConst.CART)).thenReturn(cart);
+		when(request.getParameter(ParamConst.PAGE)).thenReturn("2");
+		when(request.getParameter(ParamConst.CATEGORIES)).thenReturn("Pizza");
+		when(request.getParameter(ParamConst.SORT_VALUE)).thenReturn("price");
+		when(request.getParameter(ParamConst.ASC)).thenReturn("true");
+		when(request.getParameter(ParamConst.PRODUCT_ID)).thenReturn("1");
 
 		servlet.doGet(request, response);
 
@@ -85,10 +85,10 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(cart);
-		when(request.getParameter(Param.PRODUCT_ID)).thenReturn("1");
+		when(session.getAttribute(ParamConst.CART)).thenReturn(cart);
+		when(request.getParameter(ParamConst.PRODUCT_ID)).thenReturn("1");
 
 		when(productDao.getProductById(1)).thenThrow(new DBException(new Throwable()));
 
@@ -102,15 +102,15 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(Param.CART)).thenReturn(cart);
+		when(session.getAttribute(ParamConst.CART)).thenReturn(cart);
 
-		when(request.getParameter(Param.PAGE)).thenReturn("ZERO");
-		when(request.getParameter(Param.CATEGORIES)).thenReturn("To");
-		when(request.getParameter(Param.SORT_VALUE)).thenReturn("Oport");
-		when(request.getParameter(Param.ASC)).thenReturn("Trues");
-		when(request.getParameter(Param.PRODUCT_ID)).thenReturn("TWO");
+		when(request.getParameter(ParamConst.PAGE)).thenReturn("ZERO");
+		when(request.getParameter(ParamConst.CATEGORIES)).thenReturn("To");
+		when(request.getParameter(ParamConst.SORT_VALUE)).thenReturn("Oport");
+		when(request.getParameter(ParamConst.ASC)).thenReturn("Trues");
+		when(request.getParameter(ParamConst.PRODUCT_ID)).thenReturn("TWO");
 
 		servlet.doGet(request, response);
 
@@ -124,9 +124,9 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(productDao.getProductCount(any())).thenThrow(new DBException(new Throwable()));
+		when(productDao.getProductsCount(any())).thenThrow(new DBException(new Throwable()));
 
 		servlet.doPost(request, response);
 

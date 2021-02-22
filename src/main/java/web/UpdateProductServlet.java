@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.Comment;
-import consts.Dao;
-import consts.Page;
-import consts.Param;
+import consts.CommentConst;
+import consts.DaoConst;
+import consts.PageConst;
+import consts.ParamConst;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -30,40 +30,40 @@ import util.Validator;
 public class UpdateProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = LogManager.getLogger(UpdateProductServlet.class);
+	private static final Logger LOG = LogManager.getLogger(UpdateProductServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
-		String productId = request.getParameter(Param.ID);
+		LOG.info(CommentConst.BEGIN);
+		String productId = request.getParameter(ParamConst.ID);
 
-		log.debug("Product Id = " + productId);
+		LOG.debug("Product Id = " + productId);
 
 		if (!Validator.intValidator(productId)) {
-			log.debug("ProductId is invalid");
-			log.info(Comment.REDIRECT + 400);
+			LOG.debug("ProductId is invalid");
+			LOG.info(CommentConst.REDIRECT + 400);
 			response.sendError(400);
 			return;
 		}
 
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
 		Product product;
 		try {
 			product = productDao.getProductById(Integer.parseInt(productId));
-			log.debug("getProductById");
-			log.debug("Product: " + product);
+			LOG.debug("getProductById");
+			LOG.debug("Product: " + product);
 		} catch (DBException e) {
-			log.error(Comment.DB_EXCEPTION + e.getMessage());
-			log.info(Comment.REDIRECT + 500);
+			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
+			LOG.info(CommentConst.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP);
-		request.setAttribute(Param.PRODUCT, product);
-		log.info(Comment.FORWARD + Page.UPDATE_PRODUCT_JSP);
-		log.debug(Comment.FORWARD_WITH_PARAMETR + product);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.UPDATE_PRODUCT_JSP);
+		request.setAttribute(ParamConst.PRODUCT, product);
+		LOG.info(CommentConst.FORWARD + PageConst.UPDATE_PRODUCT_JSP);
+		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + product);
 		dispatcher.forward(request, response);
 
 	}
@@ -71,40 +71,40 @@ public class UpdateProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
-		String name = request.getParameter(Param.NAME);
-		String price = request.getParameter(Param.PRICE);
-		String description = request.getParameter(Param.DESCRIPTION);
-		String imageLink = request.getParameter(Param.IMAGE_LINK);
-		String category = request.getParameter(Param.CATEGORY);
-		String id = request.getParameter(Param.ID);
+		LOG.info(CommentConst.BEGIN);
+		String name = request.getParameter(ParamConst.NAME);
+		String price = request.getParameter(ParamConst.PRICE);
+		String description = request.getParameter(ParamConst.DESCRIPTION);
+		String imageLink = request.getParameter(ParamConst.IMAGE_LINK);
+		String category = request.getParameter(ParamConst.CATEGORY);
+		String id = request.getParameter(ParamConst.ID);
 
-		log.debug("Name " + name);
-		log.debug("Price " + price);
-		log.debug("Description " + description);
-		log.debug("Image Link " + imageLink);
-		log.debug("Category " + category);
-		log.debug("ID " + id);
+		LOG.debug("Name " + name);
+		LOG.debug("Price " + price);
+		LOG.debug("Description " + description);
+		LOG.debug("Image Link " + imageLink);
+		LOG.debug("Category " + category);
+		LOG.debug("ID " + id);
 
 		Map<String, String> errors = Validator.productValidator(name, price, description, imageLink, category);
 
 		if (!Validator.intValidator(id)) {
-			log.debug("Parametrs are invalid");
-			log.info(Comment.REDIRECT + 400);
+			LOG.debug("Parametrs are invalid");
+			LOG.info(CommentConst.REDIRECT + 400);
 			response.sendError(400);
 			return;
 		}
 
 		int productId = Integer.parseInt(id);
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
 		Product productToUpdate;
 		try {
 			productToUpdate = productDao.getProductById(productId);
-			log.debug("getProductBuId");
+			LOG.debug("getProductBuId");
 			boolean productWithIdDoesNotExist = productToUpdate == null;
 			if (productWithIdDoesNotExist) {
-				log.debug("productToUpdate " + productToUpdate);
-				log.info(Comment.REDIRECT + 404);
+				LOG.debug("productToUpdate " + productToUpdate);
+				LOG.info(CommentConst.REDIRECT + 404);
 				response.sendError(404);
 				return;
 			}
@@ -112,22 +112,22 @@ public class UpdateProductServlet extends HttpServlet {
 			boolean otherProductWitNameDoesExist = productWithName != null
 					&& productWithName.getId() != productToUpdate.getId();
 			if (otherProductWitNameDoesExist) {
-				errors.put(Param.NAME, "The name '" + name + "' is taken");
+				errors.put(ParamConst.NAME, "The name '" + name + "' is taken");
 			}
 
 		} catch (DBException e) {
-			log.error(Comment.DB_EXCEPTION + e.getMessage());
-			log.info(Comment.REDIRECT + 500);
+			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
+			LOG.info(CommentConst.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
 
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP);
-			request.setAttribute(Param.ERRORS, errors);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.UPDATE_PRODUCT_JSP);
+			request.setAttribute(ParamConst.ERRORS, errors);
 			dispatcher.forward(request, response);
-			log.info(Comment.FORWARD + Page.UPDATE_PRODUCT_JSP);
-			log.debug(Comment.FORWARD_WITH_PARAMETR + errors);
+			LOG.info(CommentConst.FORWARD + PageConst.UPDATE_PRODUCT_JSP);
+			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
 			return;
 		}
 
@@ -139,15 +139,15 @@ public class UpdateProductServlet extends HttpServlet {
 			productToUpdate.setCategory(Category.byTitle(category));
 
 			productDao.updateProduct(productToUpdate);
-			log.debug("UpdateProduct");
+			LOG.debug("UpdateProduct");
 		} catch (DBException e) {
-			log.error(Comment.DB_EXCEPTION + e.getMessage());
-			log.info(Comment.REDIRECT + 500);
+			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
+			LOG.info(CommentConst.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
-		log.info(Comment.REDIRECT + Page.PIZZA_PREFERITA);
-		response.sendRedirect(Page.PIZZA_PREFERITA);
+		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
+		response.sendRedirect(PageConst.PIZZA_PREFERITA);
 	}
 
 }

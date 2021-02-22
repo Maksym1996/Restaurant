@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import consts.Dao;
-import consts.Page;
-import consts.Param;
+import consts.DaoConst;
+import consts.PageConst;
+import consts.ParamConst;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -38,7 +38,7 @@ public class AddProductServletTest {
 
 	@Test
 	public void callDoGetReturnAddProductJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
 
 		servlet.doGet(request, response);
 
@@ -48,9 +48,9 @@ public class AddProductServletTest {
 	@Test
 	public void callDoPostWithoutParamReturnAddProductJSP() throws Exception {
 		Product product = mock(Product.class);
-		when(request.getRequestDispatcher(Page.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenReturn(product);
 
 		servlet.doPost(request, response);
@@ -61,7 +61,7 @@ public class AddProductServletTest {
 	@Test
 	public void callDoPostWithoutParamReturnError500() throws Exception {
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenThrow(new DBException(null));
 
 		servlet.doPost(request, response);
@@ -71,30 +71,30 @@ public class AddProductServletTest {
 
 	@Test
 	public void callDoPostWithParamReturnAddProductJSP() throws Exception {
-		when(request.getParameter(Param.NAME)).thenReturn("Bulka");
-		when(request.getParameter(Param.PRICE)).thenReturn("100");
-		when(request.getParameter(Param.DESCRIPTION)).thenReturn("Bulka");
-		when(request.getParameter(Param.IMAGE_LINK)).thenReturn("Bulka");
-		when(request.getParameter(Param.CATEGORY)).thenReturn("Burger");
+		when(request.getParameter(ParamConst.NAME)).thenReturn("Bulka");
+		when(request.getParameter(ParamConst.PRICE)).thenReturn("100");
+		when(request.getParameter(ParamConst.DESCRIPTION)).thenReturn("Bulka");
+		when(request.getParameter(ParamConst.IMAGE_LINK)).thenReturn("Bulka");
+		when(request.getParameter(ParamConst.CATEGORY)).thenReturn("Burger");
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenReturn(null);
 
 		servlet.doPost(request, response);
 
-		verify(response).sendRedirect(Page.PIZZA_PREFERITA);
+		verify(response).sendRedirect(PageConst.PIZZA_PREFERITA);
 
 	}
 
 	@Test
 	public void callDoPostWithParamReturnError500() throws Exception {
-		when(request.getParameter(Param.NAME)).thenReturn("Bulka");
-		when(request.getParameter(Param.PRICE)).thenReturn("100");
-		when(request.getParameter(Param.DESCRIPTION)).thenReturn("Bulka");
-		when(request.getParameter(Param.IMAGE_LINK)).thenReturn("Bulka");
-		when(request.getParameter(Param.CATEGORY)).thenReturn("Burger");
+		when(request.getParameter(ParamConst.NAME)).thenReturn("Bulka");
+		when(request.getParameter(ParamConst.PRICE)).thenReturn("100");
+		when(request.getParameter(ParamConst.DESCRIPTION)).thenReturn("Bulka");
+		when(request.getParameter(ParamConst.IMAGE_LINK)).thenReturn("Bulka");
+		when(request.getParameter(ParamConst.CATEGORY)).thenReturn("Burger");
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenReturn(null);
 		when(productDao.insertProduct(any())).thenThrow(new DBException(null));
 

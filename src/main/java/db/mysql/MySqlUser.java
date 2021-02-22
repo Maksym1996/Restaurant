@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import consts.Comment;
+import consts.CommentConst;
 import db.dao.UserDao;
 import db.entity.User;
 import db.entity.UserWithPerformedOrders;
@@ -39,7 +39,7 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 	
 	@Override
 	public List<UserWithPerformedOrders> getUserAndHimCountPerformedOrders() throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		List<UserWithPerformedOrders> usersWithPerformedOrders = new ArrayList<>();
 		Connection connect = null;
 		Statement statement = null;
@@ -53,12 +53,12 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 				usersWithPerformedOrders.add(extractionUserWithPerformedOrder(resultSet));
 			}
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, statement, resultSet);
 		}
-		log.debug(Comment.RETURN + usersWithPerformedOrders.size());
+		log.debug(CommentConst.RETURN + usersWithPerformedOrders.size());
 		return usersWithPerformedOrders;
 	}
 
@@ -69,13 +69,13 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 		userWithPerformedOrder.setFirstName(resultSet.getString(k++));
 		userWithPerformedOrder.setLastName(resultSet.getString(k++));
 		userWithPerformedOrder.setCountOrders(resultSet.getInt(k));
-		log.debug(Comment.EXTRACTION + userWithPerformedOrder.toString());
+		log.debug(CommentConst.EXTRACTION + userWithPerformedOrder.toString());
 		return userWithPerformedOrder;
 	}
 
 	@Override
 	public List<User> getUsersForManager() throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		List<User> allUser = new ArrayList<>();
 		Connection connect = null;
 		Statement statement = null;
@@ -89,18 +89,18 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 			}
 
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, statement, resultSet);
 		}
-		log.debug(Comment.RETURN + allUser.size());
+		log.debug(CommentConst.RETURN + allUser.size());
 		return allUser;
 	}
 
 	@Override
 	public List<User> getUsersByRegistered(String registered) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		List<User> registeredUser = new ArrayList<>();
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -116,18 +116,18 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 			}
 
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + registeredUser.size());
+		log.debug(CommentConst.RETURN + registeredUser.size());
 		return registeredUser;
 	}
 
 	@Override
 	public int insertUser(User user) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -154,21 +154,21 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 				}
 			}
 			connect.commit();
-			log.debug(Comment.COMMIT);
+			log.debug(CommentConst.COMMIT);
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + userId);
+		log.debug(CommentConst.RETURN + userId);
 		return userId;
 	}
 
 	@Override
 	public User getUserByNumberAndPass(String phoneNumber, String password) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		User model = null;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -186,18 +186,18 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 				model = extraction(resultSet);
 			}
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + model);
+		log.debug(CommentConst.RETURN + model);
 		return model;
 	}
 
 	@Override
 	public User getUserByNumber(String phoneNumber) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		User user = null;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -213,18 +213,18 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 				user = extraction(resultSet);
 			}
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + user);
+		log.debug(CommentConst.RETURN + user);
 		return user;
 	}
 
 	@Override
 	public boolean updateUser(User user) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		boolean result = false;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -246,22 +246,22 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 				result = true;
 			}
 			connect.commit();
-			log.debug(Comment.COMMIT);
+			log.debug(CommentConst.COMMIT);
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement);
 		}
-		log.debug(Comment.RETURN + result);
+		log.debug(CommentConst.RETURN + result);
 		return result;
 
 	}
 
 	@Override
 	public User getUserById(int userId) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		User user = null;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -277,17 +277,17 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 				user = extraction(resultSet);
 			}
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + user);
+		log.debug(CommentConst.RETURN + user);
 		return user;
 	}
 
 	private User extraction(ResultSet resultSet) throws SQLException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		User user = new User();
 		int k = 1;
 		user.setId(resultSet.getInt(k++));

@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.Comment;
-import consts.Dao;
-import consts.Page;
-import consts.Param;
+import consts.CommentConst;
+import consts.DaoConst;
+import consts.PageConst;
+import consts.ParamConst;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -31,75 +31,75 @@ import util.Validator;
 public class AddProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
  
-	private static final Logger log = LogManager.getLogger(AddProductServlet.class);
+	private static final Logger LOG = LogManager.getLogger(AddProductServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
-		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.ADD_PRODUCT_JSP);
-		log.info(Comment.FORWARD + Page.ADD_PRODUCT_JSP);
+		LOG.info(CommentConst.BEGIN);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP);
+		LOG.info(CommentConst.FORWARD + PageConst.ADD_PRODUCT_JSP);
 		dispatcher.forward(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 
-		String name = request.getParameter(Param.NAME);
-		String price = request.getParameter(Param.PRICE);
-		String description = request.getParameter(Param.DESCRIPTION);
-		String imageLink = request.getParameter(Param.IMAGE_LINK);
-		String category = request.getParameter(Param.CATEGORY);
+		String name = request.getParameter(ParamConst.NAME);
+		String price = request.getParameter(ParamConst.PRICE);
+		String description = request.getParameter(ParamConst.DESCRIPTION);
+		String imageLink = request.getParameter(ParamConst.IMAGE_LINK);
+		String category = request.getParameter(ParamConst.CATEGORY);
 
-		log.debug(Param.NAME + name);
-		log.debug(Param.PRICE + price);
-		log.debug(Param.DESCRIPTION + description);
-		log.debug(Param.IMAGE_LINK + imageLink);
-		log.debug(Param.CATEGORY + category);
+		LOG.debug(ParamConst.NAME + name);
+		LOG.debug(ParamConst.PRICE + price);
+		LOG.debug(ParamConst.DESCRIPTION + description);
+		LOG.debug(ParamConst.IMAGE_LINK + imageLink);
+		LOG.debug(ParamConst.CATEGORY + category);
 
 		Map<String, String> errors = Validator.productValidator(name, price, description, imageLink, category);
 
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
-		log.debug(Dao.PRODUCT + " " + productDao);
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
+		LOG.debug(DaoConst.PRODUCT + " " + productDao);
 
 		try {
 			Product testProductByName = productDao.getProductByName(name);
 
 			if (testProductByName != null) {
-				errors.put(Param.NAME, "The name '" + name + "' is taken");
-				log.debug("Test product by name = NOT NULL");
+				errors.put(ParamConst.NAME, "The name '" + name + "' is taken");
+				LOG.debug("Test product by name = NOT NULL");
 			}
-			log.debug("Test product by name = NULL");
+			LOG.debug("Test product by name = NULL");
 		} catch (DBException e) {
-			log.error(Comment.DB_EXCEPTION + e.getMessage());
-			log.info(Comment.REDIRECT + 500);
+			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
+			LOG.info(CommentConst.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
 
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.ADD_PRODUCT_JSP);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP);
 			request.setAttribute("errors", errors);
 			dispatcher.forward(request, response);
-			log.debug("Erorrs is not empty");
-			log.info(Comment.FORWARD + Page.ADD_PRODUCT_JSP);
-			log.debug(Comment.FORWARD_WITH_PARAMETR + errors);
+			LOG.debug("Erorrs is not empty");
+			LOG.info(CommentConst.FORWARD + PageConst.ADD_PRODUCT_JSP);
+			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
 			return;
 		}
 
 		try {
 			productDao.insertProduct(Util.createProduct(name, Integer.parseInt(price), description, imageLink,
 					Category.byTitle(category), 0));
-			log.debug("Insert product");
+			LOG.debug("Insert product");
 		} catch (Exception e) {
-			log.error(Comment.EXCEPTION + e.getMessage());
-			log.info(Comment.REDIRECT + 500);
+			LOG.error(CommentConst.EXCEPTION + e.getMessage());
+			LOG.info(CommentConst.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
-		log.info(Comment.REDIRECT + Page.PIZZA_PREFERITA);
-		response.sendRedirect(Page.PIZZA_PREFERITA);
+		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
+		response.sendRedirect(PageConst.PIZZA_PREFERITA);
 	}
 }

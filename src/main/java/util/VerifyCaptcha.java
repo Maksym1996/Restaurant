@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.Captcha;
-import consts.Comment;
+import consts.CaptchaConst;
+import consts.CommentConst;
 
 /**
  * The class for verifying reCaptcha from Google
@@ -25,10 +25,10 @@ public class VerifyCaptcha {
 	private static final Logger log = LogManager.getLogger(VerifyCaptcha.class);
 
 	public static boolean verify(String gRecaptchaResponse, HttpServletRequest request) {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		if (gRecaptchaResponse == null || gRecaptchaResponse.length() == 0) {
 			log.debug("gRecaptchaResponse is emptu or null");
-			log.info(Comment.RETURN + false);
+			log.info(CommentConst.RETURN + false);
 			return false;
 		}
 
@@ -43,7 +43,7 @@ public class VerifyCaptcha {
 			conn.setRequestProperty("Accept-Language", request.getHeader("Accept-Language"));
 			log.debug("Added header info to request");
 
-			String postParams = "secret=" + Captcha.SECRET_KEY //
+			String postParams = "secret=" + CaptchaConst.SECRET_KEY //
 					+ "&response=" + gRecaptchaResponse;
 			log.debug("Data for send to server");
 
@@ -64,16 +64,16 @@ public class VerifyCaptcha {
 			log.debug("Get reponse by server");
 
 			boolean success = jsonObject.getBoolean("success");
-			log.info(Comment.RETURN + success);
+			log.info(CommentConst.RETURN + success);
 			return success;
 		} catch (Exception e) {
-			log.error(Comment.EXCEPTION + e.getMessage());
-			log.info(Comment.RETURN + false);
+			log.error(CommentConst.EXCEPTION + e.getMessage());
+			log.info(CommentConst.RETURN + false);
 			return false;
 		}
 	}
 
 	private VerifyCaptcha() {
-		throw new IllegalStateException(Comment.ILLEGAL_STATE);
+		throw new IllegalStateException(CommentConst.ILLEGAL_STATE);
 	}
 }

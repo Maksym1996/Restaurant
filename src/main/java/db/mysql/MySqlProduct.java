@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import consts.Comment;
+import consts.CommentConst;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -37,7 +37,7 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 	@Override
 	public List<Product> getProductByCategoriesOnPage(String[] categories, String sortValue, String desc, int skip,
 			int limit) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		List<Product> productsByCategories = new ArrayList<>();
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -65,18 +65,18 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 			}
 
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + productsByCategories.size());
+		log.debug(CommentConst.RETURN + productsByCategories.size());
 		return productsByCategories;
 	}
 
 	@Override
 	public long getProductsCount(String[] categories) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -97,18 +97,18 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 			}
 
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + countProducts);
+		log.debug(CommentConst.RETURN + countProducts);
 		return countProducts;
 	}
 
 	@Override
 	public int insertProduct(Product product) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		int productId = 0;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -135,21 +135,21 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				}
 			}
 			connect.commit();
-			log.debug(Comment.COMMIT);
+			log.debug(CommentConst.COMMIT);
 		} catch (SQLException e) {
-			log.error(Comment.COMMIT + e.getMessage());
+			log.error(CommentConst.COMMIT + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + productId);
+		log.debug(CommentConst.RETURN + productId);
 		return productId;
 	}
 
 	@Override
 	public Product getProductById(int productId) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		Product product = null;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -165,18 +165,18 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				product = extractionProduct(resultSet);
 			}
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + product);
+		log.debug(CommentConst.RETURN + product);
 		return product;
 	}
 
 	@Override
 	public Product getProductByName(String name) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		Product product = null;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -192,18 +192,18 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				product = extractionProduct(resultSet);
 			}
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + product);
+		log.debug(CommentConst.RETURN + product);
 		return product;
 	}
 
 	@Override
 	public boolean updateProduct(Product product) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		boolean result = false;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -225,22 +225,22 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				result = true;
 			}
 			connect.commit();
-			log.debug(Comment.COMMIT);
+			log.debug(CommentConst.COMMIT);
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement);
 		}
-		log.debug(Comment.RETURN + result);
+		log.debug(CommentConst.RETURN + result);
 		return result;
 
 	}
 
 	@Override
 	public boolean deleteProductById(int productId) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		log.debug("id = " + productId);
 		boolean result = false;
 
@@ -259,15 +259,15 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				result = true;
 			}
 			connect.commit();
-			log.debug(Comment.COMMIT);
+			log.debug(CommentConst.COMMIT);
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + result);
+		log.debug(CommentConst.RETURN + result);
 		return result;
 	}
 
@@ -281,7 +281,7 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 		product.setImageLink(resultSet.getString(k++));
 		product.setCategory(Category.byTitle(resultSet.getString(k)));
 
-		log.debug(Comment.EXTRACTION + product.toString());
+		log.debug(CommentConst.EXTRACTION + product.toString());
 		return product;
 	}
 

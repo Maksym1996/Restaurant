@@ -19,10 +19,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.Comment;
-import consts.Dao;
-import consts.Page;
-import consts.Param;
+import consts.CommentConst;
+import consts.DaoConst;
+import consts.PageConst;
+import consts.ParamConst;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
@@ -39,30 +39,30 @@ import util.Validator;
 public class LoginPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = LogManager.getLogger(LoginPageServlet.class);
+	private static final Logger LOG = LogManager.getLogger(LoginPageServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		HttpSession session = request.getSession(true);
 		String forwardPage;
-		String logout = request.getParameter(Param.LOG_OUT);
-		log.debug("logout " + logout);
+		String logout = request.getParameter(ParamConst.LOG_OUT);
+		LOG.debug("logout " + logout);
 
-		if (Param.LOG_OUT.equals(logout)) {
+		if (ParamConst.LOG_OUT.equals(logout)) {
 			session.invalidate();
-			log.debug("session invalidate");
-			forwardPage = Page.LOGIN_PAGE_JSP;
-		} else if (session == null || session.getAttribute(Param.USER) == null) {
-			log.debug("session is null or user from session is null");
-			forwardPage = Page.LOGIN_PAGE_JSP;
+			LOG.debug("session invalidate");
+			forwardPage = PageConst.LOGIN_PAGE_JSP;
+		} else if (session == null || session.getAttribute(ParamConst.USER) == null) {
+			LOG.debug("session is null or user from session is null");
+			forwardPage = PageConst.LOGIN_PAGE_JSP;
 		} else {
-			User user = (User) session.getAttribute(Param.USER);
-			session.setAttribute(Param.ROLE, user.getRole());
-			log.debug("Set role = " + user.getRole() + " to session");
-			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
-			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
+			User user = (User) session.getAttribute(ParamConst.USER);
+			session.setAttribute(ParamConst.ROLE, user.getRole());
+			LOG.debug("Set role = " + user.getRole() + " to session");
+			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
+			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(DaoConst.ORDER_VIEW);
 			Set<Product> productList = new HashSet<>();
 			Set<OrderView> orders = new LinkedHashSet<>();
 			List<OrderView> orderViewList = new ArrayList<>();
@@ -73,24 +73,24 @@ public class LoginPageServlet extends HttpServlet {
 					productList.add(productDao.getProductById(o.getProductId()));
 				}
 			} catch (Exception e) {
-				log.error(Comment.DB_EXCEPTION + e.getMessage());
-				log.info(Comment.REDIRECT + 500);
+				LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
+				LOG.info(CommentConst.REDIRECT + 500);
 				response.sendError(500);
 				return;
 			}
-			request.setAttribute(Param.ORDER_VIEW_LIST, orderViewList);
-			request.setAttribute(Param.PRODUCTS_LIST, productList);
-			request.setAttribute(Param.ORDERS, orders);
+			request.setAttribute(ParamConst.ORDER_VIEW_LIST, orderViewList);
+			request.setAttribute(ParamConst.PRODUCTS_LIST, productList);
+			request.setAttribute(ParamConst.ORDERS, orders);
 
-			log.debug(Comment.FORWARD_WITH_PARAMETR + "orderViewList " + orderViewList);
-			log.debug(Comment.FORWARD_WITH_PARAMETR + "productList " + productList);
-			log.debug(Comment.FORWARD_WITH_PARAMETR + "orders " + orders);
+			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "orderViewList " + orderViewList);
+			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "productList " + productList);
+			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "orders " + orders);
 
-			forwardPage = Page.ACCOUNT_JSP;
+			forwardPage = PageConst.ACCOUNT_JSP;
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
-		log.info(Comment.FORWARD + forwardPage);
+		LOG.info(CommentConst.FORWARD + forwardPage);
 		dispatcher.forward(request, response);
 
 	}
@@ -98,46 +98,46 @@ public class LoginPageServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.info(Comment.BEGIN);
+		LOG.info(CommentConst.BEGIN);
 		HttpSession session = request.getSession(true);
 
-		String phoneNumber = request.getParameter(Param.PHONE_NUMBER);
-		log.debug("phoneNumber " + phoneNumber);
-		String password = request.getParameter(Param.PASSWORD);
-		log.debug("password " + password);
+		String phoneNumber = request.getParameter(ParamConst.PHONE_NUMBER);
+		LOG.debug("phoneNumber " + phoneNumber);
+		String password = request.getParameter(ParamConst.PASSWORD);
+		LOG.debug("password " + password);
 
 		Map<String, String> errors = Validator.authorizationValidator(phoneNumber, password);
 
-		UserDao userDao = (UserDao) request.getServletContext().getAttribute(Dao.USER);
+		UserDao userDao = (UserDao) request.getServletContext().getAttribute(DaoConst.USER);
 		User user = null;
 		try {
 			user = userDao.getUserByNumberAndPass(phoneNumber, password);
-			log.debug("getUserByNumberAndPass: " + user);
+			LOG.debug("getUserByNumberAndPass: " + user);
 			if (user == null) {
-				errors.put(Param.NO_USER, "User with such data does not exist");
+				errors.put(ParamConst.NO_USER, "User with such data does not exist");
 			} else {
-				session.setAttribute(Param.USER, user);
-				log.debug("Set user to session");
-				session.setAttribute(Param.ROLE, user.getRole());
-				log.debug("Set role to session: " + user.getRole());
+				session.setAttribute(ParamConst.USER, user);
+				LOG.debug("Set user to session");
+				session.setAttribute(ParamConst.ROLE, user.getRole());
+				LOG.debug("Set role to session: " + user.getRole());
 			}
 		} catch (DBException e) {
-			log.error(Comment.DB_EXCEPTION + e.getMessage());
-			log.info(Comment.REDIRECT + 500);
+			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
+			LOG.info(CommentConst.REDIRECT + 500);
 			response.sendError(500);
 			return;
 		}
 
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.LOGIN_PAGE_JSP);
-			request.setAttribute(Param.ERRORS, errors);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.LOGIN_PAGE_JSP);
+			request.setAttribute(ParamConst.ERRORS, errors);
 			dispatcher.forward(request, response);
-			log.info(Comment.FORWARD + Page.LOGIN_PAGE_JSP);
-			log.debug(Comment.FORWARD_WITH_PARAMETR + "errors " + errors);
+			LOG.info(CommentConst.FORWARD + PageConst.LOGIN_PAGE_JSP);
+			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "errors " + errors);
 			return;
 		}
-		log.info(Comment.REDIRECT + Page.LOGIN_PAGE);
-		response.sendRedirect(Page.LOGIN_PAGE);
+		LOG.info(CommentConst.REDIRECT + PageConst.LOGIN_PAGE);
+		response.sendRedirect(PageConst.LOGIN_PAGE);
 	}
 
 }

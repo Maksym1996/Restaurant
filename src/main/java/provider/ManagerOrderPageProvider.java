@@ -5,8 +5,8 @@ import java.util.List;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.Comment;
-import consts.Page;
+import consts.CommentConst;
+import consts.PageConst;
 import db.dao.OrderViewDao;
 import db.entity.OrderView;
 import exception.ProviderException;
@@ -24,16 +24,16 @@ public class ManagerOrderPageProvider implements OrderPageProvider {
 
 	@Override
 	public OrderPage getOrderPage() {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		List<OrderView> orderViewList;
 		try {
 			orderViewList = orderDao.getAllOrderViews();
 		} catch (Exception e) {
-			log.error(Comment.EXCEPTION + e.getMessage());
+			log.error(CommentConst.EXCEPTION + e.getMessage());
 			throw new ProviderException(e);
 		}
-		log.info("return orderList and " + Page.MANAGER_JSP);
-		return new OrderPage(orderViewList, Page.MANAGER_JSP);
+		log.info("return orderList and " + PageConst.MANAGER_JSP);
+		return new OrderPage(orderViewList, PageConst.MANAGER_JSP);
 	}
 
 }

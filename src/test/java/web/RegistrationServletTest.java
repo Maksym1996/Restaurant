@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
 
-import consts.Dao;
-import consts.Page;
+import consts.DaoConst;
+import consts.PageConst;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
@@ -55,7 +55,7 @@ public class RegistrationServletTest {
 
 	@Test
 	public void callDoGetReturnForwardRegistrationJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.REGISTRATION_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.REGISTRATION_JSP)).thenReturn(dispatcher);
 
 		servlet.doGet(request, response);
 
@@ -64,9 +64,9 @@ public class RegistrationServletTest {
 
 	@Test
 	public void callDoGetReturnError500() throws Exception {
-		when(request.getRequestDispatcher(Page.REGISTRATION_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(PageConst.REGISTRATION_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
+		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
 		when(userDao.getUsersByRegistered("true")).thenThrow(new DBException(null));
 		servlet.doPost(request, response);
 

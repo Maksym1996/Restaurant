@@ -11,7 +11,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import consts.Comment;
+import consts.CommentConst;
 import db.dao.OrderViewDao;
 import db.entity.OrderView;
 import db.entity.Product;
@@ -38,7 +38,7 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 
 	@Override
 	public String getStatusByOrderId(int orderId) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		String state = null;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -53,18 +53,18 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 				state = resultSet.getString(1);
 			}
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + state);
+		log.debug(CommentConst.RETURN + state);
 		return state;
 	}
 
 	@Override
 	public List<OrderView> getAllOrderViews() throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		List<OrderView> allOrders = new ArrayList<>();
 		Connection connect = null;
 		Statement statement = null;
@@ -78,18 +78,18 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 			}
 
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, statement, resultSet);
 		}
-		log.debug(Comment.RETURN + allOrders.size());
+		log.debug(CommentConst.RETURN + allOrders.size());
 		return allOrders;
 	}
 
 	@Override
 	public List<OrderView> getOrderViewsByUserId(int userId) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		List<OrderView> allOrders = new ArrayList<>();
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -105,18 +105,18 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 			}
 
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + allOrders.size());
+		log.debug(CommentConst.RETURN + allOrders.size());
 		return allOrders;
 	}
 
 	@Override
 	public List<OrderView> getOrdersByStatus(String status) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		List<OrderView> allOrders = new ArrayList<>();
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
@@ -132,18 +132,18 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 			}
 
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + allOrders.size());
+		log.debug(CommentConst.RETURN + allOrders.size());
 		return allOrders;
 	}
 
 	@Override
 	public int insertOrder(OrderView orderView, List<Product> products, Map<Integer, Integer> count) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -183,19 +183,19 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 			}
 			connect.commit();
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + orderId);
+		log.debug(CommentConst.RETURN + orderId);
 		return orderId;
 	}
 
 	@Override
 	public boolean updateStatusById(int orderId, String status) throws DBException {
-		log.info(Comment.BEGIN);
+		log.info(CommentConst.BEGIN);
 		String setState = "UPDATE orders SET state=? WHERE id = ?";
 		boolean result = false;
 		Connection connect = null;
@@ -216,15 +216,15 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 				result = true;
 			}
 			connect.commit();
-			log.debug(Comment.COMMIT);
+			log.debug(CommentConst.COMMIT);
 		} catch (SQLException e) {
-			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement);
 		}
-		log.debug(Comment.RETURN + result);
+		log.debug(CommentConst.RETURN + result);
 		return result;
 
 	}
@@ -241,7 +241,7 @@ public class MySqlOrderView extends AbstractMySqlDao implements OrderViewDao {
 		orderView.setProductId(resultSet.getInt(k++));
 		orderView.setCount(resultSet.getInt(k++));
 		orderView.setPrice(resultSet.getInt(k));
-		log.debug(Comment.EXTRACTION + orderView.toString());
+		log.debug(CommentConst.EXTRACTION + orderView.toString());
 		return orderView;
 	}
 

@@ -3,7 +3,7 @@ package consts;
  * The сlass for storing text constants for general situations
  *
  */
-public class Comment {
+public class CommentConst {
 	public static final String SQL_EXCEPTION = "SQLException: ";
 	public static final String DB_EXCEPTION = "DBException: ";
 	public static final String EXCEPTION = "Exception: ";
@@ -20,7 +20,7 @@ public class Comment {
 	public static final String FORWARD_WITH_PARAMETR = "With parametr: ";
 	public static final String REDIRECT = "Redirect on: ";
 
-	private Comment() {
+	private CommentConst() {
 		//nothing
 	}
 }
