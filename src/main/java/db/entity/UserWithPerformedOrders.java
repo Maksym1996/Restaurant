@@ -4,6 +4,8 @@ public class UserWithPerformedOrders {
 	
 	private String firstName;
 	private String lastName;
+	private String phoneNumber;
+	private int countOrders;
 
 	public String getLastName() {
 		return lastName;
@@ -11,8 +13,6 @@ public class UserWithPerformedOrders {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	private String phoneNumber;
-	private int countOrders;
 	
 	public void setCountOrders(int countOrders) {
 		this.countOrders = countOrders;
@@ -38,5 +38,27 @@ public class UserWithPerformedOrders {
 		return "UserWithPerformedOrders [firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber="
 				+ phoneNumber + ", countOrders=" + countOrders + "]";
 	}
-
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserWithPerformedOrders other = (UserWithPerformedOrders) obj;
+		if (phoneNumber == null) {
+			if (other.phoneNumber != null)
+				return false;
+		} else if (!phoneNumber.equals(other.phoneNumber))
+			return false;
+		return true;
+	}
 }
