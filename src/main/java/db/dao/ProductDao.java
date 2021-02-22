@@ -19,7 +19,7 @@ public interface ProductDao {
 	List<Product> getProductByCategoriesOnPage(String[] categories, String sortValue, String desc, int skip, int limit)
 			throws DBException;
 
-	long getProductCount(String[] categories) throws DBException;
+	long getProductsCount(String[] categories) throws DBException;
 
 	int insertProduct(Product model) throws DBException;
 
