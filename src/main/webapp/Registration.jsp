@@ -170,7 +170,7 @@
 
 			<!-- reCAPTCHA -->
 			<div class="g-recaptcha"
-				data-sitekey="6LeiQmAaAAAAAPFAZ1Un_eRExtvlXR0K4eP6Z8vb"></div>
+				data-sitekey=<c:out value = "${SITE_KEY}"/>></div>
 				<c:if
 					test="${not empty errors and errors.containsKey('captchaResponse')}">
 					<p style="color: red">
