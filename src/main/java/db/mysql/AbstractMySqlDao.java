@@ -24,6 +24,7 @@ public abstract class AbstractMySqlDao {
 			}
 			try {
 				resourceToClose.close();
+				log.debug(Comment.CLOSED + resourcesToClose);
 			} catch (Exception e) {
 				log.error(Comment.EXCEPTION + e.getMessage());
 				throw new DBException(e);
@@ -37,6 +38,7 @@ public abstract class AbstractMySqlDao {
 		}
 		try {
 			connect.rollback();
+			log.debug(Comment.ROLLBACK + connect);
 		} catch (SQLException e) {
 			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
