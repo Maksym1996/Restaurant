@@ -27,6 +27,6 @@ public interface UserDao {
 
 	boolean updateUser(User model) throws DBException;
 
-	List<UserWithPerformedOrders> getCountPerformedOrders() throws DBException ;
+	List<UserWithPerformedOrders> getUserAndHimCountPerformedOrders() throws DBException ;
 
 }
