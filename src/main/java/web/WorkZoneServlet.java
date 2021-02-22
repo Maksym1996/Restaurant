@@ -1,10 +1,12 @@
 package web;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -44,6 +46,9 @@ public class WorkZoneServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger LOG = LogManager.getLogger(WorkZoneServlet.class);
+
+	private static final Comparator<UserWithPerformedOrders> USERS_BY_ORDERS_COUNT = Comparator
+			.comparing(UserWithPerformedOrders::getCountOrders).reversed();
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -93,7 +98,7 @@ public class WorkZoneServlet extends HttpServlet {
 				return;
 			}
 		}
-		
+
 		List<UserWithPerformedOrders> usersWithPerformedOrders = null;
 		try {
 			usersWithPerformedOrders = userDao.getUserAndHimCountPerformedOrders();
@@ -104,9 +109,14 @@ public class WorkZoneServlet extends HttpServlet {
 			return;
 		}
 
+		List<UserWithPerformedOrders> sorterByCountUsersWithPerformedOrders = usersWithPerformedOrders.stream()
+				.sorted(USERS_BY_ORDERS_COUNT)
+				.limit(2)
+				.collect(Collectors.toList());
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
 		request.setAttribute(ParamConst.ORDER_VIEW_LIST, orderViewList);
-		request.setAttribute(ParamConst.USERS_WITH_PERFORMED_ORDERS, usersWithPerformedOrders);
+		request.setAttribute(ParamConst.USERS_WITH_PERFORMED_ORDERS, sorterByCountUsersWithPerformedOrders);
 		request.setAttribute(ParamConst.PRODUCTS_LIST, productList);
 		request.setAttribute(ParamConst.USER_LIST, userList);
 		request.setAttribute(ParamConst.ORDERS, orders);
