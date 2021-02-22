@@ -17,7 +17,7 @@ import consts.ParamConst;
 public class Validator {
 
 	private Validator() {
-		throw new IllegalStateException(CommentConst.ILLEGAL_STATE);
+		//nothing
 	}
 
 	public static final String INTEGER_PATTERN = "[1-9][0-9]*";

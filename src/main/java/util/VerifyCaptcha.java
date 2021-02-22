@@ -74,6 +74,6 @@ public class VerifyCaptcha {
 	}
 
 	private VerifyCaptcha() {
-		throw new IllegalStateException(CommentConst.ILLEGAL_STATE);
+		//nothing
 	}
 }
