@@ -4,6 +4,7 @@ public class UserWithPerformedOrders {
 	
 	private String firstName;
 	private String lastName;
+
 	public String getLastName() {
 		return lastName;
 	}
@@ -30,6 +31,12 @@ public class UserWithPerformedOrders {
 	}
 	public int getCountOrders() {
 		return countOrders;
+	}
+	
+	@Override
+	public String toString() {
+		return "UserWithPerformedOrders [firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber="
+				+ phoneNumber + ", countOrders=" + countOrders + "]";
 	}
 
 }
