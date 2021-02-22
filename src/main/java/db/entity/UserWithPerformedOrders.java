@@ -1,8 +1,15 @@
 package db.entity;
 
-public class OrdersCount {
+public class UserWithPerformedOrders {
 	
 	private String firstName;
+	private String lastName;
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 	private String phoneNumber;
 	private int countOrders;
 	
