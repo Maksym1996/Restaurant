@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import consts.Comment;
 import db.dao.UserDao;
 import db.entity.User;
+import db.entity.UserWithPerformedOrders;
 import exception.DBException;
 import util.UserRole;
 import util.Util;
@@ -26,6 +27,7 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 	private static final String SELECT_USER_BY_NUMBER_AND_PASS = "SELECT * FROM user WHERE phone_number = ? AND password = ?";
 	private static final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
 	private static final String SELECT_USER_BY_NUMBER = "SELECT * FROM user WHERE phone_number = ?";
+	private static final String SELECT_PERFORMED_ORDERS = "SELECT u.phone_number, u.first_name, u.last_name, COUNT(o.id) FROM user AS u JOIN orders AS o ON u.id = o.user_id AND o.state = 'PERFORMED' GROUP BY u.phone_number";
 	private static final String INSERT_USER = "INSERT INTO user VALUES (DEFAULT,?,?,?,?,?, DEFAULT, ?)";
 	private static final String UPDATE_USER_BY_NUMBER = "UPDATE user SET first_name=?, last_name=?, password = ?, registered=?, email = ? WHERE phone_number = ?";
 
@@ -34,27 +36,63 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 	public MySqlUser(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
+	
+	@Override
+	public List<UserWithPerformedOrders> getUserAndHimCountPerformedOrders() throws DBException {
+		log.info(Comment.BEGIN);
+		List<UserWithPerformedOrders> usersWithPerformedOrders = new ArrayList<>();
+		Connection connect = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+
+		try {
+			connect = dataSource.getConnection();
+			statement = connect.createStatement();
+			resultSet = statement.executeQuery(SELECT_PERFORMED_ORDERS);
+			while (resultSet.next()) {
+				usersWithPerformedOrders.add(extractionUserWithPerformedOrder(resultSet));
+			}
+		} catch (SQLException e) {
+			log.error(Comment.SQL_EXCEPTION + e.getMessage());
+			throw new DBException(e);
+		} finally {
+			close(connect, statement, resultSet);
+		}
+		log.debug(Comment.RETURN + usersWithPerformedOrders.size());
+		return usersWithPerformedOrders;
+	}
+
+	private UserWithPerformedOrders extractionUserWithPerformedOrder(ResultSet resultSet) throws SQLException {
+		UserWithPerformedOrders userWithPerformedOrder = new UserWithPerformedOrders();
+		int k = 1;
+		userWithPerformedOrder.setPhoneNumber(resultSet.getString(k++));
+		userWithPerformedOrder.setFirstName(resultSet.getString(k++));
+		userWithPerformedOrder.setLastName(resultSet.getString(k++));
+		userWithPerformedOrder.setCountOrders(resultSet.getInt(k));
+		log.debug(Comment.EXTRACTION + userWithPerformedOrder.toString());
+		return userWithPerformedOrder;
+	}
 
 	@Override
 	public List<User> getUsersForManager() throws DBException {
 		log.info(Comment.BEGIN);
 		List<User> allUser = new ArrayList<>();
-		Connection con = null;
-		Statement stat = null;
-		ResultSet rs = null;
+		Connection connect = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 		try {
-			con = dataSource.getConnection();
-			stat = con.createStatement();
-			rs = stat.executeQuery(SELECT_ALL_USERS);
-			while (rs.next()) {
-				allUser.add(extraction(rs));
+			connect = dataSource.getConnection();
+			statement = connect.createStatement();
+			resultSet = statement.executeQuery(SELECT_ALL_USERS);
+			while (resultSet.next()) {
+				allUser.add(extraction(resultSet));
 			}
 
 		} catch (SQLException e) {
 			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
-			close(con, stat, rs);
+			close(connect, statement, resultSet);
 		}
 		log.debug(Comment.RETURN + allUser.size());
 		return allUser;
@@ -64,65 +102,65 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 	public List<User> getUsersByRegistered(String registered) throws DBException {
 		log.info(Comment.BEGIN);
 		List<User> registeredUser = new ArrayList<>();
-		Connection con = null;
-		PreparedStatement prep = null;
-		ResultSet rs = null;
+		Connection connect = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		log.debug("registered = " + registered);
 		try {
-			con = dataSource.getConnection();
-			prep = con.prepareStatement(SELECT_USERS_BY_REGISTERED);
-			prep.setString(1, registered);
-			rs = prep.executeQuery();
-			while (rs.next()) {
-				registeredUser.add(extraction(rs));
+			connect = dataSource.getConnection();
+			preparedStatement = connect.prepareStatement(SELECT_USERS_BY_REGISTERED);
+			preparedStatement.setString(1, registered);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				registeredUser.add(extraction(resultSet));
 			}
 
 		} catch (SQLException e) {
 			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
-			close(con, prep, rs);
+			close(connect, preparedStatement, resultSet);
 		}
 		log.debug(Comment.RETURN + registeredUser.size());
 		return registeredUser;
 	}
 
 	@Override
-	public int insertUser(User model) throws DBException {
+	public int insertUser(User user) throws DBException {
 		log.info(Comment.BEGIN);
-		Connection con = null;
-		PreparedStatement prep = null;
-		ResultSet rs = null;
+		Connection connect = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		int userId = 0;
-		log.debug("User = " + model.toString());
+		log.debug("User = " + user.toString());
 		try {
-			con = dataSource.getConnection();
-			con.setAutoCommit(false);
-			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-			prep = con.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+			connect = dataSource.getConnection();
+			connect.setAutoCommit(false);
+			connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			preparedStatement = connect.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
-			prep.setString(k++, model.getEmail());
-			prep.setString(k++, model.getFirstName());
-			prep.setString(k++, model.getLastName());
-			prep.setString(k++, Util.stringToMD5(model.getPassword()));
-			prep.setString(k++, model.getPhoneNumber());
-			prep.setString(k++, model.getRegistered());
+			preparedStatement.setString(k++, user.getEmail());
+			preparedStatement.setString(k++, user.getFirstName());
+			preparedStatement.setString(k++, user.getLastName());
+			preparedStatement.setString(k++, Util.stringToMD5(user.getPassword()));
+			preparedStatement.setString(k++, user.getPhoneNumber());
+			preparedStatement.setString(k++, user.getRegistered());
 
-			if (prep.executeUpdate() > 0) {
-				rs = prep.getGeneratedKeys();
-				if (rs.next()) {
-					userId = rs.getInt(1);
-					model.setId(userId);
+			if (preparedStatement.executeUpdate() > 0) {
+				resultSet = preparedStatement.getGeneratedKeys();
+				if (resultSet.next()) {
+					userId = resultSet.getInt(1);
+					user.setId(userId);
 				}
 			}
-			con.commit();
+			connect.commit();
 			log.debug(Comment.COMMIT);
 		} catch (SQLException e) {
 			log.error(Comment.SQL_EXCEPTION + e.getMessage());
-			rollback(con);
+			rollback(connect);
 			throw new DBException(e);
 		} finally {
-			close(con, prep, rs);
+			close(connect, preparedStatement, resultSet);
 		}
 		log.debug(Comment.RETURN + userId);
 		return userId;
@@ -132,26 +170,26 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 	public User getUserByNumberAndPass(String phoneNumber, String password) throws DBException {
 		log.info(Comment.BEGIN);
 		User model = null;
-		Connection con = null;
-		PreparedStatement prep = null;
-		ResultSet rs = null;
+		Connection connect = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		log.debug("Phone Numeber = " + phoneNumber);
 		log.debug("Password = " + password);
 		try {
-			con = dataSource.getConnection();
-			prep = con.prepareStatement(SELECT_USER_BY_NUMBER_AND_PASS);
-			prep.setString(1, phoneNumber);
-			prep.setString(2, Util.stringToMD5(password));
-			rs = prep.executeQuery();
+			connect = dataSource.getConnection();
+			preparedStatement = connect.prepareStatement(SELECT_USER_BY_NUMBER_AND_PASS);
+			preparedStatement.setString(1, phoneNumber);
+			preparedStatement.setString(2, Util.stringToMD5(password));
+			resultSet = preparedStatement.executeQuery();
 
-			if (rs.next()) {
-				model = extraction(rs);
+			if (resultSet.next()) {
+				model = extraction(resultSet);
 			}
 		} catch (SQLException e) {
 			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
-			close(con, prep, rs);
+			close(connect, preparedStatement, resultSet);
 		}
 		log.debug(Comment.RETURN + model);
 		return model;
@@ -160,61 +198,61 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 	@Override
 	public User getUserByNumber(String phoneNumber) throws DBException {
 		log.info(Comment.BEGIN);
-		User model = null;
-		Connection con = null;
-		PreparedStatement prep = null;
-		ResultSet rs = null;
+		User user = null;
+		Connection connect = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		log.debug("Phone Number = " + phoneNumber);
 		try {
-			con = dataSource.getConnection();
-			prep = con.prepareStatement(SELECT_USER_BY_NUMBER);
-			prep.setString(1, phoneNumber);
-			rs = prep.executeQuery();
+			connect = dataSource.getConnection();
+			preparedStatement = connect.prepareStatement(SELECT_USER_BY_NUMBER);
+			preparedStatement.setString(1, phoneNumber);
+			resultSet = preparedStatement.executeQuery();
 
-			if (rs.next()) {
-				model = extraction(rs);
+			if (resultSet.next()) {
+				user = extraction(resultSet);
 			}
 		} catch (SQLException e) {
 			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
-			close(con, prep, rs);
+			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + model);
-		return model;
+		log.debug(Comment.RETURN + user);
+		return user;
 	}
 
 	@Override
-	public boolean updateUser(User model) throws DBException {
+	public boolean updateUser(User user) throws DBException {
 		log.info(Comment.BEGIN);
 		boolean result = false;
-		Connection con = null;
-		PreparedStatement prep = null;
+		Connection connect = null;
+		PreparedStatement preparedStatement = null;
 
 		try {
-			con = dataSource.getConnection();
-			con.setAutoCommit(false);
-			con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-			prep = con.prepareStatement(UPDATE_USER_BY_NUMBER);
+			connect = dataSource.getConnection();
+			connect.setAutoCommit(false);
+			connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			preparedStatement = connect.prepareStatement(UPDATE_USER_BY_NUMBER);
 			int k = 1;
-			prep.setString(k++, model.getFirstName());
-			prep.setString(k++, model.getLastName());
-			prep.setString(k++, Util.stringToMD5(model.getPassword()));
-			prep.setString(k++, model.getRegistered());
-			prep.setString(k++, model.getEmail());
-			prep.setString(k++, model.getPhoneNumber());
+			preparedStatement.setString(k++, user.getFirstName());
+			preparedStatement.setString(k++, user.getLastName());
+			preparedStatement.setString(k++, Util.stringToMD5(user.getPassword()));
+			preparedStatement.setString(k++, user.getRegistered());
+			preparedStatement.setString(k++, user.getEmail());
+			preparedStatement.setString(k++, user.getPhoneNumber());
 
-			if (prep.executeUpdate() > 0) {
+			if (preparedStatement.executeUpdate() > 0) {
 				result = true;
 			}
-			con.commit();
+			connect.commit();
 			log.debug(Comment.COMMIT);
 		} catch (SQLException e) {
 			log.error(Comment.SQL_EXCEPTION + e.getMessage());
-			rollback(con);
+			rollback(connect);
 			throw new DBException(e);
 		} finally {
-			close(con, prep);
+			close(connect, preparedStatement);
 		}
 		log.debug(Comment.RETURN + result);
 		return result;
@@ -224,42 +262,42 @@ public class MySqlUser extends AbstractMySqlDao implements UserDao {
 	@Override
 	public User getUserById(int userId) throws DBException {
 		log.info(Comment.BEGIN);
-		User model = null;
-		Connection con = null;
-		PreparedStatement prep = null;
-		ResultSet rs = null;
+		User user = null;
+		Connection connect = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		log.debug("UserID = " + userId);
 		try {
-			con = dataSource.getConnection();
-			prep = con.prepareStatement(SELECT_USER_BY_ID);
-			prep.setInt(1, userId);
-			rs = prep.executeQuery();
+			connect = dataSource.getConnection();
+			preparedStatement = connect.prepareStatement(SELECT_USER_BY_ID);
+			preparedStatement.setInt(1, userId);
+			resultSet = preparedStatement.executeQuery();
 
-			if (rs.next()) {
-				model = extraction(rs);
+			if (resultSet.next()) {
+				user = extraction(resultSet);
 			}
 		} catch (SQLException e) {
 			log.error(Comment.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
-			close(con, prep, rs);
+			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(Comment.RETURN + model);
-		return model;
+		log.debug(Comment.RETURN + user);
+		return user;
 	}
 
-	private User extraction(ResultSet rs) throws SQLException {
+	private User extraction(ResultSet resultSet) throws SQLException {
 		log.info(Comment.BEGIN);
 		User user = new User();
 		int k = 1;
-		user.setId(rs.getInt(k++));
-		user.setEmail(rs.getString(k++));
-		user.setFirstName(rs.getString(k++));
-		user.setLastName(rs.getString(k++));
-		user.setPassword(rs.getString(k++));
-		user.setPhoneNumber(rs.getString(k++));
-		user.setRole(UserRole.valueOf(rs.getString(k++)));
-		user.setRegistered(rs.getString(k));
+		user.setId(resultSet.getInt(k++));
+		user.setEmail(resultSet.getString(k++));
+		user.setFirstName(resultSet.getString(k++));
+		user.setLastName(resultSet.getString(k++));
+		user.setPassword(resultSet.getString(k++));
+		user.setPhoneNumber(resultSet.getString(k++));
+		user.setRole(UserRole.valueOf(resultSet.getString(k++)));
+		user.setRegistered(resultSet.getString(k));
 
 		return user;
 	}
