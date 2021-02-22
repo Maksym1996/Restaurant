@@ -3,6 +3,7 @@ package db.dao;
 import java.util.List;
 
 import db.entity.User;
+import db.entity.UserWithPerformedOrders;
 import exception.DBException;
 
 /**
@@ -25,5 +26,7 @@ public interface UserDao {
 	int insertUser(User model) throws DBException;
 
 	boolean updateUser(User model) throws DBException;
+
+	List<UserWithPerformedOrders> getCountPerformedOrders() throws DBException ;
 
 }
