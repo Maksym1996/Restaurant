@@ -39,10 +39,9 @@ public class AddProductServlet extends HttpServlet {
 		LOG.info(CommentConst.BEGIN);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP);
-
-		LOG.info(CommentConst.FORWARD + PageConst.ADD_PRODUCT_JSP);
-
 		dispatcher.forward(request, response);
+		
+		LOG.info(CommentConst.FORWARD + PageConst.ADD_PRODUCT_JSP);
 	}
 
 	@Override
@@ -73,18 +72,14 @@ public class AddProductServlet extends HttpServlet {
 
 			if (testProductByName != null) {
 				errors.put(ParamConst.NAME, "The name '" + name + "' is taken");
-
 				LOG.debug("Test product by name = NOT NULL");
 			}
-
 			LOG.debug("Test product by name = NULL");
-
 		} catch (DBException e) {
-
+			response.sendError(500);
 			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
-
-			response.sendError(500);
+			
 			return;
 		}
 
@@ -92,11 +87,10 @@ public class AddProductServlet extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP);
 			request.setAttribute("errors", errors);
 			dispatcher.forward(request, response);
-
 			LOG.debug("Erorrs is not empty");
 			LOG.info(CommentConst.FORWARD + PageConst.ADD_PRODUCT_JSP);
 			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
-
+			
 			return;
 		}
 
@@ -105,20 +99,17 @@ public class AddProductServlet extends HttpServlet {
 
 		try {
 			productDao.insertProduct(productModelToInsert);
-
 			LOG.debug("Insert product");
-
 		} catch (Exception e) {
-
+			response.sendError(500);
 			LOG.error(CommentConst.EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
 
-			response.sendError(500);
 			return;
 		}
 
-		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
-
 		response.sendRedirect(PageConst.PIZZA_PREFERITA);
+		
+		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
 	}
 }
