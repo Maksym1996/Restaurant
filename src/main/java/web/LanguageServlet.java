@@ -30,15 +30,19 @@ public class LanguageServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		LOG.info(CommentConst.BEGIN);
+
 		String lang = request.getParameter(ParamConst.LANG);
 		String path = request.getHeader(ParamConst.REFERER);
+
 		LOG.debug("Lang " + lang);
 		LOG.debug("Path " + lang);
 
 		HttpSession session = request.getSession(true);
 		session.setAttribute(ParamConst.LANG, lang);
+
 		LOG.debug("Set lang in session " + lang);
 		LOG.info(CommentConst.REDIRECT + path);
+
 		response.sendRedirect(path);
 	}
 
@@ -47,6 +51,7 @@ public class LanguageServlet extends HttpServlet {
 			throws ServletException, IOException {
 		LOG.info(CommentConst.BEGIN);
 		LOG.info("doGet()");
+
 		doGet(request, response);
 	}
 
