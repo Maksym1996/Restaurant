@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebFilter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 
 /**
  * 
@@ -26,14 +26,14 @@ public class EncodingFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		log.info(CommentConst.BEGIN);
+		log.info(Log.BEGIN);
 		request.setCharacterEncoding(encoding);
 		chain.doFilter(request, response);
 	}
 
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
-		log.info(CommentConst.BEGIN);
+		log.info(Log.BEGIN);
 		String encodingParam = fConfig.getInitParameter("encoding");
 		if (encodingParam != null) {
 			encoding = encodingParam;

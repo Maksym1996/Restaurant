@@ -14,7 +14,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.CaptchaConst;
-import consts.CommentConst;
+import consts.Log;
 
 /**
  * The class for verifying reCaptcha from Google
@@ -25,10 +25,10 @@ public class VerifyCaptcha {
 	private static final Logger LOG = LogManager.getLogger(VerifyCaptcha.class);
 
 	public static boolean verify(String gRecaptchaResponse, HttpServletRequest request) {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		if (gRecaptchaResponse == null || gRecaptchaResponse.length() == 0) {
 			LOG.debug("gRecaptchaResponse is emptu or null");
-			LOG.info(CommentConst.RETURN + false);
+			LOG.info(Log.RETURN + false);
 			return false;
 		}
 
@@ -64,11 +64,11 @@ public class VerifyCaptcha {
 			LOG.debug("Get reponse by server");
 
 			boolean success = jsonObject.getBoolean("success");
-			LOG.info(CommentConst.RETURN + success);
+			LOG.info(Log.RETURN + success);
 			return success;
 		} catch (Exception e) {
-			LOG.error(CommentConst.EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.RETURN + false);
+			LOG.error(Log.EXCEPTION + e.getMessage());
+			LOG.info(Log.RETURN + false);
 			return false;
 		}
 	}

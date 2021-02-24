@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -71,11 +71,11 @@ public class AddProductServletTest {
 
 	@Test
 	public void callDoPostWithParamReturnAddProductJSP() throws Exception {
-		when(request.getParameter(ParamConst.NAME)).thenReturn("Bulka");
-		when(request.getParameter(ParamConst.PRICE)).thenReturn("100");
-		when(request.getParameter(ParamConst.DESCRIPTION)).thenReturn("Bulka");
-		when(request.getParameter(ParamConst.IMAGE_LINK)).thenReturn("Bulka");
-		when(request.getParameter(ParamConst.CATEGORY)).thenReturn("Burger");
+		when(request.getParameter(Param.NAME)).thenReturn("Bulka");
+		when(request.getParameter(Param.PRICE)).thenReturn("100");
+		when(request.getParameter(Param.DESCRIPTION)).thenReturn("Bulka");
+		when(request.getParameter(Param.IMAGE_LINK)).thenReturn("Bulka");
+		when(request.getParameter(Param.CATEGORY)).thenReturn("Burger");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenReturn(null);
@@ -88,11 +88,11 @@ public class AddProductServletTest {
 
 	@Test
 	public void callDoPostWithParamReturnError500() throws Exception {
-		when(request.getParameter(ParamConst.NAME)).thenReturn("Bulka");
-		when(request.getParameter(ParamConst.PRICE)).thenReturn("100");
-		when(request.getParameter(ParamConst.DESCRIPTION)).thenReturn("Bulka");
-		when(request.getParameter(ParamConst.IMAGE_LINK)).thenReturn("Bulka");
-		when(request.getParameter(ParamConst.CATEGORY)).thenReturn("Burger");
+		when(request.getParameter(Param.NAME)).thenReturn("Bulka");
+		when(request.getParameter(Param.PRICE)).thenReturn("100");
+		when(request.getParameter(Param.DESCRIPTION)).thenReturn("Bulka");
+		when(request.getParameter(Param.IMAGE_LINK)).thenReturn("Bulka");
+		when(request.getParameter(Param.CATEGORY)).thenReturn("Burger");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenReturn(null);

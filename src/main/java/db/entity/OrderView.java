@@ -11,17 +11,17 @@ public class OrderView implements Serializable {
 
 	private static final long serialVersionUID = 5965318754937941837L;
 
-	int id;
-	String orderDate;
-	String closingDate;
-	Status status;
-	String address;
-	int userId;
-	String sum;
-	int orderId;
-	int productId;
-	int count;
-	int price;
+	private int id;
+	private String orderDate;
+	private String closingDate;
+	private Status status;
+	private String address;
+	private int userId;
+	private String sum;
+	private int orderId;
+	private int productId;
+	private int count;
+	private int price;
 
 	public int getId() {
 		return id;

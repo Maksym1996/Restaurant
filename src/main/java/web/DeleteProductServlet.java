@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -33,26 +33,26 @@ public class DeleteProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.DELETED_PRODUCT_JSP);
 		dispatcher.forward(request, response);
 
-		LOG.info(CommentConst.FORWARD + PageConst.DELETED_PRODUCT_JSP);
+		LOG.info(Log.FORWARD + PageConst.DELETED_PRODUCT_JSP);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
-		String stringProductId = request.getParameter(ParamConst.ID);
+		String stringProductId = request.getParameter(Param.ID);
 		LOG.debug("stringProductId " + stringProductId);
 
 		if (!Validator.intValidator(stringProductId)) {
 			response.sendError(400);
 			LOG.debug("stringProductId is invalid");
-			LOG.info(CommentConst.REDIRECT + 400);
+			LOG.info(Log.REDIRECT + 400);
 
 			return;
 		}
@@ -64,7 +64,7 @@ public class DeleteProductServlet extends HttpServlet {
 
 			if (testProduct == null) {
 				response.sendError(404);
-				LOG.info(CommentConst.REDIRECT + 404);
+				LOG.info(Log.REDIRECT + 404);
 
 				return;
 			}
@@ -72,12 +72,12 @@ public class DeleteProductServlet extends HttpServlet {
 			LOG.debug("deleteProductById");
 		} catch (DBException e) {
 			response.sendError(500);
-			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.DB_EXCEPTION + e.getMessage());
+			LOG.info(Log.REDIRECT + 500);
 
 			return;
 		}
 		response.sendRedirect(PageConst.DELETE_PRODUCT);
-		LOG.info(CommentConst.REDIRECT + PageConst.DELETE_PRODUCT);
+		LOG.info(Log.REDIRECT + PageConst.DELETE_PRODUCT);
 	}
 }

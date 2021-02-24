@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 import exception.DBException;
 
 /**
@@ -18,31 +18,35 @@ public abstract class AbstractMySqlDao {
 	protected Logger log = LogManager.getLogger(this.getClass());
 
 	protected void close(AutoCloseable... resourcesToClose) throws DBException {
+		log.debug(Log.START);
 		for (AutoCloseable resourceToClose : resourcesToClose) {
 			if (resourceToClose == null) {
 				continue;
 			}
 			try {
 				resourceToClose.close();
-				log.debug(CommentConst.CLOSED + resourcesToClose);
+				log.trace(Log.CLOSED + resourcesToClose);
 			} catch (Exception e) {
-				log.error(CommentConst.EXCEPTION + e.getMessage());
+				log.error(Log.EXCEPTION + e.getMessage());
 				throw new DBException(e);
 			}
 		}
+		log.debug(Log.FINISH);
 	}
 
 	protected void rollback(Connection connect) throws DBException {
+		log.debug(Log.START);
 		if (connect == null) {
 			return;
 		}
 		try {
 			connect.rollback();
-			log.debug(CommentConst.ROLLBACK + connect);
+			log.trace(Log.ROLLBACK + connect);
 		} catch (SQLException e) {
-			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
+			log.error(Log.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		}
+		log.debug(Log.FINISH);
 	}
 
 }

@@ -13,9 +13,11 @@ import consts.DaoConst;
 import db.dao.UserDao;
 import db.mysql.MySqlOrderView;
 import db.mysql.MySqlProduct;
+import db.mysql.MySqlReceipt;
 import db.mysql.MySqlUser;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
+import db.dao.ReceiptDao;
 import exception.ContextInitException;
 
 @WebListener
@@ -32,11 +34,14 @@ public class ContextListener implements ServletContextListener {
 		UserDao userDao = new MySqlUser(dataSource);
 		ProductDao productDao = new MySqlProduct(dataSource);
 		OrderViewDao orderDao = new MySqlOrderView(dataSource);
+		ReceiptDao receiptDao = new MySqlReceipt(dataSource);
 
 		ServletContext servletContext = event.getServletContext();
 		servletContext.setAttribute(DaoConst.USER, userDao);
 		servletContext.setAttribute(DaoConst.PRODUCT, productDao);
 		servletContext.setAttribute(DaoConst.ORDER_VIEW, orderDao);
+		servletContext.setAttribute(DaoConst.RECEIPT, receiptDao);
+
 	}
 
 	private DataSource getDataSource() {

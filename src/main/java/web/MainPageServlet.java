@@ -15,10 +15,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -40,27 +40,27 @@ public class MainPageServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		
 		ProductDao productDao = (ProductDao)request.getServletContext().getAttribute(DaoConst.PRODUCT);
-		Map<String, String> params = Validator.mainPageValidator(request.getParameter(ParamConst.PAGE),
-				request.getParameter(ParamConst.PRODUCT_ID), request.getParameter(ParamConst.SORT_VALUE));
+		Map<String, String> params = Validator.mainPageValidator(request.getParameter(Param.PAGE),
+				request.getParameter(Param.PRODUCT_ID), request.getParameter(Param.SORT_VALUE));
 
-		int currentPage = Integer.parseInt(params.get(ParamConst.PAGE));
+		int currentPage = Integer.parseInt(params.get(Param.PAGE));
 		LOG.debug("currentPage " + currentPage);
 		
-		int productId = Integer.parseInt(params.get(ParamConst.PRODUCT_ID));
+		int productId = Integer.parseInt(params.get(Param.PRODUCT_ID));
 		LOG.debug("productId " + productId);
 		
-		String[] categories = request.getParameterValues(ParamConst.CATEGORIES) != null
-				? request.getParameterValues(ParamConst.CATEGORIES)
+		String[] categories = request.getParameterValues(Param.CATEGORIES) != null
+				? request.getParameterValues(Param.CATEGORIES)
 				: new String[] {};
 		LOG.debug("categories " + categories);
 		
-		String sortValue = params.get(ParamConst.SORT_VALUE);
+		String sortValue = params.get(Param.SORT_VALUE);
 		LOG.debug("sortValue " + sortValue);
 		
-		String asc = request.getParameter(ParamConst.ASC);
+		String asc = request.getParameter(Param.ASC);
 		LOG.debug("asc " + asc);
 
 		int limitProductOnPage = 3;
@@ -78,18 +78,18 @@ public class MainPageServlet extends HttpServlet {
 					limitProductOnPage);
 		} catch (DBException e) {
 			response.sendError(500);
-			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.DB_EXCEPTION + e.getMessage());
+			LOG.info(Log.REDIRECT + 500);
 
 			return;
 		}
 
 		HttpSession session = request.getSession(true);
-		Cart cart = (Cart)session.getAttribute(ParamConst.CART);
+		Cart cart = (Cart)session.getAttribute(Param.CART);
 		LOG.debug("Cart from session  " + cart);
 		if (cart == null) {
 			cart = new Cart();
-			session.setAttribute(ParamConst.CART, cart);
+			session.setAttribute(Param.CART, cart);
 		}
 
 		List<Product> cartProducts = cart.getProducts();
@@ -105,8 +105,8 @@ public class MainPageServlet extends HttpServlet {
 				try {
 					cartProducts.add(productDao.getProductById(productId));
 				} catch (DBException e) {
-					LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-					LOG.info(CommentConst.REDIRECT + 500);
+					LOG.error(Log.DB_EXCEPTION + e.getMessage());
+					LOG.info(Log.REDIRECT + 500);
 					response.sendError(500);
 					return;
 				}
@@ -116,32 +116,32 @@ public class MainPageServlet extends HttpServlet {
 		int maxPages = Util.getMaxPages(productsCount, limitProductOnPage);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.PIZZA_PREFERITA_JSP);
-		request.setAttribute(ParamConst.PRODUCTS_LIST, partListProducts);
-		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "partListProducts " + partListProducts);
+		request.setAttribute(Param.PRODUCTS_LIST, partListProducts);
+		LOG.debug(Log.FORWARD_WITH_PARAMETR + "partListProducts " + partListProducts);
 		
-		request.setAttribute(ParamConst.MAX_PAGES, maxPages);
-		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "maxPages " + maxPages);
+		request.setAttribute(Param.MAX_PAGES, maxPages);
+		LOG.debug(Log.FORWARD_WITH_PARAMETR + "maxPages " + maxPages);
 		
-		request.setAttribute(ParamConst.CURRENT_PAGE, currentPage);
-		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "currentPage " + currentPage);
+		request.setAttribute(Param.CURRENT_PAGE, currentPage);
+		LOG.debug(Log.FORWARD_WITH_PARAMETR + "currentPage " + currentPage);
 		
-		request.setAttribute(ParamConst.CATEGORIES, categories);
-		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "categories " + categories);
+		request.setAttribute(Param.CATEGORIES, categories);
+		LOG.debug(Log.FORWARD_WITH_PARAMETR + "categories " + categories);
 		
-		request.setAttribute(ParamConst.SORT_VALUE, sortValue);
-		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "sortValue " + sortValue);
+		request.setAttribute(Param.SORT_VALUE, sortValue);
+		LOG.debug(Log.FORWARD_WITH_PARAMETR + "sortValue " + sortValue);
 		
-		request.setAttribute(ParamConst.ASC, asc);
-		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "asc " + asc);
+		request.setAttribute(Param.ASC, asc);
+		LOG.debug(Log.FORWARD_WITH_PARAMETR + "asc " + asc);
 		
 		dispatcher.forward(request, response);
-		LOG.info(CommentConst.FORWARD + PageConst.PIZZA_PREFERITA_JSP);
+		LOG.info(Log.FORWARD + PageConst.PIZZA_PREFERITA_JSP);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		LOG.info("doGet()");
 		doGet(request, response);
 	}

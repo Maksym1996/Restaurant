@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 import db.dao.OrderViewDao;
 import util.UserRole;
 
@@ -25,7 +25,7 @@ public class OrderPageProviderContainer {
 	}
 
 	public OrderPageProvider getProvider(UserRole role) {
-		log.info(CommentConst.BEGIN);
+		log.info(Log.BEGIN);
 		log.debug("role" + role);
 		log.info("Return");
 		return pageProviders.get(role);

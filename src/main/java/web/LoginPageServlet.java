@@ -1,12 +1,8 @@
 package web;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,21 +15,19 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
-import db.dao.OrderViewDao;
-import db.dao.ProductDao;
+import consts.Param;
+import db.dao.ReceiptDao;
 import db.dao.UserDao;
-import db.entity.OrderView;
-import db.entity.Product;
+import db.entity.Receipt;
 import db.entity.User;
 import exception.DBException;
 import util.Validator;
 
 /**
- * Ыervlet that implements the functionality of authorizing and displaying a
+ * Servlet that implements the functionality of authorizing and displaying a
  * custom page
  */
 @WebServlet("/Login page")
@@ -45,76 +39,53 @@ public class LoginPageServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.debug(Log.BEGIN);
 
 		HttpSession session = request.getSession(true);
 		String forwardPage;
 
-		String logout = request.getParameter(ParamConst.LOG_OUT);
-		LOG.debug("logout " + logout);
+		String logout = request.getParameter(Param.LOG_OUT);
+		LOG.trace("logout " + logout);
 
-		if (ParamConst.LOG_OUT.equals(logout)) {
+		if (Param.LOG_OUT.equals(logout)) {
 			session.invalidate();
-			LOG.debug("session invalidate");
+			LOG.trace("session invalidate");
 			forwardPage = PageConst.LOGIN_PAGE_JSP;
-		} else if (session == null || session.getAttribute(ParamConst.USER) == null) {
-			LOG.debug("session is null or user from session is null");
+		} else if (session == null || session.getAttribute(Param.USER) == null) {
+			LOG.trace("session is null or user from session is null");
 			forwardPage = PageConst.LOGIN_PAGE_JSP;
 		} else {
-			User user = (User) session.getAttribute(ParamConst.USER);
-			LOG.debug("Get user from session -> " + user.toString());
 
-			session.setAttribute(ParamConst.ROLE, user.getRole());
-			LOG.debug("Set role = " + user.getRole() + " to session");
-
-			ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
-			OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(DaoConst.ORDER_VIEW);
-
-			Set<Product> productList = new HashSet<>();
-			Set<OrderView> orders = new LinkedHashSet<>();
-			List<OrderView> orderViewList = new ArrayList<>();
+			ReceiptDao receiptDao = (ReceiptDao) request.getServletContext().getAttribute(DaoConst.RECEIPT);
+			List<Receipt> listOfReceipts = null;
 			try {
-				orderViewList = orderDao.getOrderViewsByUserId(user.getId());
-				for (OrderView o : orderViewList) {
-					orders.add(o);
-					productList.add(productDao.getProductById(o.getProductId()));
-				}
-			} catch (Exception e) {
+				listOfReceipts = receiptDao.getListOfReceipts();
+			} catch (DBException e) {
+				LOG.error(Log.DB_EXCEPTION + e.getMessage());
 				response.sendError(500);
-				LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-				LOG.info(CommentConst.REDIRECT + 500);
-
+				LOG.trace(Log.REDIRECT + 500);
 				return;
 			}
-			request.setAttribute(ParamConst.ORDER_VIEW_LIST, orderViewList);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "orderViewList " + orderViewList);
-
-			request.setAttribute(ParamConst.PRODUCTS_LIST, productList);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "productList " + productList);
-
-			request.setAttribute(ParamConst.ORDERS, orders);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "orders " + orders);
-
+			request.setAttribute(Param.RECEIPTS_LIST, listOfReceipts);
 			forwardPage = PageConst.ACCOUNT_JSP;
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
 		dispatcher.forward(request, response);
-		LOG.info(CommentConst.FORWARD + forwardPage);
-
+		LOG.debug(Log.FORWARD + forwardPage);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.debug(Log.BEGIN);
 
 		HttpSession session = request.getSession(true);
 
-		String phoneNumber = request.getParameter(ParamConst.PHONE_NUMBER);
-		LOG.debug("phoneNumber " + phoneNumber);
+		String phoneNumber = request.getParameter(Param.PHONE_NUMBER);
+		LOG.trace("phoneNumber " + phoneNumber);
 
-		String password = request.getParameter(ParamConst.PASSWORD);
-		LOG.debug("password " + password);
+		String password = request.getParameter(Param.PASSWORD);
+		LOG.trace("password " + password);
 
 		Map<String, String> errors = Validator.authorizationValidator(phoneNumber, password);
 
@@ -122,34 +93,34 @@ public class LoginPageServlet extends HttpServlet {
 		User user = null;
 		try {
 			user = userDao.getUserByNumberAndPass(phoneNumber, password);
-			LOG.debug("getUserByNumberAndPass: " + user);
 			if (user == null) {
-				errors.put(ParamConst.NO_USER, "User with such data does not exist");
+				errors.put(Param.NO_USER, "User with such data does not exist");
+				LOG.trace("user == null");
 			} else {
-				session.setAttribute(ParamConst.USER, user);
-				LOG.debug("Set user to session");
+				session.setAttribute(Param.USER, user);
+				LOG.trace("Set user to session" + user.toString());
 
-				session.setAttribute(ParamConst.ROLE, user.getRole());
-				LOG.debug("Set role to session: " + user.getRole());
+				session.setAttribute(Param.ROLE, user.getRole());
+				LOG.trace("Set role to session: " + user.getRole());
 			}
 		} catch (DBException e) {
 			response.sendError(500);
-			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.DB_EXCEPTION + e.getMessage());
+			LOG.debug(Log.REDIRECT + 500);
 
 			return;
 		}
 		if (!errors.isEmpty()) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.LOGIN_PAGE_JSP);
-			request.setAttribute(ParamConst.ERRORS, errors);
-			LOG.info(CommentConst.FORWARD + PageConst.LOGIN_PAGE_JSP);
+			request.setAttribute(Param.ERRORS, errors);
+			LOG.trace(Log.FORWARD + PageConst.LOGIN_PAGE_JSP);
 
 			dispatcher.forward(request, response);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "errors " + errors);
+			LOG.debug(Log.FORWARD_WITH_PARAMETR + "errors " + errors);
 			return;
 		}
 		response.sendRedirect(PageConst.LOGIN_PAGE);
-		LOG.info(CommentConst.REDIRECT + PageConst.LOGIN_PAGE);
+		LOG.debug(Log.REDIRECT + PageConst.LOGIN_PAGE);
 	}
 
 }

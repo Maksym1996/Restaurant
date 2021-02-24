@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -56,7 +56,7 @@ public class DeleteProductServletTest {
 
 	@Test
 	public void callDoPostValidIDThenRetrunError500() throws Exception {
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
+		when(request.getParameter(Param.ID)).thenReturn("1");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenThrow(new DBException(null));
@@ -69,7 +69,7 @@ public class DeleteProductServletTest {
 	@Test
 	public void callDoPostValidIDThenRetrunDeleteProduct() throws Exception {
 		Product product = mock(Product.class);
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
+		when(request.getParameter(Param.ID)).thenReturn("1");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenReturn(product);
@@ -83,7 +83,7 @@ public class DeleteProductServletTest {
 	@Test
 	public void callDoPostThenRetrunDeleteProduct() throws Exception {
 		Product product = mock(Product.class);
-		when(request.getParameter(ParamConst.ID)).thenReturn("20");
+		when(request.getParameter(Param.ID)).thenReturn("20");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(20)).thenReturn(product);
@@ -96,7 +96,7 @@ public class DeleteProductServletTest {
 	
 	@Test
 	public void callDoPostThenRetrunError404() throws Exception {
-		when(request.getParameter(ParamConst.ID)).thenReturn("20");
+		when(request.getParameter(Param.ID)).thenReturn("20");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(20)).thenReturn(null);

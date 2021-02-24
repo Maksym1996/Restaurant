@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 
 /**
  * Servlet Filter to restrict access to *.jsp files
@@ -36,13 +36,13 @@ public class NoJSPFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		log.info(CommentConst.BEGIN);
+		log.info(Log.BEGIN);
 		if (active) {
 			if (!(request instanceof HttpServletRequest && response instanceof HttpServletResponse)) {
 				throw new ServletException("non-HTTP request or response");
 			}
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-			log.info(CommentConst.REDIRECT + 404);
+			log.info(Log.REDIRECT + 404);
 			httpServletResponse.sendError(404);
 			return;
 		}
@@ -51,7 +51,7 @@ public class NoJSPFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
-		log.info(CommentConst.BEGIN);
+		log.info(Log.BEGIN);
 		String act = config.getInitParameter("active");
 		if (act != null) {
 			active = (act.equalsIgnoreCase("TRUE"));

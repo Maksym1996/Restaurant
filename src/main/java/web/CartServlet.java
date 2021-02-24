@@ -17,10 +17,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.UserDao;
 import db.entity.Product;
@@ -43,18 +43,18 @@ public class CartServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
 		HttpSession session = request.getSession(true);
 		RequestDispatcher dispatcher;
 
-		Cart cart = (Cart) session.getAttribute(ParamConst.CART);
-		LOG.debug(ParamConst.CART + ": " + cart);
+		Cart cart = (Cart) session.getAttribute(Param.CART);
+		LOG.debug(Param.CART + ": " + cart);
 
 		if (cart == null) {
 			dispatcher = request.getRequestDispatcher(PageConst.EMPTY_CART);
 			dispatcher.forward(request, response);
-			LOG.info(CommentConst.FORWARD + PageConst.EMPTY_CART);
+			LOG.info(Log.FORWARD + PageConst.EMPTY_CART);
 
 			return;
 		}
@@ -64,24 +64,24 @@ public class CartServlet extends HttpServlet {
 		if (products.isEmpty()) {
 			dispatcher = request.getRequestDispatcher(PageConst.EMPTY_CART);
 			dispatcher.forward(request, response);
-			LOG.info(CommentConst.FORWARD + PageConst.EMPTY_CART);
+			LOG.info(Log.FORWARD + PageConst.EMPTY_CART);
 
 			return;
 		}
-		Map<String, Integer> params = Validator.cartValidator(request.getParameter(ParamConst.CHANGE),
-				request.getParameter(ParamConst.ID));
-		int id = params.get(ParamConst.ID);
+		Map<String, Integer> params = Validator.cartValidator(request.getParameter(Param.CHANGE),
+				request.getParameter(Param.ID));
+		int id = params.get(Param.ID);
 		LOG.debug("Id: " + id);
 
-		int change = params.get(ParamConst.CHANGE);
+		int change = params.get(Param.CHANGE);
 		LOG.debug("Change: " + change);
 
 		@SuppressWarnings("unchecked")
-		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute(ParamConst.COUNT);
+		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute(Param.COUNT);
 
 		if (count == null) {
 			count = new HashMap<>();
-			session.setAttribute(ParamConst.COUNT, count);
+			session.setAttribute(Param.COUNT, count);
 			for (Product p : products) {
 				count.put(p.getId(), 1);
 				LOG.debug("Name " + p.getName() + " count = " + count.get(p.getId()));
@@ -98,7 +98,7 @@ public class CartServlet extends HttpServlet {
 		}
 
 		// realize delete product from cart
-		int deleteId = Validator.intValidatorReturnInt(request.getParameter(ParamConst.DELETE_ID));
+		int deleteId = Validator.intValidatorReturnInt(request.getParameter(Param.DELETE_ID));
 		LOG.debug("Delete Id: " + deleteId);
 		for (Product p : products) {
 			if (p.getId() == deleteId) {
@@ -110,11 +110,11 @@ public class CartServlet extends HttpServlet {
 
 		}
 		if (products.isEmpty()) {
-			session.removeAttribute(ParamConst.COUNT);
-			LOG.debug("Removed " + ParamConst.COUNT + " attribute from session");
+			session.removeAttribute(Param.COUNT);
+			LOG.debug("Removed " + Param.COUNT + " attribute from session");
 			dispatcher = request.getRequestDispatcher(PageConst.EMPTY_CART);
 			dispatcher.forward(request, response);
-			LOG.info(CommentConst.FORWARD + PageConst.EMPTY_CART);
+			LOG.info(Log.FORWARD + PageConst.EMPTY_CART);
 			return;
 		}
 
@@ -129,55 +129,55 @@ public class CartServlet extends HttpServlet {
 		}
 		LOG.debug("Order summ: " + orderSumm);
 		dispatcher = request.getRequestDispatcher(PageConst.CART_JSP);
-		request.setAttribute(ParamConst.PRODUCTS_LIST, products);
-		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + products);
+		request.setAttribute(Param.PRODUCTS_LIST, products);
+		LOG.debug(Log.FORWARD_WITH_PARAMETR + products);
 
-		request.setAttribute(ParamConst.ORDER_SUMM, orderSumm);
-		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "Order summ = " + orderSumm);
+		request.setAttribute(Param.ORDER_SUMM, orderSumm);
+		LOG.debug(Log.FORWARD_WITH_PARAMETR + "Order summ = " + orderSumm);
 
 		dispatcher.forward(request, response);
-		LOG.info(CommentConst.FORWARD + PageConst.CART_JSP);
+		LOG.info(Log.FORWARD + PageConst.CART_JSP);
 
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
-		String firstName = request.getParameter(ParamConst.FIRST_NAME);
-		LOG.debug(ParamConst.FIRST_NAME + " " + firstName);
+		String firstName = request.getParameter(Param.FIRST_NAME);
+		LOG.debug(Param.FIRST_NAME + " " + firstName);
 
-		String phoneNumber = request.getParameter(ParamConst.PHONE_NUMBER);
-		LOG.debug(ParamConst.PHONE_NUMBER + " " + phoneNumber);
+		String phoneNumber = request.getParameter(Param.PHONE_NUMBER);
+		LOG.debug(Param.PHONE_NUMBER + " " + phoneNumber);
 
-		String address = request.getParameter(ParamConst.ADDRESS);
-		LOG.debug(ParamConst.ADDRESS + " " + address);
+		String address = request.getParameter(Param.ADDRESS);
+		LOG.debug(Param.ADDRESS + " " + address);
 
 		HttpSession session = request.getSession(true);
 
 		Map<String, String> errors = new HashMap<>();
-		User user = (User) session.getAttribute(ParamConst.USER);
+		User user = (User) session.getAttribute(Param.USER);
 		LOG.debug("User from session: " + user);
 		if (user == null) {
 			if (null == firstName || firstName.isEmpty()) {
-				errors.put(ParamConst.FIRST_NAME, "Provide your first name");
+				errors.put(Param.FIRST_NAME, "Provide your first name");
 			}
 			if (null == phoneNumber || phoneNumber.isEmpty()) {
-				errors.put(ParamConst.PHONE_NUMBER, "Provide your first name");
+				errors.put(Param.PHONE_NUMBER, "Provide your first name");
 			} else if (!Pattern.matches(Validator.PHONE_NUMBER_PATTERN, phoneNumber)) {
-				errors.put(ParamConst.PHONE_NUMBER, "The entered phone number is incorrect");
+				errors.put(Param.PHONE_NUMBER, "The entered phone number is incorrect");
 			}
 		}
 
 		if (null == address || address.isEmpty()) {
-			errors.put(ParamConst.ADDRESS, "Indicate the address where the delivery will be");
+			errors.put(Param.ADDRESS, "Indicate the address where the delivery will be");
 		}
 
-		Cart cart = (Cart) session.getAttribute(ParamConst.CART);
+		Cart cart = (Cart) session.getAttribute(Param.CART);
 		if (cart == null) {
 			response.sendError(400);
-			LOG.info(CommentConst.REDIRECT + 400);
+			LOG.info(Log.REDIRECT + 400);
 
 			return;
 		}
@@ -189,17 +189,17 @@ public class CartServlet extends HttpServlet {
 			for (Product p : cart.getProducts()) {
 				orderSumm += p.getPrice();
 			}
-			request.setAttribute(ParamConst.PRODUCTS_LIST, cart.getProducts());
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + cart.getProducts());
+			request.setAttribute(Param.PRODUCTS_LIST, cart.getProducts());
+			LOG.debug(Log.FORWARD_WITH_PARAMETR + cart.getProducts());
 
-			request.setAttribute(ParamConst.ORDER_SUMM, orderSumm);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "Order summ: " + orderSumm);
+			request.setAttribute(Param.ORDER_SUMM, orderSumm);
+			LOG.debug(Log.FORWARD_WITH_PARAMETR + "Order summ: " + orderSumm);
 
-			request.setAttribute(ParamConst.ERRORS, errors);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
+			request.setAttribute(Param.ERRORS, errors);
+			LOG.debug(Log.FORWARD_WITH_PARAMETR + errors);
 
 			dispatcher.forward(request, response);
-			LOG.info(CommentConst.FORWARD + PageConst.CART_JSP);
+			LOG.info(Log.FORWARD + PageConst.CART_JSP);
 
 			return;
 		}
@@ -223,8 +223,8 @@ public class CartServlet extends HttpServlet {
 				}
 			} catch (Exception e) {
 				response.sendError(500);
-				LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-				LOG.info(CommentConst.REDIRECT + 500);
+				LOG.error(Log.DB_EXCEPTION + e.getMessage());
+				LOG.info(Log.REDIRECT + 500);
 
 				return;
 			}
@@ -236,7 +236,7 @@ public class CartServlet extends HttpServlet {
 		List<Product> products = cart.getProducts();
 
 		@SuppressWarnings("unchecked")
-		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute(ParamConst.COUNT);
+		Map<Integer, Integer> count = (Map<Integer, Integer>) session.getAttribute(Param.COUNT);
 		LOG.debug("Count from session" + count);
 
 		int orderSumm = 0;
@@ -252,20 +252,20 @@ public class CartServlet extends HttpServlet {
 			orderDao.insertOrder(Util.createOrder(Status.NEW, address, userId, orderSumm), products, count);
 		} catch (Exception e) {
 			response.sendError(500);
-			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.DB_EXCEPTION + e.getMessage());
+			LOG.info(Log.REDIRECT + 500);
 
 			return;
 		}
 
-		session.removeAttribute(ParamConst.COUNT);
-		LOG.debug("Remove " + ParamConst.COUNT + " from session");
+		session.removeAttribute(Param.COUNT);
+		LOG.debug("Remove " + Param.COUNT + " from session");
 
-		session.removeAttribute(ParamConst.CART);
-		LOG.debug("Remove " + ParamConst.CART + " from session");
+		session.removeAttribute(Param.CART);
+		LOG.debug("Remove " + Param.CART + " from session");
 
 		response.sendRedirect(PageConst.LOGIN_PAGE);
-		LOG.info(CommentConst.REDIRECT + PageConst.LOGIN_PAGE);
+		LOG.info(Log.REDIRECT + PageConst.LOGIN_PAGE);
 
 	}
 }

@@ -3,7 +3,7 @@ package consts;
  * The class for storing parametr consts
  *
  */
-public class ParamConst {
+public class Param {
 	// MainPageServlet
 	public static final String PAGE = "page";
 	public static final String CATEGORIES = "categories";
@@ -20,6 +20,7 @@ public class ParamConst {
 
 	// LoginPageServlet
 	public static final String LOG_OUT = "logout";
+	public static final String RECEIPTS_LIST = "receiptsList";
 
 	// product const
 	public static final String ID = "id";
@@ -64,7 +65,7 @@ public class ParamConst {
 	public static final String ERRORS = "errors";
 	public static final String USERS_WITH_PERFORMED_ORDERS = "usersWithPerformedOrders";
 	
-	private ParamConst() {
+	private Param() {
 		//nothing
 	}
 

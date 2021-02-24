@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
-import consts.ParamConst;
+import consts.Log;
+import consts.Param;
 
 import java.io.IOException;
 
@@ -29,26 +29,26 @@ public class LanguageServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
-		String lang = request.getParameter(ParamConst.LANG);
+		String lang = request.getParameter(Param.LANG);
 		LOG.debug("Lang " + lang);
 		
-		String path = request.getHeader(ParamConst.REFERER);
+		String path = request.getHeader(Param.REFERER);
 		LOG.debug("Path " + lang);
 
 		HttpSession session = request.getSession(true);
-		session.setAttribute(ParamConst.LANG, lang);
+		session.setAttribute(Param.LANG, lang);
 		LOG.debug("Set lang in session " + lang);
 	
 		response.sendRedirect(path);
-		LOG.info(CommentConst.REDIRECT + path);
+		LOG.info(Log.REDIRECT + path);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		LOG.info("doGet()");
 
 		doGet(request, response);

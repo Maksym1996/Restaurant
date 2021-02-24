@@ -19,10 +19,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
@@ -53,10 +53,10 @@ public class WorkZoneServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
 		HttpSession session = request.getSession(true);
-		UserRole role = (UserRole) session.getAttribute(ParamConst.ROLE);
+		UserRole role = (UserRole) session.getAttribute(Param.ROLE);
 		LOG.debug("Role from session" + role);
 
 		OrderViewDao orderViewDao = (OrderViewDao) request.getServletContext().getAttribute(DaoConst.ORDER_VIEW);
@@ -70,7 +70,7 @@ public class WorkZoneServlet extends HttpServlet {
 
 		if (pageProvider == null) {
 			response.sendError(403);
-			LOG.info(CommentConst.REDIRECT + 403);
+			LOG.info(Log.REDIRECT + 403);
 
 			return;
 		}
@@ -99,8 +99,8 @@ public class WorkZoneServlet extends HttpServlet {
 
 			} catch (DBException e) {
 				response.sendError(500);
-				LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-				LOG.info(CommentConst.REDIRECT + 500);
+				LOG.error(Log.DB_EXCEPTION + e.getMessage());
+				LOG.info(Log.REDIRECT + 500);
 				return;
 			}
 		}
@@ -110,8 +110,8 @@ public class WorkZoneServlet extends HttpServlet {
 			usersWithPerformedOrders = userDao.getUserAndHimCountPerformedOrders();
 		} catch (DBException e) {
 			response.sendError(500);
-			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.DB_EXCEPTION + e.getMessage());
+			LOG.info(Log.REDIRECT + 500);
 
 			return;
 		}
@@ -120,42 +120,42 @@ public class WorkZoneServlet extends HttpServlet {
 				.sorted(USERS_BY_ORDERS_COUNT).limit(2).collect(Collectors.toList());
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
-		request.setAttribute(ParamConst.ORDER_VIEW_LIST, orderViewList);
+		request.setAttribute(Param.ORDER_VIEW_LIST, orderViewList);
 		LOG.debug("Order list: " + orderViewList);
 
-		request.setAttribute(ParamConst.USERS_WITH_PERFORMED_ORDERS, sorterByCountUsersWithPerformedOrders);
+		request.setAttribute(Param.USERS_WITH_PERFORMED_ORDERS, sorterByCountUsersWithPerformedOrders);
 
-		request.setAttribute(ParamConst.PRODUCTS_LIST, productList);
+		request.setAttribute(Param.PRODUCTS_LIST, productList);
 		LOG.debug("Product list" + productList);
 
-		request.setAttribute(ParamConst.USER_LIST, userList);
+		request.setAttribute(Param.USER_LIST, userList);
 		LOG.debug("User list: " + userList);
 
-		request.setAttribute(ParamConst.ORDERS, orders);
+		request.setAttribute(Param.ORDERS, orders);
 		LOG.debug("Orders: " + orders);
 
 		dispatcher.forward(request, response);
-		LOG.info(CommentConst.FORWARD + forwardPage);
+		LOG.info(Log.FORWARD + forwardPage);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
 		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(DaoConst.ORDER_VIEW);
 		LOG.debug(DaoConst.ORDER_VIEW);
 
-		String status = request.getParameter(ParamConst.STATUS);
+		String status = request.getParameter(Param.STATUS);
 		LOG.debug("Status: " + status);
 
-		String id = request.getParameter(ParamConst.ID);
+		String id = request.getParameter(Param.ID);
 		LOG.debug("Id " + id);
 
 		if (!Validator.workZoneValidator(status, id)) {
 			response.sendError(400);
 			LOG.debug("Request paraments is invalid");
-			LOG.info(CommentConst.REDIRECT + 400);
+			LOG.info(Log.REDIRECT + 400);
 
 			return;
 		}
@@ -178,12 +178,12 @@ public class WorkZoneServlet extends HttpServlet {
 			LOG.debug("Update status by id: " + orderId + " " + resultStatus.name());
 		} catch (DBException e) {
 			response.sendError(500);
-			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.DB_EXCEPTION + e.getMessage());
+			LOG.info(Log.REDIRECT + 500);
 
 			return;
 		}
 		response.sendRedirect(PageConst.WORK_ZONE);
-		LOG.info(CommentConst.REDIRECT + PageConst.WORK_ZONE);
+		LOG.info(Log.REDIRECT + PageConst.WORK_ZONE);
 	}
 }

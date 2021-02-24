@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -36,30 +36,30 @@ public class AddProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP);
 		dispatcher.forward(request, response);
 		
-		LOG.info(CommentConst.FORWARD + PageConst.ADD_PRODUCT_JSP);
+		LOG.info(Log.FORWARD + PageConst.ADD_PRODUCT_JSP);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
-		String name = request.getParameter(ParamConst.NAME);
-		String price = request.getParameter(ParamConst.PRICE);
-		String description = request.getParameter(ParamConst.DESCRIPTION);
-		String imageLink = request.getParameter(ParamConst.IMAGE_LINK);
-		String category = request.getParameter(ParamConst.CATEGORY);
+		String name = request.getParameter(Param.NAME);
+		String price = request.getParameter(Param.PRICE);
+		String description = request.getParameter(Param.DESCRIPTION);
+		String imageLink = request.getParameter(Param.IMAGE_LINK);
+		String category = request.getParameter(Param.CATEGORY);
 
-		LOG.debug(ParamConst.NAME + name);
-		LOG.debug(ParamConst.PRICE + price);
-		LOG.debug(ParamConst.DESCRIPTION + description);
-		LOG.debug(ParamConst.IMAGE_LINK + imageLink);
-		LOG.debug(ParamConst.CATEGORY + category);
+		LOG.debug(Param.NAME + name);
+		LOG.debug(Param.PRICE + price);
+		LOG.debug(Param.DESCRIPTION + description);
+		LOG.debug(Param.IMAGE_LINK + imageLink);
+		LOG.debug(Param.CATEGORY + category);
 
 		Map<String, String> errors = Validator.productValidator(name, price, description, imageLink, category);
 
@@ -71,14 +71,14 @@ public class AddProductServlet extends HttpServlet {
 			Product testProductByName = productDao.getProductByName(name);
 
 			if (testProductByName != null) {
-				errors.put(ParamConst.NAME, "The name '" + name + "' is taken");
+				errors.put(Param.NAME, "The name '" + name + "' is taken");
 				LOG.debug("Test product by name = NOT NULL");
 			}
 			LOG.debug("Test product by name = NULL");
 		} catch (DBException e) {
 			response.sendError(500);
-			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.DB_EXCEPTION + e.getMessage());
+			LOG.info(Log.REDIRECT + 500);
 			
 			return;
 		}
@@ -88,8 +88,8 @@ public class AddProductServlet extends HttpServlet {
 			request.setAttribute("errors", errors);
 			dispatcher.forward(request, response);
 			LOG.debug("Erorrs is not empty");
-			LOG.info(CommentConst.FORWARD + PageConst.ADD_PRODUCT_JSP);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
+			LOG.info(Log.FORWARD + PageConst.ADD_PRODUCT_JSP);
+			LOG.debug(Log.FORWARD_WITH_PARAMETR + errors);
 			
 			return;
 		}
@@ -102,14 +102,14 @@ public class AddProductServlet extends HttpServlet {
 			LOG.debug("Insert product");
 		} catch (Exception e) {
 			response.sendError(500);
-			LOG.error(CommentConst.EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.EXCEPTION + e.getMessage());
+			LOG.info(Log.REDIRECT + 500);
 
 			return;
 		}
 
 		response.sendRedirect(PageConst.PIZZA_PREFERITA);
 		
-		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
+		LOG.info(Log.REDIRECT + PageConst.PIZZA_PREFERITA);
 	}
 }

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
 
-import consts.ParamConst;
+import consts.Param;
 
 public class LanguageServletTest {
 	private static final String PATH = "http://localhost:8080/restaurant-web/Pizza%20Preferita?";
@@ -31,8 +31,8 @@ public class LanguageServletTest {
 	public void callDoPostThenReturnPath() throws Exception {
 
 		when(request.getSession(true)).thenReturn(session);
-		when(request.getParameter(ParamConst.LANG)).thenReturn("ru");
-		when(request.getHeader(ParamConst.REFERER)).thenReturn(PATH);
+		when(request.getParameter(Param.LANG)).thenReturn("ru");
+		when(request.getHeader(Param.REFERER)).thenReturn(PATH);
 
 		servlet.doPost(request, response);
 

@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import consts.CommentConst;
+import consts.Log;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -37,16 +37,16 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 	@Override
 	public List<Product> getProductByCategoriesOnPage(String[] categories, String sortValue, String desc, int skip,
 			int limit) throws DBException {
-		log.info(CommentConst.BEGIN);
+		log.debug(Log.START);
 		List<Product> productsByCategories = new ArrayList<>();
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		log.debug("categories = " + categories.length);
-		log.debug("sortValue = " + sortValue);
-		log.debug("desc = " + desc);
-		log.debug("skip = " + skip);
-		log.debug("limit = " + limit);
+		log.trace("categories = " + categories.length);
+		log.trace("sortValue = " + sortValue);
+		log.trace("desc = " + desc);
+		log.trace("skip = " + skip);
+		log.trace("limit = " + limit);
 		try {
 			connect = dataSource.getConnection();
 			preparedStatement = connect.prepareStatement(protectSqlInjection(sortValue, categories, desc));
@@ -65,24 +65,24 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 			}
 
 		} catch (SQLException e) {
-			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
+			log.error(Log.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(CommentConst.RETURN + productsByCategories.size());
+		log.debug(Log.FINISH_WITH + productsByCategories.size());
 		return productsByCategories;
 	}
 
 	@Override
 	public long getProductsCount(String[] categories) throws DBException {
-		log.info(CommentConst.BEGIN);
+		log.debug(Log.START);
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
 		int countProducts = 0;
-		log.debug("categories " + categories);
+		log.trace("categories " + categories);
 		try {
 			connect = dataSource.getConnection();
 			preparedStatement = connect.prepareStatement(countQuery(categories));
@@ -97,23 +97,23 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 			}
 
 		} catch (SQLException e) {
-			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
+			log.error(Log.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(CommentConst.RETURN + countProducts);
+		log.debug(Log.FINISH_WITH + countProducts);
 		return countProducts;
 	}
 
 	@Override
 	public int insertProduct(Product product) throws DBException {
-		log.info(CommentConst.BEGIN);
+		log.debug(Log.START);
 		int productId = 0;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		log.debug("product = " + product.toString());
+		log.trace("product = " + product.toString());
 		try {
 			connect = dataSource.getConnection();
 			connect.setAutoCommit(false);
@@ -135,26 +135,26 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				}
 			}
 			connect.commit();
-			log.debug(CommentConst.COMMIT);
+			log.trace(Log.COMMIT);
 		} catch (SQLException e) {
-			log.error(CommentConst.COMMIT + e.getMessage());
+			log.error(Log.COMMIT + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(CommentConst.RETURN + productId);
+		log.debug(Log.FINISH_WITH + productId);
 		return productId;
 	}
 
 	@Override
 	public Product getProductById(int productId) throws DBException {
-		log.info(CommentConst.BEGIN);
+		log.debug(Log.BEGIN);
 		Product product = null;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		log.debug("id = " + productId);
+		log.trace("id = " + productId);
 		try {
 			connect = dataSource.getConnection();
 			preparedStatement = connect.prepareStatement(SELECT_PRODUCT_BY_ID);
@@ -165,23 +165,23 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				product = extractionProduct(resultSet);
 			}
 		} catch (SQLException e) {
-			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
+			log.error(Log.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(CommentConst.RETURN + product);
+		log.debug(Log.FINISH_WITH + product);
 		return product;
 	}
 
 	@Override
 	public Product getProductByName(String name) throws DBException {
-		log.info(CommentConst.BEGIN);
+		log.debug(Log.START);
 		Product product = null;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		log.debug("name " + name);
+		log.trace("name " + name);
 		try {
 			connect = dataSource.getConnection();
 			preparedStatement = connect.prepareStatement(SELECT_PRODUCT_BY_NAME);
@@ -192,22 +192,22 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				product = extractionProduct(resultSet);
 			}
 		} catch (SQLException e) {
-			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
+			log.error(Log.SQL_EXCEPTION + e.getMessage());
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(CommentConst.RETURN + product);
+		log.debug(Log.FINISH_WITH + product);
 		return product;
 	}
 
 	@Override
 	public boolean updateProduct(Product product) throws DBException {
-		log.info(CommentConst.BEGIN);
+		log.debug(Log.START);
 		boolean result = false;
 		Connection connect = null;
 		PreparedStatement preparedStatement = null;
-		log.debug("Product = " + product.toString());
+		log.trace("Product = " + product.toString());
 		try {
 			connect = dataSource.getConnection();
 			connect.setAutoCommit(false);
@@ -225,23 +225,23 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				result = true;
 			}
 			connect.commit();
-			log.debug(CommentConst.COMMIT);
+			log.trace(Log.COMMIT);
 		} catch (SQLException e) {
-			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
+			log.error(Log.SQL_EXCEPTION + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement);
 		}
-		log.debug(CommentConst.RETURN + result);
+		log.debug(Log.FINISH_WITH + result);
 		return result;
 
 	}
 
 	@Override
 	public boolean deleteProductById(int productId) throws DBException {
-		log.info(CommentConst.BEGIN);
-		log.debug("id = " + productId);
+		log.debug(Log.START);
+		log.trace("id = " + productId);
 		boolean result = false;
 
 		Connection connect = null;
@@ -259,19 +259,20 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 				result = true;
 			}
 			connect.commit();
-			log.debug(CommentConst.COMMIT);
+			log.trace(Log.COMMIT);
 		} catch (SQLException e) {
-			log.error(CommentConst.SQL_EXCEPTION + e.getMessage());
+			log.error(Log.SQL_EXCEPTION + e.getMessage());
 			rollback(connect);
 			throw new DBException(e);
 		} finally {
 			close(connect, preparedStatement, resultSet);
 		}
-		log.debug(CommentConst.RETURN + result);
+		log.debug(Log.FINISH_WITH + result);
 		return result;
 	}
 
 	private Product extractionProduct(ResultSet resultSet) throws SQLException {
+		log.debug(Log.START);
 		Product product = new Product();
 		int k = 1;
 		product.setId(resultSet.getInt(k++));
@@ -281,7 +282,7 @@ public class MySqlProduct extends AbstractMySqlDao implements ProductDao {
 		product.setImageLink(resultSet.getString(k++));
 		product.setCategory(Category.byTitle(resultSet.getString(k)));
 
-		log.debug(CommentConst.EXTRACTION + product.toString());
+		log.debug(Log.FINISH_WITH + product.toString());
 		return product;
 	}
 

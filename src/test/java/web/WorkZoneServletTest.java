@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
 import db.dao.UserDao;
@@ -55,7 +55,7 @@ public class WorkZoneServletTest {
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(ParamConst.ROLE)).thenReturn(UserRole.ADMIN);
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.ADMIN);
 
 		servlet.doGet(request, response);
 
@@ -71,7 +71,7 @@ public class WorkZoneServletTest {
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(ParamConst.ROLE)).thenReturn(UserRole.MANAGER);
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.MANAGER);
 
 		servlet.doGet(request, response);
 		verify(request, times(1)).getRequestDispatcher(PageConst.MANAGER_JSP);
@@ -87,7 +87,7 @@ public class WorkZoneServletTest {
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(ParamConst.ROLE)).thenReturn(UserRole.DELIVERY);
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.DELIVERY);
 
 		servlet.doGet(request, response);
 		verify(request, times(1)).getRequestDispatcher(PageConst.DELIVERY_JSP);
@@ -103,7 +103,7 @@ public class WorkZoneServletTest {
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
 		when(request.getSession(true)).thenReturn(session);
-		when(session.getAttribute(ParamConst.ROLE)).thenReturn(UserRole.COOK);
+		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.COOK);
 
 		servlet.doGet(request, response);
 		verify(request, times(1)).getRequestDispatcher(PageConst.COOK_JSP);

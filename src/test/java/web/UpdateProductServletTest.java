@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
 import exception.DBException;
@@ -47,7 +47,7 @@ public class UpdateProductServletTest {
 
 	@Test
 	public void callDoGetWithParamReturnError500() throws Exception {
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
+		when(request.getParameter(Param.ID)).thenReturn("1");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenThrow(new DBException(null));
@@ -61,7 +61,7 @@ public class UpdateProductServletTest {
 	public void callDoGetWithParamReturnForwardUpdateProductJSP() throws Exception {
 		Product product = mock(Product.class);
 		when(request.getRequestDispatcher(PageConst.UPDATE_PRODUCT_JSP)).thenReturn(dispatcher);
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
+		when(request.getParameter(Param.ID)).thenReturn("1");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenReturn(product);
@@ -82,7 +82,7 @@ public class UpdateProductServletTest {
 
 	@Test
 	public void callDoPostWithIDReturnError500() throws Exception {
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
+		when(request.getParameter(Param.ID)).thenReturn("1");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenThrow(new DBException(null));
@@ -94,7 +94,7 @@ public class UpdateProductServletTest {
 
 	@Test
 	public void callDoPostWithIDReturnError404() throws Exception {
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
+		when(request.getParameter(Param.ID)).thenReturn("1");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenReturn(null);
@@ -109,8 +109,8 @@ public class UpdateProductServletTest {
 		Product product1 = mock(Product.class);
 		Product product2 = mock(Product.class);
 		when(request.getRequestDispatcher(PageConst.UPDATE_PRODUCT_JSP)).thenReturn(dispatcher);
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
-		when(request.getParameter(ParamConst.NAME)).thenReturn("Паперони");
+		when(request.getParameter(Param.ID)).thenReturn("1");
+		when(request.getParameter(Param.NAME)).thenReturn("Паперони");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenReturn(product1);
@@ -125,8 +125,8 @@ public class UpdateProductServletTest {
 	@Test
 	public void callDoPostWithIdAndNameReturnError500() throws Exception {
 		Product product1 = mock(Product.class);
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
-		when(request.getParameter(ParamConst.NAME)).thenReturn("Паперони");
+		when(request.getParameter(Param.ID)).thenReturn("1");
+		when(request.getParameter(Param.NAME)).thenReturn("Паперони");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenReturn(product1);
@@ -141,12 +141,12 @@ public class UpdateProductServletTest {
 	public void callDoPostWithValidParamentsReturnRedirectPizzaPreferita() throws Exception {
 		Product product1 = mock(Product.class);
 		Product product2 = mock(Product.class);
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
-		when(request.getParameter(ParamConst.NAME)).thenReturn("Паперони");
-		when(request.getParameter(ParamConst.PRICE)).thenReturn("10");
-		when(request.getParameter(ParamConst.DESCRIPTION)).thenReturn("Паперони");
-		when(request.getParameter(ParamConst.IMAGE_LINK)).thenReturn("Картинка");
-		when(request.getParameter(ParamConst.CATEGORY)).thenReturn("Pizza");
+		when(request.getParameter(Param.ID)).thenReturn("1");
+		when(request.getParameter(Param.NAME)).thenReturn("Паперони");
+		when(request.getParameter(Param.PRICE)).thenReturn("10");
+		when(request.getParameter(Param.DESCRIPTION)).thenReturn("Паперони");
+		when(request.getParameter(Param.IMAGE_LINK)).thenReturn("Картинка");
+		when(request.getParameter(Param.CATEGORY)).thenReturn("Pizza");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenReturn(product1);
@@ -162,12 +162,12 @@ public class UpdateProductServletTest {
 	public void callDoPostWithValidParamentsReturnError500() throws Exception {
 		Product product1 = mock(Product.class);
 		Product product2 = mock(Product.class);
-		when(request.getParameter(ParamConst.ID)).thenReturn("1");
-		when(request.getParameter(ParamConst.NAME)).thenReturn("Паперони");
-		when(request.getParameter(ParamConst.PRICE)).thenReturn("10");
-		when(request.getParameter(ParamConst.DESCRIPTION)).thenReturn("Паперони");
-		when(request.getParameter(ParamConst.IMAGE_LINK)).thenReturn("Картинка");
-		when(request.getParameter(ParamConst.CATEGORY)).thenReturn("Pizza");
+		when(request.getParameter(Param.ID)).thenReturn("1");
+		when(request.getParameter(Param.NAME)).thenReturn("Паперони");
+		when(request.getParameter(Param.PRICE)).thenReturn("10");
+		when(request.getParameter(Param.DESCRIPTION)).thenReturn("Паперони");
+		when(request.getParameter(Param.IMAGE_LINK)).thenReturn("Картинка");
+		when(request.getParameter(Param.CATEGORY)).thenReturn("Pizza");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductById(1)).thenReturn(product1);

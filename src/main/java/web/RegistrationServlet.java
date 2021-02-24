@@ -16,10 +16,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.CaptchaConst;
-import consts.CommentConst;
+import consts.Log;
 import consts.DaoConst;
 import consts.PageConst;
-import consts.ParamConst;
+import consts.Param;
 import db.dao.UserDao;
 import db.entity.User;
 import exception.DBException;
@@ -39,37 +39,37 @@ public class RegistrationServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.REGISTRATION_JSP);
 		request.setAttribute("SITE_KEY", CaptchaConst.SITE_KEY);
 		LOG.debug("Set in request SITE KEY to reCaptcha");
 
 		dispatcher.forward(request, response);
-		LOG.info(CommentConst.FORWARD + PageConst.REGISTRATION_JSP);
+		LOG.info(Log.FORWARD + PageConst.REGISTRATION_JSP);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 
-		String firstName = request.getParameter(ParamConst.FIRST_NAME);
+		String firstName = request.getParameter(Param.FIRST_NAME);
 		LOG.debug("firstName" + firstName);
 
-		String lastName = request.getParameter(ParamConst.LAST_NAME);
+		String lastName = request.getParameter(Param.LAST_NAME);
 		LOG.debug("lastName" + lastName);
 
-		String email = request.getParameter(ParamConst.EMAIL);
+		String email = request.getParameter(Param.EMAIL);
 		LOG.debug("email" + email);
 
-		String phoneNumber = request.getParameter(ParamConst.PHONE_NUMBER);
+		String phoneNumber = request.getParameter(Param.PHONE_NUMBER);
 		LOG.debug("phoneNumber" + phoneNumber);
 
-		String password = request.getParameter(ParamConst.PASSWORD);
+		String password = request.getParameter(Param.PASSWORD);
 		LOG.debug("password" + password);
 
-		String confirmPassword = request.getParameter(ParamConst.CONFIRM_PASSWORD);
+		String confirmPassword = request.getParameter(Param.CONFIRM_PASSWORD);
 		LOG.debug("confirmPassword" + confirmPassword);
 
 		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
@@ -86,18 +86,18 @@ public class RegistrationServlet extends HttpServlet {
 			LOG.debug("getUsersByRegistered('true')");
 		} catch (DBException e) {
 			response.sendError(500);
-			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.DB_EXCEPTION + e.getMessage());
+			LOG.info(Log.REDIRECT + 500);
 
 			return;
 		}
 		for (User user : allRegistredUsers) {
 			if (user.getEmail().equals(email)) {
-				errors.put(ParamConst.EMAIL, "An account with such email already exists!");
+				errors.put(Param.EMAIL, "An account with such email already exists!");
 				LOG.debug("such email already exists");
 			}
 			if (user.getPhoneNumber().equals(phoneNumber)) {
-				errors.put(ParamConst.PHONE_NUMBER, "An account with such phone number already exist!");
+				errors.put(Param.PHONE_NUMBER, "An account with such phone number already exist!");
 				LOG.debug("such phone number already exist");
 			}
 		}
@@ -110,11 +110,11 @@ public class RegistrationServlet extends HttpServlet {
 		
 		if (!errors.isEmpty()) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.REGISTRATION_JSP);
-			request.setAttribute(ParamConst.ERRORS, errors);
-			LOG.info(CommentConst.FORWARD + PageConst.REGISTRATION_JSP);
+			request.setAttribute(Param.ERRORS, errors);
+			LOG.info(Log.FORWARD + PageConst.REGISTRATION_JSP);
 
 			dispatcher.forward(request, response);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
+			LOG.debug(Log.FORWARD_WITH_PARAMETR + errors);
 			return;
 		}
 
@@ -133,16 +133,19 @@ public class RegistrationServlet extends HttpServlet {
 			}
 		} catch (DBException e) {
 			response.sendError(500);
-			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
-			LOG.info(CommentConst.REDIRECT + 500);
+			LOG.error(Log.DB_EXCEPTION + e.getMessage());
+			LOG.info(Log.REDIRECT + 500);
 
 			return;
 		}
 		HttpSession session = request.getSession(true);
-		session.setAttribute(ParamConst.USER, userToInsert);
+		session.setAttribute(Param.USER, userToInsert);
 		LOG.debug("Set user in session " + userToInsert);
+		
+		session.setAttribute(Param.USER, userToInsert.getRole());
+		LOG.debug("Set role in session " + userToInsert.getRole());
 
 		response.sendRedirect(PageConst.PIZZA_PREFERITA);
-		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
+		LOG.info(Log.REDIRECT + PageConst.PIZZA_PREFERITA);
 	}
 }

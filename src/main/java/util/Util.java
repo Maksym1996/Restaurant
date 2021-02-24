@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import consts.CommentConst;
+import consts.Log;
 import db.entity.OrderView;
 import db.entity.Product;
 import db.entity.User;
@@ -24,7 +24,7 @@ public class Util {
 	private static final Logger LOG = LogManager.getLogger(Util.class);
 
 	public static int getMaxPages(long itemsCount, long pageSize) {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		LOG.debug("itemsCount " + itemsCount);
 		LOG.debug("pageSize " + pageSize);
 		int i = (int) (itemsCount / pageSize);
@@ -34,7 +34,7 @@ public class Util {
 
 	public static User createUser(String firstName, String lastName, String email, String phoneNumber,
 			String password) {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		LOG.debug("firstName " + firstName);
 		LOG.debug("lastName " + lastName);
 		LOG.debug("email " + email);
@@ -49,13 +49,13 @@ public class Util {
 		user.setPassword(password);
 		user.setRegistered("true");
 
-		LOG.info(CommentConst.RETURN + user);
+		LOG.info(Log.RETURN + user);
 		return user;
 
 	}
 
 	public static User createUser(String firstName, String phoneNumber) {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		LOG.debug("firstName " + firstName);
 		LOG.debug("phoneNumber " + phoneNumber);
 		User user = new User();
@@ -63,13 +63,13 @@ public class Util {
 		user.setPhoneNumber(phoneNumber);
 		user.setRegistered("false");
 
-		LOG.info(CommentConst.RETURN + user);
+		LOG.info(Log.RETURN + user);
 		return user;
 
 	}
 
 	public static OrderView createOrder(Status status, String address, int userId, int sum) {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		LOG.debug("status " + status);
 		LOG.debug("address " + address);
 		LOG.debug("userId " + userId);
@@ -81,14 +81,14 @@ public class Util {
 		order.setUserId(userId);
 		order.setSum(String.valueOf(sum));
 
-		LOG.info(CommentConst.RETURN + order);
+		LOG.info(Log.RETURN + order);
 		return order;
 
 	}
 
 	public static Product createProduct(String name, int price, String description, String imageLink, Category category,
 			int id) {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		LOG.debug("name " + name);
 		LOG.debug("price " + price);
 		LOG.debug("description " + description);
@@ -104,7 +104,7 @@ public class Util {
 		product.setCategory(category);
 		product.setId(id);
 
-		LOG.info(CommentConst.RETURN + product);
+		LOG.info(Log.RETURN + product);
 		return product;
 
 	}
@@ -112,10 +112,10 @@ public class Util {
 	private static final String SALT = "234jsdflakj";
 
 	public static String stringToMD5(String password) {
-		LOG.info(CommentConst.BEGIN);
+		LOG.info(Log.BEGIN);
 		LOG.debug("password: " + password);
 		if (password == null) {
-			LOG.info(CommentConst.RETURN + null);
+			LOG.info(Log.RETURN + null);
 			return null;
 		}
 		String saltedPassword = password.concat(SALT);

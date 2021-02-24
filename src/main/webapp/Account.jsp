@@ -10,7 +10,7 @@
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><f:message key="Account.title"/></title>
+<title><f:message key="Account.title" /></title>
 <!--    Bootstap START-->
 
 <link
@@ -53,29 +53,31 @@
 		<div class="info col-sm-10">
 
 			<p>
-				<label><f:message key="firstName"/>: </label>
+				<label><f:message key="firstName" />: </label>
 				<c:out value="${user.firstName}" />
 			</p>
 			<p>
-				<label><f:message key="lastName"/>: </label>
+				<label><f:message key="lastName" />: </label>
 				<c:out value="${user.lastName}" />
 			</p>
 			<p>
-				<label><f:message key="email"/>: </label>
+				<label><f:message key="email" />: </label>
 				<c:out value="${user.email}" />
 			</p>
 			<p>
-				<label><f:message key="number"/>: </label>
+				<label><f:message key="number" />: </label>
 				<c:out value="${user.phoneNumber}" />
 			</p>
 			<form action="Login page" method="get">
 				<input type="hidden" name="logout" value="logout" />
-				<button type="submit" class="btn btn-secondary"><f:message key="logOut"/></button>
+				<button type="submit" class="btn btn-secondary">
+					<f:message key="logOut" />
+				</button>
 			</form>
 		</div>
 	</div>
 
-	<c:forEach var="order" items="${orders}">
+	<!--  <c:forEach var="order" items="${orders}">
 
 		<div class="card w-50" style="margin-left: 3em">
 			<div class="card-body">
@@ -131,6 +133,65 @@
 		</div>
 	</c:forEach>
 
+-->
+
+	<c:forEach var="receipt" items="${receiptsList}">
+
+		<div class="card w-50" style="margin-left: 3em">
+			<div class="card-body">
+				<h5 class="card-title">
+					№
+					<c:out value="${receipt.order.id}" />
+				</h5>
+				<h3 class="card-title">
+					<c:out value="${receipt.order.address}" />
+
+				</h3>
+				<h5 class="card-text">
+					<c:out value="${receipt.order.orderDate}" />
+				</h5>
+				<h5>
+					<span
+						style="color: <c:out value="${receipt.order.status.getColor()}" /> ; font-weight: 900"><c:out
+							value="${receipt.order.status}" /></span>
+					<c:out value="${receipt.order.closingDate}" />
+
+				</h5>
+				<div class="row productList">
+					<div class="col-sm-4">
+						<f:message key="name" />
+					</div>
+					<div class="col-sm-2">
+						<f:message key="count" />
+					</div>
+					<div class="col-sm-2">
+						<f:message key="price" />
+					</div>
+				</div>
+				<c:forEach var="content" items="${receipt.orderContent}">
+					<div class="row productList">
+						<div class="col-sm-4">
+							<c:out value="${content.productName}" />
+						</div>
+						<div class="col-sm-2">
+							<c:out value="${content.productCount }" />
+						</div>
+						<div class="col-sm-2">
+							<c:out
+								value="${content.productPrice * content.productCount}" />
+						</div>
+					</div>
+				</c:forEach>
+				<h5 style="margin-top: 1em">
+					<f:message key="sumOrder" />
+					:
+					<c:out value="${receipt.order.sum}" />
+					<f:message key="grn" />
+					.
+				</h5>
+			</div>
+		</div>
+	</c:forEach>
 
 
 
