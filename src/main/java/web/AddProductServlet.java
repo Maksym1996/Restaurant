@@ -30,15 +30,18 @@ import util.Validator;
 @WebServlet("/AddProduct")
 public class AddProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
- 
+
 	private static final Logger LOG = LogManager.getLogger(AddProductServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		LOG.info(CommentConst.BEGIN);
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP);
+
 		LOG.info(CommentConst.FORWARD + PageConst.ADD_PRODUCT_JSP);
+
 		dispatcher.forward(request, response);
 	}
 
@@ -62,6 +65,7 @@ public class AddProductServlet extends HttpServlet {
 		Map<String, String> errors = Validator.productValidator(name, price, description, imageLink, category);
 
 		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
+
 		LOG.debug(DaoConst.PRODUCT + " " + productDao);
 
 		try {
@@ -69,12 +73,17 @@ public class AddProductServlet extends HttpServlet {
 
 			if (testProductByName != null) {
 				errors.put(ParamConst.NAME, "The name '" + name + "' is taken");
+
 				LOG.debug("Test product by name = NOT NULL");
 			}
+
 			LOG.debug("Test product by name = NULL");
+
 		} catch (DBException e) {
+
 			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
+
 			response.sendError(500);
 			return;
 		}
@@ -83,23 +92,33 @@ public class AddProductServlet extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP);
 			request.setAttribute("errors", errors);
 			dispatcher.forward(request, response);
+
 			LOG.debug("Erorrs is not empty");
 			LOG.info(CommentConst.FORWARD + PageConst.ADD_PRODUCT_JSP);
 			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
+
 			return;
 		}
 
+		Product productModelToInsert = Util.createProduct(name, Integer.parseInt(price), description, imageLink,
+				Category.byTitle(category), 0);
+
 		try {
-			productDao.insertProduct(Util.createProduct(name, Integer.parseInt(price), description, imageLink,
-					Category.byTitle(category), 0));
+			productDao.insertProduct(productModelToInsert);
+
 			LOG.debug("Insert product");
+
 		} catch (Exception e) {
+
 			LOG.error(CommentConst.EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
+
 			response.sendError(500);
 			return;
 		}
+
 		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
+
 		response.sendRedirect(PageConst.PIZZA_PREFERITA);
 	}
 }
