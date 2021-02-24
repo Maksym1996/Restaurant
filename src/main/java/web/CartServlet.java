@@ -44,30 +44,36 @@ public class CartServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		LOG.info(CommentConst.BEGIN);
+
 		HttpSession session = request.getSession(true);
 		RequestDispatcher dispatcher;
 
 		Cart cart = (Cart) session.getAttribute(ParamConst.CART);
 		LOG.debug(ParamConst.CART + ": " + cart);
+
 		if (cart == null) {
 			dispatcher = request.getRequestDispatcher(PageConst.EMPTY_CART);
 			dispatcher.forward(request, response);
 			LOG.info(CommentConst.FORWARD + PageConst.EMPTY_CART);
+
 			return;
 		}
 		List<Product> products = cart.getProducts();
 		LOG.debug("Product list: " + cart);
+
 		if (products.isEmpty()) {
 			dispatcher = request.getRequestDispatcher(PageConst.EMPTY_CART);
 			dispatcher.forward(request, response);
 			LOG.info(CommentConst.FORWARD + PageConst.EMPTY_CART);
+
 			return;
 		}
 		Map<String, Integer> params = Validator.cartValidator(request.getParameter(ParamConst.CHANGE),
 				request.getParameter(ParamConst.ID));
 		int id = params.get(ParamConst.ID);
-		int change = params.get(ParamConst.CHANGE);
 		LOG.debug("Id: " + id);
+
+		int change = params.get(ParamConst.CHANGE);
 		LOG.debug("Change: " + change);
 
 		@SuppressWarnings("unchecked")
@@ -105,7 +111,7 @@ public class CartServlet extends HttpServlet {
 		}
 		if (products.isEmpty()) {
 			session.removeAttribute(ParamConst.COUNT);
-			LOG.debug("Remove " + ParamConst.COUNT + " from session");
+			LOG.debug("Removed " + ParamConst.COUNT + " attribute from session");
 			dispatcher = request.getRequestDispatcher(PageConst.EMPTY_CART);
 			dispatcher.forward(request, response);
 			LOG.info(CommentConst.FORWARD + PageConst.EMPTY_CART);
@@ -124,11 +130,13 @@ public class CartServlet extends HttpServlet {
 		LOG.debug("Order summ: " + orderSumm);
 		dispatcher = request.getRequestDispatcher(PageConst.CART_JSP);
 		request.setAttribute(ParamConst.PRODUCTS_LIST, products);
-		request.setAttribute(ParamConst.ORDER_SUMM, orderSumm);
-		LOG.info(CommentConst.FORWARD + PageConst.CART_JSP);
 		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + products);
+
+		request.setAttribute(ParamConst.ORDER_SUMM, orderSumm);
 		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "Order summ = " + orderSumm);
+
 		dispatcher.forward(request, response);
+		LOG.info(CommentConst.FORWARD + PageConst.CART_JSP);
 
 	}
 
@@ -138,11 +146,12 @@ public class CartServlet extends HttpServlet {
 		LOG.info(CommentConst.BEGIN);
 
 		String firstName = request.getParameter(ParamConst.FIRST_NAME);
-		String phoneNumber = request.getParameter(ParamConst.PHONE_NUMBER);
-		String address = request.getParameter(ParamConst.ADDRESS);
-
 		LOG.debug(ParamConst.FIRST_NAME + " " + firstName);
+
+		String phoneNumber = request.getParameter(ParamConst.PHONE_NUMBER);
 		LOG.debug(ParamConst.PHONE_NUMBER + " " + phoneNumber);
+
+		String address = request.getParameter(ParamConst.ADDRESS);
 		LOG.debug(ParamConst.ADDRESS + " " + address);
 
 		HttpSession session = request.getSession(true);
@@ -167,8 +176,9 @@ public class CartServlet extends HttpServlet {
 
 		Cart cart = (Cart) session.getAttribute(ParamConst.CART);
 		if (cart == null) {
-			LOG.info(CommentConst.REDIRECT + 400);
 			response.sendError(400);
+			LOG.info(CommentConst.REDIRECT + 400);
+
 			return;
 		}
 
@@ -180,13 +190,17 @@ public class CartServlet extends HttpServlet {
 				orderSumm += p.getPrice();
 			}
 			request.setAttribute(ParamConst.PRODUCTS_LIST, cart.getProducts());
-			request.setAttribute(ParamConst.ORDER_SUMM, orderSumm);
-			request.setAttribute(ParamConst.ERRORS, errors);
-			LOG.info(CommentConst.FORWARD + PageConst.CART_JSP);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "Order summ: " + orderSumm);
 			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + cart.getProducts());
+
+			request.setAttribute(ParamConst.ORDER_SUMM, orderSumm);
+			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + "Order summ: " + orderSumm);
+
+			request.setAttribute(ParamConst.ERRORS, errors);
 			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
+
 			dispatcher.forward(request, response);
+			LOG.info(CommentConst.FORWARD + PageConst.CART_JSP);
+
 			return;
 		}
 
@@ -194,7 +208,7 @@ public class CartServlet extends HttpServlet {
 		int userId = 0;
 		if (user != null) {
 			userId = user.getId();
-			LOG.debug("User id: " + userId);
+			LOG.debug("UserId: " + userId);
 		} else {
 			UserDao userDao = (UserDao) request.getServletContext().getAttribute(DaoConst.USER);
 			try {
@@ -208,9 +222,10 @@ public class CartServlet extends HttpServlet {
 					LOG.debug("User id: " + userId);
 				}
 			} catch (Exception e) {
+				response.sendError(500);
 				LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
 				LOG.info(CommentConst.REDIRECT + 500);
-				response.sendError(500);
+
 				return;
 			}
 		}
@@ -236,19 +251,21 @@ public class CartServlet extends HttpServlet {
 		try {
 			orderDao.insertOrder(Util.createOrder(Status.NEW, address, userId, orderSumm), products, count);
 		} catch (Exception e) {
+			response.sendError(500);
 			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
-			response.sendError(500);
+
 			return;
 		}
 
 		session.removeAttribute(ParamConst.COUNT);
 		LOG.debug("Remove " + ParamConst.COUNT + " from session");
+
 		session.removeAttribute(ParamConst.CART);
 		LOG.debug("Remove " + ParamConst.CART + " from session");
 
-		LOG.info(CommentConst.REDIRECT + PageConst.LOGIN_PAGE);
 		response.sendRedirect(PageConst.LOGIN_PAGE);
+		LOG.info(CommentConst.REDIRECT + PageConst.LOGIN_PAGE);
 
 	}
 }

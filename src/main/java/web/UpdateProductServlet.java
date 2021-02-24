@@ -36,14 +36,15 @@ public class UpdateProductServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		LOG.info(CommentConst.BEGIN);
-		String productId = request.getParameter(ParamConst.ID);
 
+		String productId = request.getParameter(ParamConst.ID);
 		LOG.debug("Product Id = " + productId);
 
 		if (!Validator.intValidator(productId)) {
+			response.sendError(400);
 			LOG.debug("ProductId is invalid");
 			LOG.info(CommentConst.REDIRECT + 400);
-			response.sendError(400);
+
 			return;
 		}
 
@@ -54,17 +55,19 @@ public class UpdateProductServlet extends HttpServlet {
 			LOG.debug("getProductById");
 			LOG.debug("Product: " + product);
 		} catch (DBException e) {
+			response.sendError(500);
 			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
-			response.sendError(500);
+
 			return;
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.UPDATE_PRODUCT_JSP);
 		request.setAttribute(ParamConst.PRODUCT, product);
 		LOG.info(CommentConst.FORWARD + PageConst.UPDATE_PRODUCT_JSP);
-		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + product);
+
 		dispatcher.forward(request, response);
+		LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + product);
 
 	}
 
@@ -72,26 +75,32 @@ public class UpdateProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		LOG.info(CommentConst.BEGIN);
-		String name = request.getParameter(ParamConst.NAME);
-		String price = request.getParameter(ParamConst.PRICE);
-		String description = request.getParameter(ParamConst.DESCRIPTION);
-		String imageLink = request.getParameter(ParamConst.IMAGE_LINK);
-		String category = request.getParameter(ParamConst.CATEGORY);
-		String id = request.getParameter(ParamConst.ID);
 
+		String name = request.getParameter(ParamConst.NAME);
 		LOG.debug("Name " + name);
+
+		String price = request.getParameter(ParamConst.PRICE);
 		LOG.debug("Price " + price);
+
+		String description = request.getParameter(ParamConst.DESCRIPTION);
 		LOG.debug("Description " + description);
+
+		String imageLink = request.getParameter(ParamConst.IMAGE_LINK);
 		LOG.debug("Image Link " + imageLink);
+
+		String category = request.getParameter(ParamConst.CATEGORY);
 		LOG.debug("Category " + category);
+
+		String id = request.getParameter(ParamConst.ID);
 		LOG.debug("ID " + id);
 
 		Map<String, String> errors = Validator.productValidator(name, price, description, imageLink, category);
 
 		if (!Validator.intValidator(id)) {
+			response.sendError(400);
 			LOG.debug("Parametrs are invalid");
 			LOG.info(CommentConst.REDIRECT + 400);
-			response.sendError(400);
+
 			return;
 		}
 
@@ -103,31 +112,35 @@ public class UpdateProductServlet extends HttpServlet {
 			LOG.debug("getProductBuId");
 			boolean productWithIdDoesNotExist = productToUpdate == null;
 			if (productWithIdDoesNotExist) {
+				response.sendError(404);
 				LOG.debug("productToUpdate " + productToUpdate);
 				LOG.info(CommentConst.REDIRECT + 404);
-				response.sendError(404);
+
 				return;
 			}
 			Product productWithName = productDao.getProductByName(name);
 			boolean otherProductWitNameDoesExist = productWithName != null
-					&& productWithName.getId() != productToUpdate.getId();
+					&& !productWithName.getId().equals(productToUpdate.getId());
 			if (otherProductWitNameDoesExist) {
 				errors.put(ParamConst.NAME, "The name '" + name + "' is taken");
 			}
 
 		} catch (DBException e) {
+			response.sendError(500);
 			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
-			response.sendError(500);
+
 			return;
 		}
 
 		if (!errors.isEmpty()) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.UPDATE_PRODUCT_JSP);
 			request.setAttribute(ParamConst.ERRORS, errors);
+			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
+
 			dispatcher.forward(request, response);
 			LOG.info(CommentConst.FORWARD + PageConst.UPDATE_PRODUCT_JSP);
-			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
+
 			return;
 		}
 
@@ -141,13 +154,14 @@ public class UpdateProductServlet extends HttpServlet {
 			productDao.updateProduct(productToUpdate);
 			LOG.debug("UpdateProduct");
 		} catch (DBException e) {
+			response.sendError(500);
 			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
-			response.sendError(500);
+
 			return;
 		}
-		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
 		response.sendRedirect(PageConst.PIZZA_PREFERITA);
+		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
 	}
 
 }

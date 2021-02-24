@@ -40,31 +40,40 @@ public class RegistrationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		LOG.info(CommentConst.BEGIN);
-		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.REGISTRATION_JSP);
-		LOG.info(CommentConst.FORWARD + PageConst.REGISTRATION_JSP);
-		request.setAttribute("SITE_KEY", CaptchaConst.SITE_KEY);
-		dispatcher.forward(request, response);
 
+		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.REGISTRATION_JSP);
+		request.setAttribute("SITE_KEY", CaptchaConst.SITE_KEY);
+		LOG.debug("Set in request SITE KEY to reCaptcha");
+
+		dispatcher.forward(request, response);
+		LOG.info(CommentConst.FORWARD + PageConst.REGISTRATION_JSP);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		LOG.info(CommentConst.BEGIN);
-		String firstName = request.getParameter(ParamConst.FIRST_NAME);
-		String lastName = request.getParameter(ParamConst.LAST_NAME);
-		String email = request.getParameter(ParamConst.EMAIL);
-		String phoneNumber = request.getParameter(ParamConst.PHONE_NUMBER);
-		String password = request.getParameter(ParamConst.PASSWORD);
-		String confirmPassword = request.getParameter(ParamConst.CONFIRM_PASSWORD);
-		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
+		String firstName = request.getParameter(ParamConst.FIRST_NAME);
 		LOG.debug("firstName" + firstName);
+
+		String lastName = request.getParameter(ParamConst.LAST_NAME);
 		LOG.debug("lastName" + lastName);
+
+		String email = request.getParameter(ParamConst.EMAIL);
 		LOG.debug("email" + email);
+
+		String phoneNumber = request.getParameter(ParamConst.PHONE_NUMBER);
 		LOG.debug("phoneNumber" + phoneNumber);
+
+		String password = request.getParameter(ParamConst.PASSWORD);
 		LOG.debug("password" + password);
+
+		String confirmPassword = request.getParameter(ParamConst.CONFIRM_PASSWORD);
 		LOG.debug("confirmPassword" + confirmPassword);
+
+		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+		LOG.debug("Get g-recaptcha-response");
 
 		Map<String, String> errors = Validator.registrationValidator(firstName, lastName, email, phoneNumber, password,
 				confirmPassword);
@@ -76,12 +85,12 @@ public class RegistrationServlet extends HttpServlet {
 			allRegistredUsers = userDao.getUsersByRegistered("true");
 			LOG.debug("getUsersByRegistered('true')");
 		} catch (DBException e) {
+			response.sendError(500);
 			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
-			response.sendError(500);
+
 			return;
 		}
-
 		for (User user : allRegistredUsers) {
 			if (user.getEmail().equals(email)) {
 				errors.put(ParamConst.EMAIL, "An account with such email already exists!");
@@ -98,39 +107,42 @@ public class RegistrationServlet extends HttpServlet {
 			LOG.debug("reCaptcha is not Valid");
 			errors.put("captchaResponse", "Captcha invalid!");
 		}
+		
 		if (!errors.isEmpty()) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.REGISTRATION_JSP);
 			request.setAttribute(ParamConst.ERRORS, errors);
-			dispatcher.forward(request, response);
 			LOG.info(CommentConst.FORWARD + PageConst.REGISTRATION_JSP);
+
+			dispatcher.forward(request, response);
 			LOG.debug(CommentConst.FORWARD_WITH_PARAMETR + errors);
 			return;
 		}
 
-		User model = Util.createUser(firstName, lastName, email, phoneNumber, password);
-		User user = null;
+		User userToInsert = Util.createUser(firstName, lastName, email, phoneNumber, password);
+		User testUser = null;
 		try {
-			user = userDao.getUserByNumber(phoneNumber);
-			if (user == null) {
-				int userId = userDao.insertUser(model);
+			testUser = userDao.getUserByNumber(phoneNumber);
+			if (testUser == null) {
+				int userId = userDao.insertUser(userToInsert);
 				LOG.debug("userId" + userId);
-				model.setId(userId);
+				userToInsert.setId(userId);
 			} else {
-				userDao.updateUser(model);
-				model.setId(user.getId());
-				model.setRole(user.getRole());
+				userDao.updateUser(userToInsert);
+				userToInsert.setId(testUser.getId());
+				userToInsert.setRole(testUser.getRole());
 			}
 		} catch (DBException e) {
+			response.sendError(500);
 			LOG.error(CommentConst.DB_EXCEPTION + e.getMessage());
 			LOG.info(CommentConst.REDIRECT + 500);
-			response.sendError(500);
+
 			return;
 		}
-
 		HttpSession session = request.getSession(true);
-		session.setAttribute(ParamConst.USER, model);
-		LOG.debug("Set user in session " + model);
-		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
+		session.setAttribute(ParamConst.USER, userToInsert);
+		LOG.debug("Set user in session " + userToInsert);
+
 		response.sendRedirect(PageConst.PIZZA_PREFERITA);
+		LOG.info(CommentConst.REDIRECT + PageConst.PIZZA_PREFERITA);
 	}
 }
