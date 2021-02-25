@@ -52,6 +52,7 @@ public class Param {
 	public static final String ORDER_SUMM = "orderSumm";
 	public static final String CART = "cart";
 	public static final String COUNT = "count";
+	public static final String ORDER_ID = "orderId";
 
 	// LanguageServlet
 	public static final String LANG = "lang";
