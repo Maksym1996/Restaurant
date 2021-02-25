@@ -6,7 +6,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.Log;
-import consts.Page;
+import consts.Path;
 import db.dao.ReceiptDao;
 import db.entity.Receipt;
 import exception.ProviderException;
@@ -33,8 +33,8 @@ public class ManagerOrderPageProvider implements OrderPageProvider {
 			log.error(Log.EXCEPTION + e.getMessage());
 			throw new ProviderException(e);
 		}
-		log.info("return orderList and " + Page.MANAGER_JSP);
-		return new OrderPage(receiptList, Page.MANAGER_JSP);
+		log.info("return orderList and " + Path.MANAGER_JSP);
+		return new OrderPage(receiptList, Path.MANAGER_JSP);
 	}
 
 }

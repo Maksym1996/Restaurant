@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -45,7 +45,7 @@ public class DeleteProductServletTest {
 
 	@Test
 	public void callDoGetThenRetrunDeletedPageJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.DELETED_PRODUCT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.DELETED_PRODUCT_JSP)).thenReturn(dispatcher);
 
 		servlet.doGet(request, response);
 
@@ -77,7 +77,7 @@ public class DeleteProductServletTest {
 
 		servlet.doPost(request, response);
 
-		verify(response).sendRedirect(Page.DELETE_PRODUCT);
+		verify(response).sendRedirect(Path.DELETE_PRODUCT);
 	}
 	
 	@Test
@@ -91,7 +91,7 @@ public class DeleteProductServletTest {
 
 		servlet.doPost(request, response);
 
-		verify(response).sendRedirect(Page.DELETE_PRODUCT);
+		verify(response).sendRedirect(Path.DELETE_PRODUCT);
 	}
 	
 	@Test

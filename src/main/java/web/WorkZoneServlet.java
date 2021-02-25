@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 import consts.Log;
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.ReceiptDao;
@@ -146,7 +146,7 @@ public class WorkZoneServlet extends HttpServlet {
 
 			return;
 		}
-		response.sendRedirect(Page.WORK_ZONE);
-		LOG.info(Log.REDIRECT + Page.WORK_ZONE);
+		response.sendRedirect(Path.WORK_ZONE);
+		LOG.info(Log.REDIRECT + Path.WORK_ZONE);
 	}
 }

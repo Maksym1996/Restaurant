@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 
 import consts.Log;
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -115,7 +115,7 @@ public class MainPageServlet extends HttpServlet {
 
 		int maxPages = Util.getMaxPages(productsCount, limitProductOnPage);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.PIZZA_PREFERITA_JSP);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Path.PIZZA_PREFERITA_JSP);
 		request.setAttribute(Param.PRODUCTS_LIST, partListProducts);
 		LOG.debug(Log.FORWARD_WITH_PARAMETR + "partListProducts " + partListProducts);
 		
@@ -135,7 +135,7 @@ public class MainPageServlet extends HttpServlet {
 		LOG.debug(Log.FORWARD_WITH_PARAMETR + "asc " + asc);
 		
 		dispatcher.forward(request, response);
-		LOG.info(Log.FORWARD + Page.PIZZA_PREFERITA_JSP);
+		LOG.info(Log.FORWARD + Path.PIZZA_PREFERITA_JSP);
 	}
 
 	@Override

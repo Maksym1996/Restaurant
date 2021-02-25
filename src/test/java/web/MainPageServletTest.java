@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.ProductDao;
 import exception.DBException;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 
 public class MainPageServletTest {
 
-	private static final String path = Page.PIZZA_PREFERITA_JSP;
+	private static final String path = Path.PIZZA_PREFERITA_JSP;
 
 	private MainPageServlet servlet;
 	private HttpServletRequest request;

@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 import consts.Log;
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -35,10 +35,10 @@ public class DeleteProductServlet extends HttpServlet {
 			throws ServletException, IOException {
 		LOG.info(Log.BEGIN);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.DELETED_PRODUCT_JSP);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Path.DELETED_PRODUCT_JSP);
 		dispatcher.forward(request, response);
 
-		LOG.info(Log.FORWARD + Page.DELETED_PRODUCT_JSP);
+		LOG.info(Log.FORWARD + Path.DELETED_PRODUCT_JSP);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class DeleteProductServlet extends HttpServlet {
 
 			return;
 		}
-		response.sendRedirect(Page.DELETE_PRODUCT);
-		LOG.info(Log.REDIRECT + Page.DELETE_PRODUCT);
+		response.sendRedirect(Path.DELETE_PRODUCT);
+		LOG.info(Log.REDIRECT + Path.DELETE_PRODUCT);
 	}
 }

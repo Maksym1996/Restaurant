@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -60,7 +60,7 @@ public class UpdateProductServletTest {
 	@Test
 	public void callDoGetWithParamReturnForwardUpdateProductJSP() throws Exception {
 		Product product = mock(Product.class);
-		when(request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.UPDATE_PRODUCT_JSP)).thenReturn(dispatcher);
 		when(request.getParameter(Param.ID)).thenReturn("1");
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
@@ -108,7 +108,7 @@ public class UpdateProductServletTest {
 	public void callDoPostWithIdAndNameReturnForwardUpadateProductJSP() throws Exception {
 		Product product1 = mock(Product.class);
 		Product product2 = mock(Product.class);
-		when(request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.UPDATE_PRODUCT_JSP)).thenReturn(dispatcher);
 		when(request.getParameter(Param.ID)).thenReturn("1");
 		when(request.getParameter(Param.NAME)).thenReturn("Паперони");
 		when(request.getServletContext()).thenReturn(context);
@@ -155,7 +155,7 @@ public class UpdateProductServletTest {
 
 		servlet.doPost(request, response);
 
-		verify(response).sendRedirect(Page.PIZZA_PREFERITA);
+		verify(response).sendRedirect(Path.PIZZA_PREFERITA);
 	}
 
 	@Test

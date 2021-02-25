@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 import consts.Log;
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -62,9 +62,9 @@ public class UpdateProductServlet extends HttpServlet {
 			return;
 		}
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Path.UPDATE_PRODUCT_JSP);
 		request.setAttribute(Param.PRODUCT, product);
-		LOG.info(Log.FORWARD + Page.UPDATE_PRODUCT_JSP);
+		LOG.info(Log.FORWARD + Path.UPDATE_PRODUCT_JSP);
 
 		dispatcher.forward(request, response);
 		LOG.debug(Log.FORWARD_WITH_PARAMETR + product);
@@ -134,12 +134,12 @@ public class UpdateProductServlet extends HttpServlet {
 		}
 
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(Path.UPDATE_PRODUCT_JSP);
 			request.setAttribute(Param.ERRORS, errors);
 			LOG.debug(Log.FORWARD_WITH_PARAMETR + errors);
 
 			dispatcher.forward(request, response);
-			LOG.info(Log.FORWARD + Page.UPDATE_PRODUCT_JSP);
+			LOG.info(Log.FORWARD + Path.UPDATE_PRODUCT_JSP);
 
 			return;
 		}
@@ -160,8 +160,8 @@ public class UpdateProductServlet extends HttpServlet {
 
 			return;
 		}
-		response.sendRedirect(Page.PIZZA_PREFERITA);
-		LOG.info(Log.REDIRECT + Page.PIZZA_PREFERITA);
+		response.sendRedirect(Path.PIZZA_PREFERITA);
+		LOG.info(Log.REDIRECT + Path.PIZZA_PREFERITA);
 	}
 
 }

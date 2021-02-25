@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -38,7 +38,7 @@ public class AddProductServletTest {
 
 	@Test
 	public void callDoGetReturnAddProductJSP() throws Exception {
-		when(request.getRequestDispatcher(Page.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
 
 		servlet.doGet(request, response);
 
@@ -48,7 +48,7 @@ public class AddProductServletTest {
 	@Test
 	public void callDoPostWithoutParamReturnAddProductJSP() throws Exception {
 		Product product = mock(Product.class);
-		when(request.getRequestDispatcher(Page.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenReturn(product);
@@ -82,7 +82,7 @@ public class AddProductServletTest {
 
 		servlet.doPost(request, response);
 
-		verify(response).sendRedirect(Page.PIZZA_PREFERITA);
+		verify(response).sendRedirect(Path.PIZZA_PREFERITA);
 
 	}
 

@@ -18,7 +18,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
@@ -55,7 +55,7 @@ public class LoginPageServletTest {
 	@Test
 	public void callDoGetWithLogoutThenReturnLoginPageJSP() throws Exception {
 
-		when(request.getRequestDispatcher(Page.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(request.getParameter(Param.LOG_OUT)).thenReturn(Param.LOG_OUT);
 		servlet.doGet(request, response);
@@ -66,7 +66,7 @@ public class LoginPageServletTest {
 	@Test
 	public void callDoGetWithoutLogoutThenReturnLoginPageJSP() throws Exception {
 
-		when(request.getRequestDispatcher(Page.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
 		when(request.getSession()).thenReturn(session);
 		servlet.doGet(request, response);
 
@@ -79,7 +79,7 @@ public class LoginPageServletTest {
 
 		User user = mock(User.class);
 
-		when(request.getRequestDispatcher(Page.ACCOUNT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.ACCOUNT_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.USER)).thenReturn(user);
 		when(request.getServletContext()).thenReturn(context);
@@ -115,7 +115,7 @@ public class LoginPageServletTest {
 	@Test
 	public void callDoPostThenReturnLoginPageJSP() throws Exception {
 
-		when(request.getRequestDispatcher(Page.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 
@@ -148,7 +148,7 @@ public class LoginPageServletTest {
 
 		servlet.doPost(request, response);
 
-		verify(response).sendRedirect(Page.LOGIN_PAGE);
+		verify(response).sendRedirect(Path.LOGIN_PAGE);
 	}
 
 	private User getUser() {

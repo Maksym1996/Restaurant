@@ -13,7 +13,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import consts.Dao;
-import consts.Page;
+import consts.Path;
 import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
@@ -24,7 +24,7 @@ import util.UserRole;
 
 public class WorkZoneServletTest {
 
-	private static final String path = Page.WORK_ZONE;
+	private static final String path = Path.WORK_ZONE;
 
 	private WorkZoneServlet servlet;
 	private HttpServletRequest request;
@@ -67,7 +67,7 @@ public class WorkZoneServletTest {
 	@Test
 	public void callDoGetThenReturnManagerPage() throws Exception {
 
-		when(request.getRequestDispatcher(Page.MANAGER_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.MANAGER_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
@@ -76,7 +76,7 @@ public class WorkZoneServletTest {
 		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.MANAGER);
 
 		servlet.doGet(request, response);
-		verify(request, times(1)).getRequestDispatcher(Page.MANAGER_JSP);
+		verify(request, times(1)).getRequestDispatcher(Path.MANAGER_JSP);
 		verify(dispatcher).forward(request, response);
 	}
 
@@ -84,7 +84,7 @@ public class WorkZoneServletTest {
 	@Test
 	public void callDoGetThenReturnDeliveryPage() throws Exception {
 
-		when(request.getRequestDispatcher(Page.DELIVERY_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.DELIVERY_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
@@ -93,7 +93,7 @@ public class WorkZoneServletTest {
 		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.DELIVERY);
 
 		servlet.doGet(request, response);
-		verify(request, times(1)).getRequestDispatcher(Page.DELIVERY_JSP);
+		verify(request, times(1)).getRequestDispatcher(Path.DELIVERY_JSP);
 		verify(dispatcher).forward(request, response);
 	}
 
@@ -101,7 +101,7 @@ public class WorkZoneServletTest {
 	@Test
 	public void callDoGetThenReturnCookPage() throws Exception {
 
-		when(request.getRequestDispatcher(Page.COOK_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Path.COOK_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
 		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
@@ -110,7 +110,7 @@ public class WorkZoneServletTest {
 		when(session.getAttribute(Param.ROLE)).thenReturn(UserRole.COOK);
 
 		servlet.doGet(request, response);
-		verify(request, times(1)).getRequestDispatcher(Page.COOK_JSP);
+		verify(request, times(1)).getRequestDispatcher(Path.COOK_JSP);
 		verify(dispatcher).forward(request, response);
 	}
 
