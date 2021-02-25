@@ -131,7 +131,16 @@
 					.
 				</h5>
 			</div>
+			<c:if test="${receipt.order.status == 'PERFORMED' }">
+				<form action="DownloadReport" method="get">
+					<input type="hidden" name="orderId" value="${receipt.order.id}" />
+					<button type="submit" class="btn btn-secondary">Получить
+						чек</button>
+
+				</form>
+			</c:if>
 		</div>
+
 	</c:forEach>
 
 

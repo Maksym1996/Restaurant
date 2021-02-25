@@ -4,7 +4,7 @@ package consts;
  *
  */
 
-public class Page {
+public class Path {
 
 	public static final String PIZZA_PREFERITA_JSP = "Pizza Preferita.jsp";
 	public static final String ACCOUNT_JSP = "Account.jsp";
@@ -23,8 +23,11 @@ public class Page {
 	public static final String WORK_ZONE = "WorkZone";
 	public static final String DELETE_PRODUCT = "DeleteProduct";
 	public static final String LOGIN_PAGE = "Login page";
-
-	private Page() {
+	public static final String DOWNLOAD_REPORT = "ReportPDF";
+	
+	public static final String REPORT_PDF = "report.pdf";
+	
+	private Path() {
 		//nothing
 	}
 
