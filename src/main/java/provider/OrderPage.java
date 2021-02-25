@@ -2,19 +2,19 @@ package provider;
 
 import java.util.List;
 
-import db.entity.OrderView;
+import db.entity.Receipt;
 
 public class OrderPage {
-	private List<OrderView> orderViewList;
+	private List<Receipt> orderViewList;
 	private String forwardPage;
 	
-	public OrderPage(List<OrderView> orderViewList, String forwardPage) {
+	public OrderPage(List<Receipt> orderViewList, String forwardPage) {
 		super();
 		this.orderViewList = orderViewList;
 		this.forwardPage = forwardPage;
 	}
 	
-	public List<OrderView> getOrderViewList() {
+	public List<Receipt> getOrderViewList() {
 		return orderViewList;
 	}
 	

@@ -10,7 +10,7 @@
 <META http-equiv="content-language" CONTENT="ru-RU">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><f:message key="cook"/></title>
+<title><f:message key="cook" /></title>
 <!--    Bootstap START-->
 
 <link
@@ -46,55 +46,53 @@
 
 	<c:import url="/WEB-INF/resources/header.jsp" />
 	<main>
-		<c:forEach var="order" items="${orders}">
+		<c:forEach var="receipt" items="${receiptsList}">
 
-			<div class="card w-50" style="margin-left:3em">
+			<div class="card w-50" style="margin-left: 3em">
 				<div class="card-body">
 					<h5 class="card-title">
 						№
-						<c:out value="${order.id}" />
+						<c:out value="${receipt.order.id}" />
 					</h5>
 					<h5 class="card-text">
-						<c:out value="${order.orderDate}" />
+						<c:out value="${receipt.order.orderDate}" />
 					</h5>
 					<div class="row productList">
-						<div class="col-sm-4"><f:message key="name"/></div>
-						<div class="col-sm-2"><f:message key="count"/></div>
+						<div class="col-sm-4">
+							<f:message key="name" />
+						</div>
+						<div class="col-sm-2">
+							<f:message key="count" />
+						</div>
 					</div>
-					<c:forEach var="orderView" items="${orderViewList}">
-						<c:if test="${orderView.id == order.id }">
+					<c:forEach var="content" items="${receipt.orderContent}">
 
-							<div class="row productList">
-								<c:forEach var="product" items="${productsList}">
-									<c:if test="${product.id == orderView.productId}">
-										<div class="col-sm-4">
-											<c:out value="${product.name}" />
-										</div>
-									</c:if>
-								</c:forEach>
-
-								<div class="col-sm-2">
-									<c:out value="${orderView.count }" />
-								</div>
-							</div>
-						</c:if>
-					</c:forEach>
-					</div>
-					<c:if
-						test="${order.status != 'REJECTED' and order.status != 'PERFORMED'}">
-
-						<div class="row" style="margin-top: 1em">
+						<div class="row productList">
 							<div class="col-sm-4">
-								<form action="WorkZone" method="post">
-									<input name="status" value="${order.status}" type="hidden" />
-									<input name="id" value="${order.id}" type="hidden" />
-									<button type="submit" class="btn btn-success"><f:message key="cooked"/></button>
-								</form>
+								<c:out value="${content.productName}" />
+							</div>
+							<div class="col-sm-2">
+								<c:out value="${content.productCount }" />
 							</div>
 						</div>
-					</c:if>
+
+					</c:forEach>
+				</div>
+
+				<div class="row" style="margin-top: 1em">
+					<div class="col-sm-4">
+						<form action="WorkZone" method="post">
+							<input name="status" value="${receipt.order.status}"
+								type="hidden" /> <input name="id" value="${receipt.order.id}"
+								type="hidden" />
+							<button type="submit" class="btn btn-success">
+								<f:message key="cooked" />
+							</button>
+						</form>
+					</div>
 				</div>
 			</div>
+
 		</c:forEach>
 	</main>
 	<c:import url="/WEB-INF/resources/footer.jspf" />

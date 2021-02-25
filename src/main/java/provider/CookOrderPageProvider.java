@@ -6,35 +6,35 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.Log;
-import consts.PageConst;
-import db.dao.OrderViewDao;
-import db.entity.OrderView;
+import consts.Page;
+import db.dao.ReceiptDao;
+import db.entity.Receipt;
 import exception.ProviderException;
-import util.Status;
+import util.UserRole;
 
 public class CookOrderPageProvider implements OrderPageProvider {
 
 	private static final Logger log = LogManager.getLogger(CookOrderPageProvider.class);
 
-	private OrderViewDao orderDao;
+	private ReceiptDao receiptDao;
 
-	public CookOrderPageProvider(OrderViewDao orderDao) {
-		log.info("In constructor orderDao: " + orderDao);
-		this.orderDao = orderDao;
+	public CookOrderPageProvider(ReceiptDao receiptDao) {
+		log.info("In constructor orderDao: " + receiptDao);
+		this.receiptDao = receiptDao;
 	}
 
 	@Override
 	public OrderPage getOrderPage() {
 		log.info(Log.BEGIN);
-		List<OrderView> orderViewList;
+		List<Receipt> receiptList;
 		try {
-			orderViewList = orderDao.getOrdersByStatus(Status.COOKING.name());
+			receiptList = receiptDao.getListOfReceipts(UserRole.COOK.name());
 		} catch (Exception e) {
 			log.error(Log.EXCEPTION + e.getMessage());
 			throw new ProviderException(e);
 		}
-		log.info("return orderList and " + PageConst.COOK_JSP);
-		return new OrderPage(orderViewList, PageConst.COOK_JSP);
+		log.info("return orderList and " + Page.COOK_JSP);
+		return new OrderPage(receiptList, Page.COOK_JSP);
 	}
 
 }

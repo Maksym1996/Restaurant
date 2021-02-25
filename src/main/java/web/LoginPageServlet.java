@@ -16,8 +16,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.Log;
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.ReceiptDao;
 import db.dao.UserDao;
@@ -50,16 +50,16 @@ public class LoginPageServlet extends HttpServlet {
 		if (Param.LOG_OUT.equals(logout)) {
 			session.invalidate();
 			LOG.trace("session invalidate");
-			forwardPage = PageConst.LOGIN_PAGE_JSP;
+			forwardPage = Page.LOGIN_PAGE_JSP;
 		} else if (session == null || session.getAttribute(Param.USER) == null) {
 			LOG.trace("session is null or user from session is null");
-			forwardPage = PageConst.LOGIN_PAGE_JSP;
+			forwardPage = Page.LOGIN_PAGE_JSP;
 		} else {
-
-			ReceiptDao receiptDao = (ReceiptDao) request.getServletContext().getAttribute(DaoConst.RECEIPT);
+			User user = (User) session.getAttribute(Param.USER);
+			ReceiptDao receiptDao = (ReceiptDao) request.getServletContext().getAttribute(Dao.RECEIPT);
 			List<Receipt> listOfReceipts = null;
 			try {
-				listOfReceipts = receiptDao.getListOfReceipts();
+				listOfReceipts = receiptDao.getListOfReceipts(String.valueOf(user.getId()));
 			} catch (DBException e) {
 				LOG.error(Log.DB_EXCEPTION + e.getMessage());
 				response.sendError(500);
@@ -67,7 +67,7 @@ public class LoginPageServlet extends HttpServlet {
 				return;
 			}
 			request.setAttribute(Param.RECEIPTS_LIST, listOfReceipts);
-			forwardPage = PageConst.ACCOUNT_JSP;
+			forwardPage = Page.ACCOUNT_JSP;
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPage);
 		dispatcher.forward(request, response);
@@ -89,7 +89,7 @@ public class LoginPageServlet extends HttpServlet {
 
 		Map<String, String> errors = Validator.authorizationValidator(phoneNumber, password);
 
-		UserDao userDao = (UserDao) request.getServletContext().getAttribute(DaoConst.USER);
+		UserDao userDao = (UserDao) request.getServletContext().getAttribute(Dao.USER);
 		User user = null;
 		try {
 			user = userDao.getUserByNumberAndPass(phoneNumber, password);
@@ -111,16 +111,16 @@ public class LoginPageServlet extends HttpServlet {
 			return;
 		}
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.LOGIN_PAGE_JSP);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.LOGIN_PAGE_JSP);
 			request.setAttribute(Param.ERRORS, errors);
-			LOG.trace(Log.FORWARD + PageConst.LOGIN_PAGE_JSP);
+			LOG.trace(Log.FORWARD + Page.LOGIN_PAGE_JSP);
 
 			dispatcher.forward(request, response);
 			LOG.debug(Log.FORWARD_WITH_PARAMETR + "errors " + errors);
 			return;
 		}
-		response.sendRedirect(PageConst.LOGIN_PAGE);
-		LOG.debug(Log.REDIRECT + PageConst.LOGIN_PAGE);
+		response.sendRedirect(Page.LOGIN_PAGE);
+		LOG.debug(Log.REDIRECT + Page.LOGIN_PAGE);
 	}
 
 }

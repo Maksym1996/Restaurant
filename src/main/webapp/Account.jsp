@@ -77,64 +77,6 @@
 		</div>
 	</div>
 
-	<!--  <c:forEach var="order" items="${orders}">
-
-		<div class="card w-50" style="margin-left: 3em">
-			<div class="card-body">
-				<h5 class="card-title">
-					№
-					<c:out value="${order.id}" />
-				</h5>
-				<h3 class="card-title">
-					<c:out value="${order.address}" />
-
-				</h3>
-				<h5 class="card-text">
-					<c:out value="${order.orderDate}" />
-				</h5>
-				<h5>
-					<span style="color: <c:out value="${order.status.getColor()}" /> ; font-weight: 900"><c:out
-							value="${order.status}" /></span>
-					<c:out value="${order.closingDate}" />
-
-				</h5>
-				<div class="row productList">
-					<div class="col-sm-4"><f:message key="name"/></div>
-					<div class="col-sm-2"><f:message key="count"/></div>
-					<div class="col-sm-2"><f:message key="price"/></div>
-				</div>
-				<c:forEach var="orderView" items="${orderViewList}">
-					<c:if test="${orderView.id == order.id }">
-
-						<div class="row productList">
-							<c:forEach var="product" items="${productsList}">
-								<c:if test="${product.id == orderView.productId}">
-									<div class="col-sm-4">
-										<c:out value="${product.name}" />
-									</div>
-								</c:if>
-							</c:forEach>
-
-							<div class="col-sm-2">
-								<c:out value="${orderView.count }" />
-							</div>
-							<div class="col-sm-2">
-								<c:out value="${orderView.price * orderView.count}" />
-							</div>
-						</div>
-					</c:if>
-				</c:forEach>
-				<h5 style="margin-top: 1em">
-					<f:message key="sumOrder"/>:
-					<c:out value="${order.sum}" />
-					<f:message key="grn"/>.
-				</h5>
-			</div>
-		</div>
-	</c:forEach>
-
--->
-
 	<c:forEach var="receipt" items="${receiptsList}">
 
 		<div class="card w-50" style="margin-left: 3em">
@@ -177,8 +119,7 @@
 							<c:out value="${content.productCount }" />
 						</div>
 						<div class="col-sm-2">
-							<c:out
-								value="${content.productPrice * content.productCount}" />
+							<c:out value="${content.productPrice * content.productCount}" />
 						</div>
 					</div>
 				</c:forEach>

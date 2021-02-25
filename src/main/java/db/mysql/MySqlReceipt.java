@@ -20,7 +20,7 @@ import util.Status;
 
 public class MySqlReceipt extends AbstractMySqlDao implements ReceiptDao {
 
-	private static final String SELECT_ALL_ORDERS = "SELECT o.id, o.order_date, o.closing_date, o.state, o.address, o.sum, u.first_name, u.last_name, u.phone_number FROM orders AS o JOIN user AS u ON o.user_id = u.id ORDER BY o.state";
+	private static final String SELECT_ALL_ORDERS = "SELECT o.id, o.order_date, o.closing_date, o.state, o.address, o.sum, u.first_name, u.last_name, u.phone_number FROM orders AS o JOIN user AS u ON o.user_id = u.id ";
 	private static final String SELECT_CONTENT_BY_ORDER_ID = "SELECT ohp.count, ohp.price, p.name FROM order_has_product AS ohp JOIN product AS p ON ohp.product_id = p.id AND ohp.order_id = ?";
 
 	private final DataSource dataSource;
@@ -29,8 +29,11 @@ public class MySqlReceipt extends AbstractMySqlDao implements ReceiptDao {
 		this.dataSource = dataSource;
 	}
 
+	/**
+	 * parametr can be null, user role or userId
+	 */
 	@Override
-	public List<Receipt> getListOfReceipts() throws DBException {
+	public List<Receipt> getListOfReceipts(String parametr) throws DBException {
 		log.debug(Log.START);
 
 		List<Receipt> listOfReceipts = new ArrayList<>();
@@ -40,7 +43,9 @@ public class MySqlReceipt extends AbstractMySqlDao implements ReceiptDao {
 		try {
 			connect = dataSource.getConnection();
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery(SELECT_ALL_ORDERS);
+			String sqlQuery = queryBuilder(parametr);
+			log.debug("SQL_QUERY = " + sqlQuery);
+			resultSet = statement.executeQuery(sqlQuery);
 			while (resultSet.next()) {
 				Order order = extractionOrder(resultSet);
 				List<OrderContent> listOfOrderContent = getListOfOrderContent(order.getId());
@@ -127,6 +132,33 @@ public class MySqlReceipt extends AbstractMySqlDao implements ReceiptDao {
 
 		log.debug(Log.FINISH_WITH + orderContent.toString());
 		return orderContent;
+
+	}
+
+	private String queryBuilder(String parametr) {
+		StringBuilder query = new StringBuilder();
+		query.append(SELECT_ALL_ORDERS);
+		if (parametr != null) {
+
+			switch (parametr) {
+			case "COOK":
+				query.append("WHERE state = '" + Status.COOKING.name() + "' ");
+				break;
+			case "DELIVERY":
+				query.append("WHERE state = '" + Status.IN_DELIVERY.name() + "' ");
+				break;
+			case "MANAGER":
+				query.append("WHERE state IN ('" + Status.NEW.name() + "', '" + Status.COOKED.name() + "', '"
+						+ Status.DELIVERED_AND_PAID.name() + "', '" + Status.PERFORMED.name() + "', '" + Status.REJECTED
+						+ "') ");
+				break;
+			default:
+				query.append("WHERE o.user_id = " + parametr + " ");
+				break;
+			}
+		}
+
+		return query.append("ORDER BY o.state").toString();
 
 	}
 

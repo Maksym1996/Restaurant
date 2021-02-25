@@ -7,6 +7,6 @@ import exception.DBException;
 
 public interface ReceiptDao {
 	
-	List<Receipt> getListOfReceipts() throws DBException;
+	List<Receipt> getListOfReceipts(String userRole) throws DBException;
 
 }

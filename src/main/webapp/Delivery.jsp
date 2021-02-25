@@ -46,33 +46,30 @@
 
 	<c:import url="/WEB-INF/resources/header.jsp" />
 	<main>
-		<c:forEach var="order" items="${orders}">
+		<c:forEach var="receipt" items="${receiptsList}">
 
 			<div class="card w-50" style="margin-left: 3em">
 				<div class="card-body">
 					<h5 class="card-title">
 						№
-						<c:out value="${order.id}" />
+						<c:out value="${receipt.order.id}" />
 					</h5>
 					<h4 class="card-title">
-						<c:forEach var="user" items="${userList}">
-							<c:if test="${order.userId == user.id}">
 
-								<c:out value="${user.firstName}" />
+						<c:out value="${receipt.order.userFirstName}" />
 
-								<c:out value="${user.lastName}" />
+						<c:out value="${receipt.order.userLastName}" />
 
-								<f:message key="tel" />. <c:out value="${user.phoneNumber}" />
-
-							</c:if>
-						</c:forEach>
+						<f:message key="tel" />
+						.
+						<c:out value="${receipt.order.userPhoneNumber}" />
 					</h4>
 					<h3 class="card-title">
-						<c:out value="${order.address}" />
+						<c:out value="${receipt.order.address}" />
 
 					</h3>
 					<h5 class="card-text">
-						<c:out value="${order.orderDate}" />
+						<c:out value="${receipt.order.orderDate}" />
 					</h5>
 					<div class="row productList">
 						<div class="col-sm-4">
@@ -85,50 +82,48 @@
 							<f:message key="price" />
 						</div>
 					</div>
-					<c:forEach var="orderView" items="${orderViewList}">
-						<c:if test="${orderView.id == order.id }">
+					<c:forEach var="content" items="${receipt.orderContent}">
 
-							<div class="row productList">
-								<c:forEach var="product" items="${productsList}">
-									<c:if test="${product.id == orderView.productId}">
-										<div class="col-sm-4">
-											<c:out value="${product.name}" />
-										</div>
-									</c:if>
-								</c:forEach>
 
-								<div class="col-sm-2">
-									<c:out value="${orderView.count }" />
-								</div>
-								<div class="col-sm-2">
-									<c:out value="${orderView.price * orderView.count}" />
-								</div>
+						<div class="row productList">
+
+
+							<div class="col-sm-4">
+								<c:out value="${content.productName}" />
 							</div>
-						</c:if>
+
+
+							<div class="col-sm-2">
+								<c:out value="${content.productCount }" />
+							</div>
+							<div class="col-sm-2">
+								<c:out value="${content.productPrice * content.productCount}" />
+							</div>
+						</div>
 					</c:forEach>
 					<h5 style="margin-top: 1em">
 						<f:message key="sumOrder" />
 						:
-						<c:out value="${order.sum}" />
+						<c:out value="${receipt.order.sum}" />
 						<f:message key="grn" />
 						.
 					</h5>
 				</div>
-				<c:if
-					test="${order.status != 'REJECTED' and order.status != 'PERFORMED'}">
 
-					<div class="row" style="margin-top: 1em">
-						<div class="col-sm-4">
-							<form action="WorkZone" method="post">
-								<input name="status" value="${order.status}" type="hidden" /> <input
-									name="id" value="${order.id}" type="hidden" />
-								<button type="submit" class="btn btn-success">
-									<f:message key="deliveredAndPaid" />
-								</button>
-							</form>
-						</div>
+
+				<div class="row" style="margin-top: 1em">
+					<div class="col-sm-4">
+						<form action="WorkZone" method="post">
+							<input name="status" value="${receipt.order.status}"
+								type="hidden" /> <input name="id" value="${receipt.order.id}"
+								type="hidden" />
+							<button type="submit" class="btn btn-success">
+								<f:message key="deliveredAndPaid" />
+							</button>
+						</form>
 					</div>
-				</c:if>
+				</div>
+
 			</div>
 
 		</c:forEach>
