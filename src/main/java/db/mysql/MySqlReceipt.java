@@ -60,6 +60,72 @@ public class MySqlReceipt extends AbstractMySqlDao implements ReceiptDao {
 		log.debug(Log.FINISH_WITH + listOfReceipts.size());
 		return listOfReceipts;
 	}
+	
+	@Override
+	public List<Receipt> getListOfReceiptsByUserId(int userId) throws DBException {
+		log.debug(Log.START);
+		
+		String queryEnd = " WHERE o.user_id = ? ORDER BY o.state";
+
+		List<Receipt> listOfReceipts = new ArrayList<>();
+		Connection connect = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+			connect = dataSource.getConnection();
+			preparedStatement = connect.prepareStatement(SELECT_ALL_ORDERS + queryEnd);
+			preparedStatement.setInt(1, userId);
+			resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next()) {
+				Order order = extractionOrder(resultSet);
+				List<OrderContent> listOfOrderContent = getListOfOrderContent(order.getId());
+				listOfReceipts.add(createReceipt(order, listOfOrderContent));
+			}
+		} catch (Exception e) {
+			log.error(Log.DB_EXCEPTION + e.getMessage());
+			throw new DBException(e);
+		} finally {
+			close(connect, preparedStatement, resultSet);
+		}
+		log.debug(Log.FINISH_WITH + listOfReceipts.size());
+		return listOfReceipts;
+	}
+	
+	@Override
+	public Receipt getReceipt(int orderId, String userPhoneNumber) throws DBException {
+		log.debug(Log.START);
+		Receipt receipt = null;
+		
+		String queryEnd = " WHERE o.id = ? AND u.phone_number = ? AND o.state = 'PERFORMED'";
+
+		Connection connect = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+			connect = dataSource.getConnection();
+			preparedStatement = connect.prepareStatement(SELECT_ALL_ORDERS + queryEnd);
+			
+			int columnIndex = 1;
+			preparedStatement.setInt(columnIndex++, orderId);
+			preparedStatement.setString(columnIndex, userPhoneNumber);
+			
+			resultSet = preparedStatement.executeQuery();
+			
+			if (resultSet.next()) {
+				Order order = extractionOrder(resultSet);
+				List<OrderContent> listOfOrderContent = getListOfOrderContent(order.getId());
+				receipt = createReceipt(order, listOfOrderContent);
+			}
+		} catch (Exception e) {
+			log.error(Log.DB_EXCEPTION + e.getMessage());
+			throw new DBException(e);
+		} finally {
+			close(connect, preparedStatement, resultSet);
+		}
+		log.debug(Log.FINISH_WITH + receipt);
+		return receipt;
+	}
 
 	private List<OrderContent> getListOfOrderContent(int orderId) throws DBException {
 		log.debug(Log.START);
@@ -135,12 +201,12 @@ public class MySqlReceipt extends AbstractMySqlDao implements ReceiptDao {
 
 	}
 
-	private String queryBuilder(String parametr) {
+	private String queryBuilder(String userRole) {
 		StringBuilder query = new StringBuilder();
 		query.append(SELECT_ALL_ORDERS);
-		if (parametr != null) {
+		if (userRole != null) {
 
-			switch (parametr) {
+			switch (userRole) {
 			case "COOK":
 				query.append("WHERE state = '" + Status.COOKING.name() + "' ");
 				break;
@@ -153,8 +219,7 @@ public class MySqlReceipt extends AbstractMySqlDao implements ReceiptDao {
 						+ "') ");
 				break;
 			default:
-				query.append("WHERE o.user_id = " + parametr + " ");
-				break;
+				return null;
 			}
 		}
 
