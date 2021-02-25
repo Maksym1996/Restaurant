@@ -9,7 +9,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
-import consts.DaoConst;
+import consts.Dao;
 import db.dao.UserDao;
 import db.mysql.MySqlOrderView;
 import db.mysql.MySqlProduct;
@@ -37,10 +37,10 @@ public class ContextListener implements ServletContextListener {
 		ReceiptDao receiptDao = new MySqlReceipt(dataSource);
 
 		ServletContext servletContext = event.getServletContext();
-		servletContext.setAttribute(DaoConst.USER, userDao);
-		servletContext.setAttribute(DaoConst.PRODUCT, productDao);
-		servletContext.setAttribute(DaoConst.ORDER_VIEW, orderDao);
-		servletContext.setAttribute(DaoConst.RECEIPT, receiptDao);
+		servletContext.setAttribute(Dao.USER, userDao);
+		servletContext.setAttribute(Dao.PRODUCT, productDao);
+		servletContext.setAttribute(Dao.ORDER_VIEW, orderDao);
+		servletContext.setAttribute(Dao.RECEIPT, receiptDao);
 
 	}
 

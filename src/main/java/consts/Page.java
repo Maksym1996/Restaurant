@@ -4,7 +4,7 @@ package consts;
  *
  */
 
-public class PageConst {
+public class Page {
 
 	public static final String PIZZA_PREFERITA_JSP = "Pizza Preferita.jsp";
 	public static final String ACCOUNT_JSP = "Account.jsp";
@@ -24,7 +24,7 @@ public class PageConst {
 	public static final String DELETE_PRODUCT = "DeleteProduct";
 	public static final String LOGIN_PAGE = "Login page";
 
-	private PageConst() {
+	private Page() {
 		//nothing
 	}
 

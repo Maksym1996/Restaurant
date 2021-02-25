@@ -13,8 +13,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.Log;
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -35,10 +35,10 @@ public class DeleteProductServlet extends HttpServlet {
 			throws ServletException, IOException {
 		LOG.info(Log.BEGIN);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.DELETED_PRODUCT_JSP);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.DELETED_PRODUCT_JSP);
 		dispatcher.forward(request, response);
 
-		LOG.info(Log.FORWARD + PageConst.DELETED_PRODUCT_JSP);
+		LOG.info(Log.FORWARD + Page.DELETED_PRODUCT_JSP);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class DeleteProductServlet extends HttpServlet {
 
 			return;
 		}
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 		int productId = Integer.parseInt(stringProductId);
 		try {
 			Product testProduct = productDao.getProductById(productId);
@@ -77,7 +77,7 @@ public class DeleteProductServlet extends HttpServlet {
 
 			return;
 		}
-		response.sendRedirect(PageConst.DELETE_PRODUCT);
-		LOG.info(Log.REDIRECT + PageConst.DELETE_PRODUCT);
+		response.sendRedirect(Page.DELETE_PRODUCT);
+		LOG.info(Log.REDIRECT + Page.DELETE_PRODUCT);
 	}
 }

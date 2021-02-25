@@ -17,8 +17,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.ProductDao;
@@ -55,7 +55,7 @@ public class LoginPageServletTest {
 	@Test
 	public void callDoGetWithLogoutThenReturnLoginPageJSP() throws Exception {
 
-		when(request.getRequestDispatcher(PageConst.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Page.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(request.getParameter(Param.LOG_OUT)).thenReturn(Param.LOG_OUT);
 		servlet.doGet(request, response);
@@ -66,7 +66,7 @@ public class LoginPageServletTest {
 	@Test
 	public void callDoGetWithoutLogoutThenReturnLoginPageJSP() throws Exception {
 
-		when(request.getRequestDispatcher(PageConst.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Page.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
 		when(request.getSession()).thenReturn(session);
 		servlet.doGet(request, response);
 
@@ -79,12 +79,12 @@ public class LoginPageServletTest {
 
 		User user = mock(User.class);
 
-		when(request.getRequestDispatcher(PageConst.ACCOUNT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Page.ACCOUNT_JSP)).thenReturn(dispatcher);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.USER)).thenReturn(user);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
-		when(context.getAttribute(DaoConst.ORDER_VIEW)).thenReturn(orderViewDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(user.getRole()).thenReturn(UserRole.CLIENT);
 
 		servlet.doGet(request, response);
@@ -104,8 +104,8 @@ public class LoginPageServletTest {
 		when(session.getAttribute(Param.USER)).thenReturn(user);
 		when(user.getRole()).thenReturn(UserRole.CLIENT);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
-		when(context.getAttribute(DaoConst.ORDER_VIEW)).thenReturn(orderViewDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.ORDER_VIEW)).thenReturn(orderViewDao);
 		when(orderViewDao.getOrderViewsByUserId(0)).thenReturn(orderViewList);
 		servlet.doGet(request, response);
 
@@ -115,9 +115,9 @@ public class LoginPageServletTest {
 	@Test
 	public void callDoPostThenReturnLoginPageJSP() throws Exception {
 
-		when(request.getRequestDispatcher(PageConst.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Page.LOGIN_PAGE_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
+		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 
 		servlet.doPost(request, response);
 
@@ -128,7 +128,7 @@ public class LoginPageServletTest {
 	public void callDoPostThenReturnError500() throws Exception {
 
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
+		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 		when(userDao.getUserByNumberAndPass(any(), any())).thenThrow(new DBException(null));
 
 		servlet.doPost(request, response);
@@ -141,14 +141,14 @@ public class LoginPageServletTest {
 
 		when(request.getSession(true)).thenReturn(session);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.USER)).thenReturn(userDao);
+		when(context.getAttribute(Dao.USER)).thenReturn(userDao);
 		when(userDao.getUserByNumberAndPass(any(), any())).thenReturn(getUser());
 		when(request.getParameter(Param.PHONE_NUMBER)).thenReturn("0969055382");
 		when(request.getParameter(Param.PASSWORD)).thenReturn("Client9)");
 
 		servlet.doPost(request, response);
 
-		verify(response).sendRedirect(PageConst.LOGIN_PAGE);
+		verify(response).sendRedirect(Page.LOGIN_PAGE);
 	}
 
 	private User getUser() {

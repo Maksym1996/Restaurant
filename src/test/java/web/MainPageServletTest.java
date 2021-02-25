@@ -3,8 +3,8 @@ package web;
 import org.junit.Before;
 import org.junit.Test;
 
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.ProductDao;
 import exception.DBException;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 
 public class MainPageServletTest {
 
-	private static final String path = PageConst.PIZZA_PREFERITA_JSP;
+	private static final String path = Page.PIZZA_PREFERITA_JSP;
 
 	private MainPageServlet servlet;
 	private HttpServletRequest request;
@@ -48,7 +48,7 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
 
 		servlet.doGet(request, response);
@@ -64,7 +64,7 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(cart);
 		when(request.getParameter(Param.PAGE)).thenReturn("2");
@@ -85,7 +85,7 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(cart);
 		when(request.getParameter(Param.PRODUCT_ID)).thenReturn("1");
@@ -102,7 +102,7 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
 		when(session.getAttribute(Param.CART)).thenReturn(cart);
 
@@ -124,7 +124,7 @@ public class MainPageServletTest {
 
 		when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(request.getSession(true)).thenReturn(session);
 		when(productDao.getProductsCount(any())).thenThrow(new DBException(new Throwable()));
 

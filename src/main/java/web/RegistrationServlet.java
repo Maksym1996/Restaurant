@@ -17,8 +17,8 @@ import org.apache.log4j.Logger;
 
 import consts.CaptchaConst;
 import consts.Log;
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.UserDao;
 import db.entity.User;
@@ -41,12 +41,12 @@ public class RegistrationServlet extends HttpServlet {
 			throws ServletException, IOException {
 		LOG.info(Log.BEGIN);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.REGISTRATION_JSP);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.REGISTRATION_JSP);
 		request.setAttribute("SITE_KEY", CaptchaConst.SITE_KEY);
 		LOG.debug("Set in request SITE KEY to reCaptcha");
 
 		dispatcher.forward(request, response);
-		LOG.info(Log.FORWARD + PageConst.REGISTRATION_JSP);
+		LOG.info(Log.FORWARD + Page.REGISTRATION_JSP);
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class RegistrationServlet extends HttpServlet {
 		Map<String, String> errors = Validator.registrationValidator(firstName, lastName, email, phoneNumber, password,
 				confirmPassword);
 
-		UserDao userDao = (UserDao) request.getServletContext().getAttribute(DaoConst.USER);
+		UserDao userDao = (UserDao) request.getServletContext().getAttribute(Dao.USER);
 
 		List<User> allRegistredUsers = null;
 		try {
@@ -109,9 +109,9 @@ public class RegistrationServlet extends HttpServlet {
 		}
 		
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.REGISTRATION_JSP);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.REGISTRATION_JSP);
 			request.setAttribute(Param.ERRORS, errors);
-			LOG.info(Log.FORWARD + PageConst.REGISTRATION_JSP);
+			LOG.info(Log.FORWARD + Page.REGISTRATION_JSP);
 
 			dispatcher.forward(request, response);
 			LOG.debug(Log.FORWARD_WITH_PARAMETR + errors);
@@ -145,7 +145,7 @@ public class RegistrationServlet extends HttpServlet {
 		session.setAttribute(Param.USER, userToInsert.getRole());
 		LOG.debug("Set role in session " + userToInsert.getRole());
 
-		response.sendRedirect(PageConst.PIZZA_PREFERITA);
-		LOG.info(Log.REDIRECT + PageConst.PIZZA_PREFERITA);
+		response.sendRedirect(Page.PIZZA_PREFERITA);
+		LOG.info(Log.REDIRECT + Page.PIZZA_PREFERITA);
 	}
 }

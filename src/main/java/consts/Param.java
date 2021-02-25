@@ -1,4 +1,5 @@
 package consts;
+
 /**
  * The class for storing parametr consts
  *
@@ -51,8 +52,8 @@ public class Param {
 	public static final String ORDER_SUMM = "orderSumm";
 	public static final String CART = "cart";
 	public static final String COUNT = "count";
-	
-	//LanguageServlet
+
+	// LanguageServlet
 	public static final String LANG = "lang";
 	public static final String REFERER = "referer";
 
@@ -64,9 +65,9 @@ public class Param {
 	public static final String PRODUCT = "product";
 	public static final String ERRORS = "errors";
 	public static final String USERS_WITH_PERFORMED_ORDERS = "usersWithPerformedOrders";
-	
+
 	private Param() {
-		//nothing
+		// nothing
 	}
 
 }

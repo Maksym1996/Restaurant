@@ -14,8 +14,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.Log;
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -38,10 +38,10 @@ public class AddProductServlet extends HttpServlet {
 			throws ServletException, IOException {
 		LOG.info(Log.BEGIN);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.ADD_PRODUCT_JSP);
 		dispatcher.forward(request, response);
 		
-		LOG.info(Log.FORWARD + PageConst.ADD_PRODUCT_JSP);
+		LOG.info(Log.FORWARD + Page.ADD_PRODUCT_JSP);
 	}
 
 	@Override
@@ -63,9 +63,9 @@ public class AddProductServlet extends HttpServlet {
 
 		Map<String, String> errors = Validator.productValidator(name, price, description, imageLink, category);
 
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 
-		LOG.debug(DaoConst.PRODUCT + " " + productDao);
+		LOG.debug(Dao.PRODUCT + " " + productDao);
 
 		try {
 			Product testProductByName = productDao.getProductByName(name);
@@ -84,11 +84,11 @@ public class AddProductServlet extends HttpServlet {
 		}
 
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.ADD_PRODUCT_JSP);
 			request.setAttribute("errors", errors);
 			dispatcher.forward(request, response);
 			LOG.debug("Erorrs is not empty");
-			LOG.info(Log.FORWARD + PageConst.ADD_PRODUCT_JSP);
+			LOG.info(Log.FORWARD + Page.ADD_PRODUCT_JSP);
 			LOG.debug(Log.FORWARD_WITH_PARAMETR + errors);
 			
 			return;
@@ -108,8 +108,8 @@ public class AddProductServlet extends HttpServlet {
 			return;
 		}
 
-		response.sendRedirect(PageConst.PIZZA_PREFERITA);
+		response.sendRedirect(Page.PIZZA_PREFERITA);
 		
-		LOG.info(Log.REDIRECT + PageConst.PIZZA_PREFERITA);
+		LOG.info(Log.REDIRECT + Page.PIZZA_PREFERITA);
 	}
 }

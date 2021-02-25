@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -38,7 +38,7 @@ public class AddProductServletTest {
 
 	@Test
 	public void callDoGetReturnAddProductJSP() throws Exception {
-		when(request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Page.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
 
 		servlet.doGet(request, response);
 
@@ -48,9 +48,9 @@ public class AddProductServletTest {
 	@Test
 	public void callDoPostWithoutParamReturnAddProductJSP() throws Exception {
 		Product product = mock(Product.class);
-		when(request.getRequestDispatcher(PageConst.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
+		when(request.getRequestDispatcher(Page.ADD_PRODUCT_JSP)).thenReturn(dispatcher);
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenReturn(product);
 
 		servlet.doPost(request, response);
@@ -61,7 +61,7 @@ public class AddProductServletTest {
 	@Test
 	public void callDoPostWithoutParamReturnError500() throws Exception {
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenThrow(new DBException(null));
 
 		servlet.doPost(request, response);
@@ -77,12 +77,12 @@ public class AddProductServletTest {
 		when(request.getParameter(Param.IMAGE_LINK)).thenReturn("Bulka");
 		when(request.getParameter(Param.CATEGORY)).thenReturn("Burger");
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenReturn(null);
 
 		servlet.doPost(request, response);
 
-		verify(response).sendRedirect(PageConst.PIZZA_PREFERITA);
+		verify(response).sendRedirect(Page.PIZZA_PREFERITA);
 
 	}
 
@@ -94,7 +94,7 @@ public class AddProductServletTest {
 		when(request.getParameter(Param.IMAGE_LINK)).thenReturn("Bulka");
 		when(request.getParameter(Param.CATEGORY)).thenReturn("Burger");
 		when(request.getServletContext()).thenReturn(context);
-		when(context.getAttribute(DaoConst.PRODUCT)).thenReturn(productDao);
+		when(context.getAttribute(Dao.PRODUCT)).thenReturn(productDao);
 		when(productDao.getProductByName(any())).thenReturn(null);
 		when(productDao.insertProduct(any())).thenThrow(new DBException(null));
 

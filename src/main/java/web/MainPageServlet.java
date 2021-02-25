@@ -16,8 +16,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.Log;
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -42,7 +42,7 @@ public class MainPageServlet extends HttpServlet {
 			throws IOException, ServletException {
 		LOG.info(Log.BEGIN);
 		
-		ProductDao productDao = (ProductDao)request.getServletContext().getAttribute(DaoConst.PRODUCT);
+		ProductDao productDao = (ProductDao)request.getServletContext().getAttribute(Dao.PRODUCT);
 		Map<String, String> params = Validator.mainPageValidator(request.getParameter(Param.PAGE),
 				request.getParameter(Param.PRODUCT_ID), request.getParameter(Param.SORT_VALUE));
 
@@ -115,7 +115,7 @@ public class MainPageServlet extends HttpServlet {
 
 		int maxPages = Util.getMaxPages(productsCount, limitProductOnPage);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.PIZZA_PREFERITA_JSP);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.PIZZA_PREFERITA_JSP);
 		request.setAttribute(Param.PRODUCTS_LIST, partListProducts);
 		LOG.debug(Log.FORWARD_WITH_PARAMETR + "partListProducts " + partListProducts);
 		
@@ -135,7 +135,7 @@ public class MainPageServlet extends HttpServlet {
 		LOG.debug(Log.FORWARD_WITH_PARAMETR + "asc " + asc);
 		
 		dispatcher.forward(request, response);
-		LOG.info(Log.FORWARD + PageConst.PIZZA_PREFERITA_JSP);
+		LOG.info(Log.FORWARD + Page.PIZZA_PREFERITA_JSP);
 	}
 
 	@Override

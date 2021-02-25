@@ -18,8 +18,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.Log;
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.OrderViewDao;
 import db.dao.UserDao;
@@ -52,9 +52,9 @@ public class CartServlet extends HttpServlet {
 		LOG.debug(Param.CART + ": " + cart);
 
 		if (cart == null) {
-			dispatcher = request.getRequestDispatcher(PageConst.EMPTY_CART);
+			dispatcher = request.getRequestDispatcher(Page.EMPTY_CART);
 			dispatcher.forward(request, response);
-			LOG.info(Log.FORWARD + PageConst.EMPTY_CART);
+			LOG.info(Log.FORWARD + Page.EMPTY_CART);
 
 			return;
 		}
@@ -62,9 +62,9 @@ public class CartServlet extends HttpServlet {
 		LOG.debug("Product list: " + cart);
 
 		if (products.isEmpty()) {
-			dispatcher = request.getRequestDispatcher(PageConst.EMPTY_CART);
+			dispatcher = request.getRequestDispatcher(Page.EMPTY_CART);
 			dispatcher.forward(request, response);
-			LOG.info(Log.FORWARD + PageConst.EMPTY_CART);
+			LOG.info(Log.FORWARD + Page.EMPTY_CART);
 
 			return;
 		}
@@ -112,9 +112,9 @@ public class CartServlet extends HttpServlet {
 		if (products.isEmpty()) {
 			session.removeAttribute(Param.COUNT);
 			LOG.debug("Removed " + Param.COUNT + " attribute from session");
-			dispatcher = request.getRequestDispatcher(PageConst.EMPTY_CART);
+			dispatcher = request.getRequestDispatcher(Page.EMPTY_CART);
 			dispatcher.forward(request, response);
-			LOG.info(Log.FORWARD + PageConst.EMPTY_CART);
+			LOG.info(Log.FORWARD + Page.EMPTY_CART);
 			return;
 		}
 
@@ -128,7 +128,7 @@ public class CartServlet extends HttpServlet {
 			orderSumm += p.getPrice() * count.get(p.getId());
 		}
 		LOG.debug("Order summ: " + orderSumm);
-		dispatcher = request.getRequestDispatcher(PageConst.CART_JSP);
+		dispatcher = request.getRequestDispatcher(Page.CART_JSP);
 		request.setAttribute(Param.PRODUCTS_LIST, products);
 		LOG.debug(Log.FORWARD_WITH_PARAMETR + products);
 
@@ -136,7 +136,7 @@ public class CartServlet extends HttpServlet {
 		LOG.debug(Log.FORWARD_WITH_PARAMETR + "Order summ = " + orderSumm);
 
 		dispatcher.forward(request, response);
-		LOG.info(Log.FORWARD + PageConst.CART_JSP);
+		LOG.info(Log.FORWARD + Page.CART_JSP);
 
 	}
 
@@ -183,7 +183,7 @@ public class CartServlet extends HttpServlet {
 		}
 
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.CART_JSP);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.CART_JSP);
 
 			int orderSumm = 0;
 			for (Product p : cart.getProducts()) {
@@ -199,7 +199,7 @@ public class CartServlet extends HttpServlet {
 			LOG.debug(Log.FORWARD_WITH_PARAMETR + errors);
 
 			dispatcher.forward(request, response);
-			LOG.info(Log.FORWARD + PageConst.CART_JSP);
+			LOG.info(Log.FORWARD + Page.CART_JSP);
 
 			return;
 		}
@@ -210,7 +210,7 @@ public class CartServlet extends HttpServlet {
 			userId = user.getId();
 			LOG.debug("UserId: " + userId);
 		} else {
-			UserDao userDao = (UserDao) request.getServletContext().getAttribute(DaoConst.USER);
+			UserDao userDao = (UserDao) request.getServletContext().getAttribute(Dao.USER);
 			try {
 				user = userDao.getUserByNumber(phoneNumber);
 				if (user == null) {
@@ -231,7 +231,7 @@ public class CartServlet extends HttpServlet {
 		}
 
 		// create order
-		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(DaoConst.ORDER_VIEW);
+		OrderViewDao orderDao = (OrderViewDao) request.getServletContext().getAttribute(Dao.ORDER_VIEW);
 		LOG.debug("OrderDao " + orderDao);
 		List<Product> products = cart.getProducts();
 
@@ -264,8 +264,8 @@ public class CartServlet extends HttpServlet {
 		session.removeAttribute(Param.CART);
 		LOG.debug("Remove " + Param.CART + " from session");
 
-		response.sendRedirect(PageConst.LOGIN_PAGE);
-		LOG.info(Log.REDIRECT + PageConst.LOGIN_PAGE);
+		response.sendRedirect(Page.LOGIN_PAGE);
+		LOG.info(Log.REDIRECT + Page.LOGIN_PAGE);
 
 	}
 }

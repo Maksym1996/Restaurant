@@ -14,8 +14,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import consts.Log;
-import consts.DaoConst;
-import consts.PageConst;
+import consts.Dao;
+import consts.Page;
 import consts.Param;
 import db.dao.ProductDao;
 import db.entity.Product;
@@ -48,7 +48,7 @@ public class UpdateProductServlet extends HttpServlet {
 			return;
 		}
 
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 		Product product;
 		try {
 			product = productDao.getProductById(Integer.parseInt(productId));
@@ -62,9 +62,9 @@ public class UpdateProductServlet extends HttpServlet {
 			return;
 		}
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.UPDATE_PRODUCT_JSP);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP);
 		request.setAttribute(Param.PRODUCT, product);
-		LOG.info(Log.FORWARD + PageConst.UPDATE_PRODUCT_JSP);
+		LOG.info(Log.FORWARD + Page.UPDATE_PRODUCT_JSP);
 
 		dispatcher.forward(request, response);
 		LOG.debug(Log.FORWARD_WITH_PARAMETR + product);
@@ -105,7 +105,7 @@ public class UpdateProductServlet extends HttpServlet {
 		}
 
 		int productId = Integer.parseInt(id);
-		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(DaoConst.PRODUCT);
+		ProductDao productDao = (ProductDao) request.getServletContext().getAttribute(Dao.PRODUCT);
 		Product productToUpdate;
 		try {
 			productToUpdate = productDao.getProductById(productId);
@@ -134,12 +134,12 @@ public class UpdateProductServlet extends HttpServlet {
 		}
 
 		if (!errors.isEmpty()) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(PageConst.UPDATE_PRODUCT_JSP);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(Page.UPDATE_PRODUCT_JSP);
 			request.setAttribute(Param.ERRORS, errors);
 			LOG.debug(Log.FORWARD_WITH_PARAMETR + errors);
 
 			dispatcher.forward(request, response);
-			LOG.info(Log.FORWARD + PageConst.UPDATE_PRODUCT_JSP);
+			LOG.info(Log.FORWARD + Page.UPDATE_PRODUCT_JSP);
 
 			return;
 		}
@@ -160,8 +160,8 @@ public class UpdateProductServlet extends HttpServlet {
 
 			return;
 		}
-		response.sendRedirect(PageConst.PIZZA_PREFERITA);
-		LOG.info(Log.REDIRECT + PageConst.PIZZA_PREFERITA);
+		response.sendRedirect(Page.PIZZA_PREFERITA);
+		LOG.info(Log.REDIRECT + Page.PIZZA_PREFERITA);
 	}
 
 }
