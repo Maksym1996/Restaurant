@@ -39,9 +39,9 @@ public class CreateFile {
 	private static final String SELLER = "Продавец: ";
 	private static final String NAME = "Название";
 	private static final String QUANTITY = "Количество(шт)";
-	private static final String PRICE_GRN = "Цена(грн)";
-	private static final String OPEN_DATE = "Заказ получен";
-	private static final String CLOSE_DATE = "Заказ закрыт";
+	private static final String PRICE_GRN = "Цена(грн за шт.)";
+	private static final String OPEN_DATE = "Заказ получен: ";
+	private static final String CLOSE_DATE = "Заказ закрыт: ";
 
 	public static void writePdfFile(Receipt receipt, OutputStream outStream) throws DBException {
 		Order order = receipt.getOrder();
@@ -66,7 +66,6 @@ public class CreateFile {
 
 		Paragraph paragraphOrderOpenDate = new Paragraph(OPEN_DATE + order.getOrderDate(), TABLE_FORT);
 		paragraphOrderOpenDate.setAlignment(Element.ALIGN_LEFT);
-		addEmptyLine(paragraphOrderOpenDate, 1);
 		document.add(paragraphOrderOpenDate);
 
 		Paragraph paragraphOrderCloseData = new Paragraph(CLOSE_DATE + order.getClosingDate(), TABLE_FORT);
@@ -76,7 +75,6 @@ public class CreateFile {
 
 		Paragraph paragraphOrderNumber = new Paragraph(ORDER_NUMBER + order.getId(), TABLE_FORT);
 		paragraphOrderNumber.setAlignment(Element.ALIGN_CENTER);
-		addEmptyLine(paragraphOrderNumber, 1);
 		document.add(paragraphOrderNumber);
 
 		Paragraph orderProducts = new Paragraph(SPACE);
